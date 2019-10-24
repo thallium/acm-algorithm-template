@@ -3,30 +3,18 @@ const int MAXN = 1000010;
 struct qnode {
     int v;
     int c;
-    qnode(int _v = 0, int _c = 0)
-        : v(_v)
-        , c(_c)
-    {
-    }
-    bool operator<(const qnode& r) const
-    {
-        return c > r.c;
-    }
+    qnode(int _v = 0, int _c = 0): v(_v), c(_c){}
+    bool operator<(const qnode& r) const{ return c > r.c;}
 };
 struct Edge {
     int v, cost;
-    Edge(int _v = 0, int _cost = 0)
-        : v(_v)
-        , cost(_cost)
-    {
-    }
+    Edge(int _v = 0, int _cost = 0): v(_v), cost(_cost){}
 };
 vector<Edge> E[MAXN];
 bool vis[MAXN];
 int dist[MAXN];
 //点的编号从 1 开始
-void Dijkstra(int n, int start)
-{
+void Dijkstra(int n, int start){
     memset(vis, false, sizeof(vis));
     for (int i = 1; i <= n; i++)
         dist[i] = INF;
@@ -53,7 +41,6 @@ void Dijkstra(int n, int start)
         }
     }
 }
-void addedge(int u, int v, int w)
-{
+void addedge(int u, int v, int w){
     E[u].push_back(Edge(v, w));
 }
