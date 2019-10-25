@@ -1,0 +1,7 @@
+PWD /home/attacker0211/algorithm/acm-algorithm-template
+INPUT /etc/texmf/web2c/texmf.cnf
+INPUT /usr/share/texmf/web2c/texmf.cnf
+INPUT /usr/share/texlive/texmf-dist/web2c/texmf.cnf
+INPUT /var/lib/texmf/web2c/pdftex/pdflatex.fmt
+INPUT /home/attacker0211/algorithm/acm-algorithm-template/contents.tex
+OUTPUT /home/attacker0211/algorithm/acm-algorithm-template/contents.log
