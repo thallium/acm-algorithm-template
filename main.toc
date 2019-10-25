@@ -1,6 +1,0 @@
-\contentsline {section}{\numberline {1}Template}{1}{section.1}
-\contentsline {subsection}{\numberline {1.1}Template}{1}{subsection.1.1}
-\contentsline {section}{\numberline {2}Tree}{1}{section.2}
-\contentsline {subsection}{\numberline {2.1}Fenwick Tree}{1}{subsection.2.1}
-\contentsline {section}{\numberline {3}String}{2}{section.3}
-\contentsline {subsection}{\numberline {3.1}KMP}{2}{subsection.3.1}
