@@ -16,5 +16,9 @@ Manacher
 
 ## Data stucture
 segment tree
+
 fenwick tree
+
 persistent segtree
+
+sparse table

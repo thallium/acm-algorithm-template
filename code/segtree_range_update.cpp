@@ -52,6 +52,3 @@ ll q(int root,int l,int r){
     if(r>mid) ans+=q(root<<1|1,l,r);
     return ans;
 }
-int main(){
-    
-}
