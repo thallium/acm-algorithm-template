@@ -1,6 +1,26 @@
 \BOOKMARK [1][-]{section.1}{Template}{}% 1
 \BOOKMARK [2][-]{subsection.1.1}{Template}{section.1}% 2
-\BOOKMARK [1][-]{section.2}{Tree}{}% 3
+\BOOKMARK [1][-]{section.2}{Data Structure}{}% 3
 \BOOKMARK [2][-]{subsection.2.1}{Fenwick Tree}{section.2}% 4
-\BOOKMARK [1][-]{section.3}{String}{}% 5
-\BOOKMARK [2][-]{subsection.3.1}{KMP}{section.3}% 6
+\BOOKMARK [2][-]{subsection.2.2}{Segment Tree\(single update\)}{section.2}% 5
+\BOOKMARK [2][-]{subsection.2.3}{Segment Tree\(range update\)}{section.2}% 6
+\BOOKMARK [2][-]{subsection.2.4}{Persistent Segment Tree}{section.2}% 7
+\BOOKMARK [2][-]{subsection.2.5}{Sparse Table}{section.2}% 8
+\BOOKMARK [1][-]{section.3}{Graph Theory}{}% 9
+\BOOKMARK [2][-]{subsection.3.1}{Lowest Common Ancestor}{section.3}% 10
+\BOOKMARK [2][-]{subsection.3.2}{Strongly Connected Components}{section.3}% 11
+\BOOKMARK [2][-]{subsection.3.3}{Shortest Path\(Dijkstra\)}{section.3}% 12
+\BOOKMARK [2][-]{subsection.3.4}{Topological Sort}{section.3}% 13
+\BOOKMARK [1][-]{section.4}{Math}{}% 14
+\BOOKMARK [2][-]{subsection.4.1}{Baby-step Giant-step}{section.4}% 15
+\BOOKMARK [2][-]{subsection.4.2}{Euler's totient function}{section.4}% 16
+\BOOKMARK [2][-]{subsection.4.3}{Extended Euclidean}{section.4}% 17
+\BOOKMARK [2][-]{subsection.4.4}{Gause Elimination}{section.4}% 18
+\BOOKMARK [2][-]{subsection.4.5}{Inverse and Modulo of Combanation}{section.4}% 19
+\BOOKMARK [2][-]{subsection.4.6}{Prime}{section.4}% 20
+\BOOKMARK [1][-]{section.5}{String}{}% 21
+\BOOKMARK [2][-]{subsection.5.1}{KMP}{section.5}% 22
+\BOOKMARK [2][-]{subsection.5.2}{Trie}{section.5}% 23
+\BOOKMARK [2][-]{subsection.5.3}{Z-function}{section.5}% 24
+\BOOKMARK [2][-]{subsection.5.4}{AC-Automaton}{section.5}% 25
+\BOOKMARK [2][-]{subsection.5.5}{Manacher}{section.5}% 26
