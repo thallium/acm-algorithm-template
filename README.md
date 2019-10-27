@@ -46,3 +46,5 @@ Modular Multiplicative Inverse
 BSGS
 
 Gauss-Jordan elimination
+
+Chinese Remainder Theorem
