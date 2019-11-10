@@ -33,6 +33,8 @@ Shortest path
 
 Strong connected component
 
+Max Flow (Dinic)
+
 ## Math:
 
 Euler's totient function
