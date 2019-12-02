@@ -1,6 +1,6 @@
-const int N=1e4+5;
+const int N=2e5+5;
 vector<pii> E[N];
-ll dis[N];
+int dis[N];
 bool vis[N];
 // vector<pii> pre[N];
 void dijkstra(int start){
