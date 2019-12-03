@@ -1,6 +1,6 @@
 const int N=2e5+5;
 vector<int> G[N];
-int dep[N],fa[N][31];
+int dep[N],fa[N][31];//fa[a][b]=a's 2^i th ancestor
 
 void dfs(int root,int f){
   fa[root][0]=f;
