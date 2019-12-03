@@ -1,8 +1,8 @@
 #include<bits/stdc++.h>
 #define MXN 50007
 using namespace std;
-std::vector<int> v[MXN];
-std::vector<int> w[MXN];
+vector<int> v[MXN];
+vector<int> w[MXN];
 
 int fa[MXN][31], cost[MXN][31], dep[MXN];
 int n, m;
