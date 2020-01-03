@@ -8,7 +8,7 @@ const int N=1e6+5;
 ll a[N];
 struct segt{
     int l,r;
-    ll val,add;
+    ll val,tag;
 }t[N<<2];
 void build(int root,int l,int r){
     t[root].l=l;
@@ -22,19 +22,21 @@ void build(int root,int l,int r){
     build(root<<1|1,mid+1,r);
     t[root].val=t[root<<1].val+t[root<<1|1].val;
 }
+void addtag(int p,int x){
+    t[p].val+=(t[p].r-t[p].l+1)*x;
+    t[p].tag+=x;
+}
 void spread(int p){
-    if(t[p].add){
-        t[p*2].val+=t[p].add*(t[p<<1].r-t[p<<1].l+1);
-        t[p<<1|1].val+=t[p].add*(t[p<<1|1].r-t[p<<1|1].l+1);
-        t[p<<1].add+=t[p].add;
-        t[p<<1|1].add+=t[p].add;
-        t[p].add=0;
+    if(t[p].tag){
+        addtag(p<<1,t[p].tag);
+        addtag(p<<1|1,t[p].tag);
+        t[p].tag=0;
     }
 }
 void update(int root,int l,int r,ll x){
     if(l<=t[root].l&&r>=t[root].r){
         t[root].val+=x*(t[root].r-t[root].l+1);
-        t[root].add+=x;
+        t[root].tag+=x;
         return;
     }
     spread(root);
