@@ -1,3 +1,4 @@
+// ax+by=gcd(a,b)
 int ex_gcd(int a, int b, int& x, int& y) {
   if (b == 0) {
     x = 1;
