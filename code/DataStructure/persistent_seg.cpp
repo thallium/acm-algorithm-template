@@ -1,56 +1,45 @@
-//find the nth biggest in [l,r]
-#include<bits/stdc++.h>
-
-#define forn(i, n) for (int i = 0; i < (int)(n); ++i)
-using namespace std;
-
-typedef long long ll;
-#define lson tree[tree[root].l]
-#define rson tree[tree[root].r]
-#define tr tree[root]
-#define tcur tree[cur]
-const int maxn=1e5+5;
-const int mxsz=(maxn*20)+10;
-int tot=0;
-int a[maxn],ver[maxn];
-struct segtree{
-	int l,r,data;
-}tree[mxsz];
-void build(int l,int r,int root){
-	if(l==r){
-		tr.data=0;
-		return;
+//find the nth biggest number
+const int N=1e5+5;
+struct node{
+    int l,r,val;
+};
+int ver[N];
+node tr[N*20];
+int cnt=0;
+void build(int& rt,int l,int r){
+    rt=++cnt;
+    tr[rt].val=0;
+    if(l==r) return;
+    int mid=(l+r)>>1;
+    build(tr[rt].l,l,mid);
+    build(tr[rt].r,mid+1,r);
+}
+void update(int& rt,int l,int r,int val){
+    tr[++cnt]=tr[rt];
+    rt=cnt;
+    tr[rt].val++;
+    if(l==r) return;
+    int mid=(l+r)>>1;
+    if(val<=mid) update(tr[rt].l,l,mid,val);
+    else update(tr[rt].r,mid+1,r,val);
+}
+int query(int rl,int rr,int l,int r,int val){
+    int d=tr[tr[rr].r].val-tr[tr[rl].r].val;
+    if(l==r) return l;
+    int mid=(l+r)>>1;
+    if(val<=d) return query(tr[rl].r,tr[rr].r,mid+1,r,val);
+    else return query(tr[rl].l,tr[rr].l,l,mid,val-d);
+}
+int main(){
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+	cnt=0;
+	build(ver[0],1,len);
+    forn(i,n){
+		int x;
+		cin>>x;
+		int pos=getpos(x);
+		update(ver[i],1,len,pos);
 	}
-	int mid=(l+r)>>1;
-	tree[root].l=++tot;
-	build(l,mid,tr.l);
-	tree[root].r=++tot;
-	build(mid+1,r,tr.r);
-	tree[root].data=lson.data+rson.data;
-}
-void update(int root,int cur,int l,int r,int id){
-	if(l==r) return;
-	int mid=(l+r)>>1;
-	if(id<=mid){
-		tcur.r=tr.r;
-		tcur.l=++tot;
-		update(tr.l,tcur.l,l,mid,id);
-	}else{
-		tcur.l=tr.l;
-		tcur.r=++tot;
-		update(tr.r,tcur.r,mid+1,r,id);
-	}
-	tcur.data=tree[tcur.l].data+tree[tcur.r].data;
-}
-int query(int o,int v,int l,int r,int kth){
-	if(l==r) return l;
-	int mid=(l+r)>>1;
-	int res=tree[tree[v].l].data-tree[tree[o].l].data;
-	if(res>=kth)  return query(tree[o].l,tree[v].l,l,mid,kth);
-	else return query(tree[o].r,tree[v].r,mid+1,r,kth-res);
-}
-int n,m,idx[maxn];
-int main(){    
-	update(ver[i-1],ver[i],1,len,x);
-	query(ver[l-1],ver[r],1,len,k)];
+	query(ver[l-1],ver[r],1,len,kth);
 }
