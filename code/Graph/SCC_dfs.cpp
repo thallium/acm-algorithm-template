@@ -15,7 +15,7 @@ void kosaraju() {
   sccCnt = 0;
   for (int i = 1; i <= n; ++i)
     if (!vis[i]) dfs1(i);
-  for (int i = n; i >= 1; --i)
+  for (int i = n-1; i >= 0; --i)
     if (!color[order[i]]) {
       ++sccCnt;
       dfs2(s[i])
