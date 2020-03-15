@@ -15,8 +15,7 @@ void dijkstra(int start){
 		int u=tmp.S;
 		if(vis[u]) continue;
 		vis[u]=1;
-		for(pii it:E[u]){
-			ll v=it.S,cost=it.F;
+		for(auto [cost,v]:E[u]){
 			if(!vis[v]&&dis[v]>dis[u]+cost){
 				dis[v]=dis[u]+cost;
 				// pre[v].clear();
