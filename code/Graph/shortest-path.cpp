@@ -1,7 +1,6 @@
 const int N=2e5+5;
 vector<pii> E[N];
 int dis[N];
-bool vis[N];
 // vector<pii> pre[N];
 void dijkstra(int start){
 	ms(vis,false);
@@ -13,10 +12,9 @@ void dijkstra(int start){
 		pii tmp=q.top();
 		q.pop();
 		int u=tmp.S;
-		if(vis[u]) continue;
-		vis[u]=1;
+		if(tmp.F!=dis[u]) continue;
 		for(auto [cost,v]:E[u]){
-			if(!vis[v]&&dis[v]>dis[u]+cost){
+			if(dis[v]>dis[u]+cost){
 				dis[v]=dis[u]+cost;
 				// pre[v].clear();
 				// pre[v].pb({cost,u});
