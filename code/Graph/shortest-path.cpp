@@ -1,5 +1,5 @@
 const int N=2e5+5;
-vector<pii> E[N];
+vector<pii> G[N];
 int dis[N];
 // vector<pii> pre[N];
 void dijkstra(int start){
@@ -13,7 +13,7 @@ void dijkstra(int start){
 		q.pop();
 		int u=tmp.S;
 		if(tmp.F!=dis[u]) continue;
-		for(auto [cost,v]:E[u]){
+		for(auto [cost,v]:G[u]){
 			if(dis[v]>dis[u]+cost){
 				dis[v]=dis[u]+cost;
 				// pre[v].clear();
