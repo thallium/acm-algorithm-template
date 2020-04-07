@@ -14,6 +14,8 @@ AC automaton
 
 Manacher
 
+Suffix array
+
 ## Data stucture
 segment tree
 
@@ -34,6 +36,8 @@ Shortest path
 Strong connected component
 
 Max Flow (Dinic)
+
+Heavy-light decomposation
 
 ## Math:
 
