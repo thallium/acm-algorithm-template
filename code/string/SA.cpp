@@ -1,5 +1,56 @@
-template <typename T>
-vector<int> suffix_array(int n, const T& s, int char_bound) {
+#include<bits/stdc++.h>
+using namespace std;
+//O(n log(n)^2)
+vector<int> suffix_array(string s) {
+    s+="#";
+    int n = s.size();
+    vector<int> sa(n), rank(n);
+    for(int i = 0; i < n; i++)  rank[i] = s[i], sa[i] = i;
+    for(int k = 0; k < n; k ? k *= 2 : k = 1) {
+        stable_sort(sa.begin(), sa.end(), [&](int i, int j) {
+            if(rank[i] == rank[j]) return rank[(i + k) % n] < rank[(j + k) % n];
+                return rank[i] < rank[j]; });
+        vector<int> nrank(n);
+        int r = 0;
+        for(int i = 1; i < n; i++) {
+            if(rank[sa[i]] != rank[sa[i - 1]]) r++;
+            else if(rank[(sa[i] + k) % n] != rank[(sa[i - 1] + k) % n]) r++;
+            nrank[sa[i]] = r;
+        }
+        rank = nrank;
+    }
+    sa.erase(sa.begin());
+    return sa;
+}
+//O(n log(n))
+vector<int> suffix_array(string s) {
+    s+="#";
+    int n = s.size(), N = n + 256;
+    vector<int> sa(n), ra(n);
+    for(int i = 0; i < n; i++) sa[i] = i, ra[i] = s[i];
+    for(int k = 0; k < n; k ? k *= 2 : k++) {
+        vector<int> nsa(sa), nra(n), cnt(N);
+        for(int i = 0; i < n; i++) nsa[i] = (nsa[i] - k + n) % n;
+        for(int i = 0; i < n; i++) cnt[ra[i]]++;
+        for(int i = 1; i < N; i++) cnt[i] += cnt[i - 1];
+        for(int i = n - 1; i >= 0; i--) sa[--cnt[ra[nsa[i]]]] = nsa[i];
+ 
+        int r = 0;
+        for(int i = 1; i < n; i++) {
+            if(ra[sa[i]] != ra[sa[i - 1]]) r++;
+            else if(ra[(sa[i] + k) % n] != ra[(sa[i - 1] + k) % n]) r++;
+            nra[sa[i]] = r;
+        }
+        ra = nra;
+    }
+    sa.erase(sa.begin());
+    return sa;
+}
+
+//O(n)
+vector<int> suffix_array(const string& s, int char_bound) {
+
+    int n=s.size();
     vector<int> a(n);
     if (n == 0) return a;
 
@@ -63,34 +114,22 @@ vector<int> suffix_array(int n, const T& s, int char_bound) {
     return a;
 }
 
-template <typename T>
-vector<int> suffix_array(const T& s, int char_bound) {
-    return suffix_array((int)s.size(), s, char_bound);
-}
 
-template <typename T>
-vector<int> build_lcp(int n, const T& s, const vector<int>& sa) {
+vector<int> build_lcp(const string& s, const vector<int>& sa) {
+    int n=s.size();
     vector<int> pos(n);
-    for (int i = 0; i < n; i++)
-        pos[sa[i]] = i;
+    for (int i = 0; i < n; i++) pos[sa[i]] = i;
 
     vector<int> lcp(max(n - 1, 0));
     int k = 0;
     for (int i = 0; i < n; i++) {
         k = max(k - 1, 0);
-        if (pos[i] == n - 1)
-            k = 0;
+        if (pos[i] == n - 1) k = 0;
         else {
             int j = sa[pos[i] + 1];
-            while (i + k < n && j + k < n && s[i + k] == s[j + k])
-                k++;
+            while (i + k < n && j + k < n && s[i + k] == s[j + k]) k++;
             lcp[pos[i]] = k;
         }
     }
     return lcp;
-}
-
-template <typename T>
-vector<int> build_lcp(const T& s, const vector<int>& sa) {
-    return build_lcp((int)s.size(), s, sa);
 }
