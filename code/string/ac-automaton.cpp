@@ -6,20 +6,15 @@
 using namespace std;
 
 const int N=1e6+5;
-namespace AC{
-    int tr[N][26],tot=0;
-    int e[N],fail[N];
+struct AC{
+    array<array<int,26>,N> tr{};
+    int tot=0;
+    array<int,N> e{},fail{};
     queue<int> q;
-    void ini(){
-        ms(tr,0);
-        ms(fail,0);
-        ms(e,0);
-        tot=0;
-    }
-    void insert(string s){
+    void insert(const string& s){
         int u=0;
-        forn(i,s.length()){
-            int c=s[i]-'a';
+        for(auto ch:s){
+            int c=ch-'a';
             if(tr[u][c]==0) tr[u][c]=++tot;
             u=tr[u][c];
         }
@@ -39,10 +34,10 @@ namespace AC{
             }
         }
     }
-    int query(string t){
+    int query(const string& s){
         int u=0,res=0;
-        forn(i,t.length()){
-            u=tr[u][t[i]-'a'];
+        for(auto ch:s){
+            u=tr[u][ch-'a'];
             for(int j=u;j&&e[j]!=-1;j=fail[j]){
                 res+=e[j];
                 e[j]=-1;
@@ -50,20 +45,20 @@ namespace AC{
         }
         return res;
     }
-}
+};
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(0);
-    AC::ini();
+    AC ac;
     int n;
     cin>>n;
     string st;
     while(n--){
         cin>>st;
-        AC::insert(st);
+        ac.insert(st);
     }
-    AC::build();
+    ac.build();
     cin>>st;
-    cout<<AC::query(st)<<endl;
+    cout<<ac.query(st)<<endl;
     return 0;
 }
