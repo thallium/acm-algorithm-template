@@ -17,8 +17,8 @@ struct Trie {
         int p = 0;
         for (int i = 0; i < len; i++) {
             int c = s[i] - 'a';
-            if (!nex[p][c]) return 0;
-            p = nex[p][c];
+            if (!child[p][c]) return 0;
+            p = child[p][c];
         }
         return exist[p];
     }
