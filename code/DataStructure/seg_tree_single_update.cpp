@@ -1,46 +1,41 @@
-#include<bits/stdc++.h>
-
-#define forn(i, n) for (int i = 0; i < (int)(n); ++i)
-#define ms(a,x) memset(a,x,sizeof(a))
-#define tr t[root]
-using namespace std;
-
-const int N=5e4+5;
-struct segtree{
-    int l,r,val;
-}t[N<<2];
-int a[N];
-void build(int root,int l,int r){
-    tr.l=l;
-    tr.r=r;
-    if(l==r){
-        tr.val=a[l];
-        return;
+struct SegTree{
+    int n;
+    vector<int> t;
+    SegTree(int n_):n(n_),t(4*n){}
+    SegTree(const vector<int>& v):SegTree((int)v.size()){
+        build(1,0,n-1,v);
     }
-    int mid=(l+r)>>1;
-    build(root<<1,l,mid);
-    build(root<<1|1,mid+1,r);
-    tr.val=t[root<<1].val+t[root<<1|1].val;
-}
-void update(int root,int i,int x){
-    int l=tr.l;
-    int r=tr.r;
-    if(tr.l==tr.r){
-        tr.val+=x;
-        return;
+    void pushup(int node){
+        t[node]=t[node<<1]+t[node<<1|1];
     }
-    int mid=(l+r)/2;
-    if(i<=mid) update(root<<1,i,x);
-    else update(root<<1|1,i,x);
-    tr.val=t[root<<1].val+t[root<<1|1].val;
-}
-int q(int root,int l,int r){
-    if(l<=tr.l&&r>=tr.r){
-        return tr.val;
+    void build(int node,int l,int r,const vector<int>& v){
+        if(l==r){
+            t[node]=v[l];
+            return;
+        }
+        int mid=(l+r)>>1;
+        build(root<<1,l,mid,v);
+        build(root<<1|1,mid+1,r,v);
+        pushup(node);
     }
-    int mid=(tr.l+tr.r)>>1;
-    int ans=0;
-    if(l<=mid) ans+=q(root<<1,l,r);
-    if(r>mid) ans+=q(root<<1|1,l,r);
-    return ans;
-}
+    void update(int node,int i,int x,int l,int r){
+        if(l==r){
+            t[node]+=x;
+            return;
+        }
+        int mid=(l+r)/2;
+        if(i<=mid) update(node<<1,i,x,l,mid);
+        else update(node<<1|1,i,x,mid+1,r);
+        pushup(node);
+    }
+    int query(int node,int ql,int qr,int l,int r){
+        if(ql<=l&&qr>=r){
+            return t[node];
+        }
+        int mid=(l+r)>>1;
+        int ans=0;
+        if(ql<=mid) ans+=query(node<<1,ql,qr,l,mid);
+        if(qr>mid) ans+=query(node<<1|1,ql,qr,mid+1,r);
+        return ans;
+    }
+};

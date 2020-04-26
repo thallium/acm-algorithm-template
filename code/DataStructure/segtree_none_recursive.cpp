@@ -1,10 +1,8 @@
 struct SegTree{
     int n;
     vector<int> t;
-    SegTree(int n_):n(n_){ t=vector<int>(2*n); }
-    SegTree(vector<int>& a){
-        n=a.size();
-        t=vector<int>(2*n);
+    SegTree(int n_):n(n_),t(2*n){}
+    SegTree(vector<int>& a):SegTree((int)a.size()){
         for (int i=0;i<n;i++) t[n+i]=a[i];
         for (int i = n - 1; i > 0; --i) t[i] = t[i<<1] + t[i<<1|1];
     }
