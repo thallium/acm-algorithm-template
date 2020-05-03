@@ -3,7 +3,6 @@ vector<pii> G[N];
 int dis[N];
 // vector<pii> pre[N];
 void dijkstra(int start){
-	ms(vis,false);
 	ms(dis,INF);
 	priority_queue<pii,vector<pii>,greater<pii>> q;
 	dis[start]=0;
