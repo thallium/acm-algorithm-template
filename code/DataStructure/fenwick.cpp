@@ -1,12 +1,10 @@
 struct fenwick{
-    vector<ll> t;
     int n;
+    vector<ll> t;
     fenwick(int n_):n(n_),t(n+1){}
-    fenwick(const vector<int>& v)fenwick((int)v.size()){
+    fenwick(const vector<int>& v):fenwick((int)v.size()){
         for(int i=1;i<=n;i++){
-            t[i]+=v[i-1];
-            int j=i+(i&-i);
-            if(j<=n) t[j]+=t[i];
+            t[i]+=v[i-1]; int j=i+(i&-i); if(j<=n) t[j]+=t[i];
         }
     }
     void update(int i,int x){
@@ -19,6 +17,9 @@ struct fenwick{
         for(;i>0;i-=i&-i) res+=t[i];
         return res;
     }
+    ll query(int l,int r){
+        return query(r)-query(l-1);
+    }
 };
 //fenwick trie with range update and range sum query
 
@@ -27,16 +28,19 @@ struct fenwick{
     int n;
     fenwick(int n_):n(n_),sum1(n),sum2(n){}
 
-    void add(int p, ll x){
+    void update(int p, ll x){
         for(int i=p;i<=n;i+=i&-i) sum1[i] += x, sum2[i] += x * p;
     }
-    void range_add(int l,int r, ll x){
+    void update(int l,int r, ll x){
         add(l, x), add(r + 1, -x);
     }
     ll query(int p){
         ll res = 0;
         for(int i=p;i;i-=i&-i) res += (p + 1) * sum1[i] - sum2[i];
         return res;
+    }
+    ll query(int l,int r){
+        return query(r)-query(l-r);
     }
 };
 // two dimensional, single update, range query
