@@ -1,6 +1,6 @@
 #include<bits/stdc++.h>
 using namespace std;
-//O(n log(n)^2)
+//O(n log(n)^2),actually calculates cyclic shifts
 vector<int> suffix_array(string s) {
     s+="#";
     int n = s.size();
@@ -22,7 +22,7 @@ vector<int> suffix_array(string s) {
     sa.erase(sa.begin());
     return sa;
 }
-//O(n log(n))
+//O(n log(n)),actually calculates cyclic shifts
 vector<int> suffix_array(string s) {
     s+="#";
     int n = s.size(), N = n + 256;
