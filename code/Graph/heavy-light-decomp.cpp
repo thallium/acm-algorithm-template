@@ -1,5 +1,5 @@
 vector<int> G[N];
-vector<int> fa,dep,heavy,head,pos,posr;
+vector<int> fa,dep,heavy,head,pos,posr;//initialize heavy with -1
 int cnt;
 int dfs(int u){
 	int size=1;
@@ -29,6 +29,7 @@ ll pathsum(int u,int v){
         res+=interval_sum(pos[head[u]],pos[u]);
         u=fa[head[u]];
     }
+    if(pos[u]>pos[v]) swap(u,v);
     res+=interval_sum(pos[u],pos[v]);
     return res;
 }
