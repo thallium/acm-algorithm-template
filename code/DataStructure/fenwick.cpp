@@ -20,6 +20,17 @@ struct fenwick{
     ll query(int l,int r){
         return query(r)-query(l-1);
     }
+    int search(ll prefix){//eqvuivalent to upper_bound(prefix)
+        int pos=0;
+        ll sum=0;
+        for(int i=20;i>=0;i--){
+            if(pos+(1<<i)<=n&&(sum+t[pos+(1<<i)]<=prefix)){
+                pos+=(1<<i);
+                sum+=t[pos];
+            }
+        }
+        return pos+1;
+    }
 };
 //fenwick trie with range update and range sum query
 
