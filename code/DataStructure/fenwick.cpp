@@ -20,7 +20,7 @@ struct fenwick{
     ll query(int l,int r){
         return query(r)-query(l-1);
     }
-    int search(ll prefix){//eqvuivalent to upper_bound(prefix)
+    int search(ll prefix){//equivalent to upper_bound(prefix)
         int pos=0;
         ll sum=0;
         for(int i=20;i>=0;i--){
@@ -51,7 +51,7 @@ struct fenwick{
         return res;
     }
     ll query(int l,int r){
-        return query(r)-query(l-r);
+        return query(r)-query(l-1);
     }
 };
 // two dimensional, single update, range query

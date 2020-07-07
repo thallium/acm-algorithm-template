@@ -1,7 +1,7 @@
 // The Z-function for this string is an array of length n where the i-th element is equal to the greatest number of characters starting from the position i that coincide with the first characters of s.
 // In other words, z[i] is the length of the longest common prefix between s and the suffix of s starting at i.
 
-vector<int> z_function(string s) {
+vector<int> z_function(const string& s) {
     int n = (int)s.size();
     vector<int> z(n);
     for (int i = 1, l = 0, r = 0; i < n; ++i) {
