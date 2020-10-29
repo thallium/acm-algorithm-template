@@ -1,3 +1,5 @@
+// using treap to maintain a sequence that support multiple operation, index
+// starts from 1!
 mt19937 gen(chrono::high_resolution_clock::now().time_since_epoch().count());
 template <typename T> struct Treap {
     struct data {
@@ -83,7 +85,7 @@ template <typename T> struct Treap {
             return update(tr);
         }
     }
-    void split(int rt, int k, int &x, int &y) {
+    void split(int rt, int k, int &x, int &y) { // split between k and k+1
         if (!rt) {
             x = y = 0;
             return;
@@ -107,14 +109,14 @@ template <typename T> struct Treap {
     // interface
     T get(int id) { return nodes[id].d; }
     int size() { return nodes[root].sz; }
-    int kth(int k) {
+    int kth(int k) { // returns the index of kth node
         int x, y, z;
         split(root, k, y, z);
         split(y, k - 1, x, y);
         root = merge(merge(x, y), z);
         return y;
     }
-    void insert(int k, data v) {
+    void insert(int k, data v) { // insert at kth position
         int l, r;
         split(root, k - 1, l, r);
         int rt = new_node(v);
