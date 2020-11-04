@@ -1,28 +1,30 @@
 // using treap to maintain a sequence that support multiple operation, index
 // starts from 1!
+#include<bits/stdc++.h>
+using namespace std;
 mt19937 gen(chrono::high_resolution_clock::now().time_since_epoch().count());
+struct data {
+    int v;
+    data(int _v = 0) : v(_v) {}
+    data operator+(const data &d) const {
+        data r;
+        r.v = v + d.v;
+        return r;
+    }
+    data operator*(int t) const {
+        data r;
+        r.v = v * t;
+        return r;
+    }
+    operator bool() const { return v != 0; }
+    operator int() const { return v; }
+};
 template <typename T> struct Treap {
-    struct data {
-        T v;
-        data(int _v = 0) : v(_v) {}
-        data operator+(const data &d) const {
-            data r;
-            r.v = v + d.v;
-            return r;
-        }
-        data operator*(int t) const {
-            data r;
-            r.v = v * t;
-            return r;
-        }
-        operator bool() const { return v != 0; }
-        operator T() const { return v; }
-    };
     struct node {
         int ch[2], sz;
         unsigned k;
-        data d, sum, lz_add;
-        node(int z = 1) : sz(z), k(gen()) { ch[0] = ch[1] = 0; }
+        T d, sum, lz_add;
+        node(int z = 1) : sz(z), k((unsigned)gen()) { ch[0] = ch[1] = 0; }
     };
     vector<node> nodes;
     int root, recyc, reserve_size;
@@ -38,7 +40,7 @@ template <typename T> struct Treap {
             nodes.reserve((reserve_size *= 2) + 1);
     }
     inline int &ch(int rt, int r) { return nodes[rt].ch[r]; }
-    int new_node(const data &d) {
+    int new_node(const T &d) {
         int id = (int)nodes.size();
         if (recyc) {
             id = recyc;
@@ -58,7 +60,7 @@ template <typename T> struct Treap {
         n.sum = n.d + nodes[n.ch[0]].sum + nodes[n.ch[1]].sum;
         return rt;
     }
-    void add(int rt, const data &d) {
+    void add(int rt, const T &d) {
         node &n = nodes[rt];
         n.lz_add = n.lz_add + d;
         n.d = n.d + d;
@@ -116,7 +118,7 @@ template <typename T> struct Treap {
         root = merge(merge(x, y), z);
         return y;
     }
-    void insert(int k, data v) { // insert at kth position
+    void insert(int k, T v) { // insert at kth position
         int l, r;
         split(root, k - 1, l, r);
         int rt = new_node(v);
@@ -129,7 +131,7 @@ template <typename T> struct Treap {
         remove(y);
         root = merge(x, z);
     }
-    void range_add(int l, int r, data v) {
+    void range_add(int l, int r, T v) {
         int x, y, z;
         split(root, r, y, z);
         split(y, l - 1, x, y);
