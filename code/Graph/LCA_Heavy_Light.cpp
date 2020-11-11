@@ -1,10 +1,9 @@
-const int N=5e5+5;
-vector<int> G[N];
-vector<int> fa,dep,heavy,head;
+vector<vector<int>> g;
+vector<int> fa,dep,heavy,head; // remember to initialize heavy with -1
 
 int dfs(int u){
 	int size=1,mx=0;
-	for(int v:G[u]){
+	for(int v:g[u]){
         if(v==fa[u]) continue;
         fa[v]=u,dep[v]=dep[u]+1;
         int csize=dfs(v);
@@ -19,7 +18,7 @@ int dfs(int u){
 void dfs2(int u,int h){
     head[u]=h;
     if(heavy[u]!=-1) dfs2(heavy[u],h);
-    for(int v:G[u]){
+    for(int v:g[u]){
         if(v!=fa[u]&&v!=heavy[u]) dfs2(v,v);
     }
 }

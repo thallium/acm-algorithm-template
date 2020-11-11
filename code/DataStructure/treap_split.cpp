@@ -24,14 +24,14 @@ template <typename T> struct Treap {
         int ch[2], sz;
         unsigned k;
         T d, sum, lz_add;
-        node(int z = 1) : sz(z), k((unsigned)gen()) { ch[0] = ch[1] = 0; }
+        node(T d_, int z = 1) : sz(z), k((unsigned)gen()), d(d_), sum(d) { ch[0] = ch[1] = 0; }
     };
     vector<node> nodes;
     int root, recyc, reserve_size;
     Treap(int size=0) {
         nodes.clear();
         nodes.reserve((size = max(size, 15)) + 1);
-        nodes.push_back(node(0));
+        nodes.push_back(node(0, 0));
         root = recyc = 0;
         reserve_size = size + 1;
     }
@@ -48,10 +48,8 @@ template <typename T> struct Treap {
                 recyc = merge(ch(recyc, 0), ch(recyc, 1));
             else
                 recyc = ch(recyc, ch(recyc,0) ? 0 : 1);
-            nodes[id] = node();
-        } else nodes.push_back(node());
-        nodes[id].d = d;
-        nodes[id].sum = d;
+            nodes[id] = node(d);
+        } else nodes.push_back(node(d));
         return id;
     }
     int update(int rt) {
