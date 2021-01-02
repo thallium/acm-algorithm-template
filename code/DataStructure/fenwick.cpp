@@ -1,5 +1,6 @@
 #include <bits/stdc++.h>
 using namespace std;
+
 template <typename T>
 struct fenwick{
     int n;

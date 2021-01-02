@@ -8,7 +8,7 @@ void dijkstra(int start){
         auto [d, u]=q.top();
         q.pop();
         if(d!=dis[u]) continue;
-        for(auto [cost,v]:G[u]){
+        for(auto [cost,v]:g[u]){
             if(dis[v]>dis[u]+cost){
                 dis[v]=dis[u]+cost;
                 // pre[v].clear();

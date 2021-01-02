@@ -1,31 +1,29 @@
-const int N=2e5+5;
-vector<int> G[N];
-int dep[N],fa[N][31];//fa[a][b]=a's 2^i th ancestor
+auto dfs=[&](auto& dfs, int u, int p) -> void {
+    if (u==-1) return;
+    pa[u][0] = p;
+    dep[u] = dep[p] + 1;
+    for (int i = 1; i < 20; i++) {
+        pa[u][i] = pa[pa[u][i - 1]][i - 1];
+    }
+    for (auto v : g[u]) {
+        if (v == p) continue;
+        dfs(dfs, v, u);
+    }
+};
 
-void dfs(int root,int f){
-    fa[root][0]=f;
-    dep[root]=dep[f]+1;
-    for1(i,30){
-        fa[root][i]=fa[fa[root][i-1]][i-1];
+auto lca=[&](int x, int y) {
+    if (dep[x] > dep[y]) swap(x, y);
+    int tmp = dep[y] - dep[x];
+    for (int j = 0; tmp; ++j, tmp >>= 1) {
+        if (tmp & 1) y = pa[y][j];
     }
-    for(auto it:G[root]){
-        if(it==f) continue;
-        dfs(it,root);
-    }
-}
-
-int lca(int x,int y){
-    if(dep[x]>dep[y]) swap(x,y);
-    int tmp=dep[y]-dep[x];
-    for(int j=0;tmp;++j, tmp>>=1){
-        if(tmp&1) y=fa[y][j];
-    }
-    if(x==y) return x;
-    for(int j=30;j>=0&&y!=x;--j){
-        if(fa[x][j]!=fa[y][j]){
-            x=fa[x][j];
-            y=fa[y][j];
+    if (x == y) return x;
+    for (int j = 19; j >= 0 && y != x; j--) {
+        if (pa[x][j] != pa[y][j]) {
+            x = pa[x][j];
+            y = pa[y][j];
         }
     }
-    return fa[x][0];
-}
+    return pa[x][0];
+};
+
