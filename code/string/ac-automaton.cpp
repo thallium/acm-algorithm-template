@@ -1,64 +1,73 @@
-//given some words and a passage, find how many words appeared in the passage
+/**
+ * Source: https://github.com/kth-competitive-programming/kactl/blob/master/content/strings/AhoCorasick.h
+ * Description: Aho-Corasick automaton, used for multiple pattern matching.
+ * Initialize with AhoCorasick ac(patterns); the automaton start node will be at index 0.
+ * find(word) returns for each position the index of the longest word that ends there, or -1 if none.
+ * Duplicate patterns are allowed; empty patterns are not.
+ * To find the longest words that start at each position, reverse all input.
+ * For large alphabets, split each symbol into chunks, with sentinel bits for symbol boundaries.
+ * Time: construction takes $O(26N)$, where $N =$ sum of length of patterns.
+ * find(x) is $O(N)$, where N = length of x. findAll is $O(NM)$.
+ */
 #include<bits/stdc++.h>
-#define forn(i, n) for (int i = 0; i < (int)(n); ++i)
-#define ms(a, x) memset(a, x, sizeof(a))
-#define endl '\n'
 using namespace std;
+#define sz(x) int(x.size())
 
-const int N=1e6+5;
-struct AC{
-    array<array<int,26>,N> tr{};
-    int tot=0;
-    array<int,N> e{},fail{};
-    queue<int> q;
-    void insert(const string& s){
-        int u=0;
-        for(auto ch:s){
-            int c=ch-'a';
-            if(tr[u][c]==0) tr[u][c]=++tot;
-            u=tr[u][c];
+struct AhoCorasick {
+    enum {alpha = 26, first = 'a'}; // change this!
+    struct Node {
+        // (nmatches is optional)
+        int back, next[alpha], start = -1, end = -1, nmatches = 0;
+        Node(int v) { memset(next, v, sizeof(next)); }
+    };
+    vector<Node> N;
+    vector<int> backp;
+
+    AhoCorasick() : N(1, -1) {}
+
+    void insert(string& s, int j) { // j: id of string s (must be 0 indexed!)
+        assert(!s.empty());
+        int n = 0;
+        for (char c : s) {
+            int& m = N[n].next[c - first];
+            if (m == -1) { n = m = sz(N); N.emplace_back(-1); }
+            else n = m;
         }
-        e[u]++;
+        if (N[n].end == -1) N[n].start = j;
+        backp.push_back(N[n].end);
+        N[n].end = j;
+        N[n].nmatches++;
     }
-    void build(){
-        forn(i,26) if(tr[0][i]) q.push(tr[0][i]);
-        while(!q.empty()){
-            int u=q.front();
-            q.pop();
-            forn(i,26){
-                if(tr[u][i]){
-                    fail[tr[u][i]]=tr[fail[u]][i];
-                    q.push(tr[u][i]);
+
+    void build() {
+        N[0].back = sz(N);
+        N.emplace_back(0);
+
+        queue<int> q;
+        for (q.push(0); !q.empty(); q.pop()) {
+            int n = q.front(), prev = N[n].back;
+            for (int i=0; i<alpha; i++) {
+                int &ed = N[n].next[i], y = N[prev].next[i];
+                if (ed == -1) ed = y;
+                else {
+                    N[ed].back = y;
+                    (N[ed].end == -1 ? N[ed].end : backp[N[ed].start])
+                        = N[y].end;
+                    N[ed].nmatches += N[y].nmatches;
+                    q.push(ed);
                 }
-                else tr[u][i]=tr[fail[u]][i];
             }
         }
     }
-    int query(const string& s){
-        int u=0,res=0;
-        for(auto ch:s){
-            u=tr[u][ch-'a'];
-            for(int j=u;j&&e[j]!=-1;j=fail[j]){
-                res+=e[j];
-                e[j]=-1;
-            }
+
+    vector<int> find(string word) {
+        int n = 0;
+        vector<int> res; // ll count = 0;
+        for (char c : word) {
+            n = N[n].next[c - first];
+            res.push_back(N[n].end);
+            // count += N[n].nmatches;
         }
         return res;
     }
 };
-int main() {
-    ios::sync_with_stdio(false);
-    cin.tie(0);
-    AC ac;
-    int n;
-    cin>>n;
-    string st;
-    while(n--){
-        cin>>st;
-        ac.insert(st);
-    }
-    ac.build();
-    cin>>st;
-    cout<<ac.query(st)<<endl;
-    return 0;
-}
