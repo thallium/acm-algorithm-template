@@ -1,28 +1,36 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+template <typename T>
 struct fenwick{
     int n;
-    vector<ll> t;
-    fenwick(int n_):n(n_),t(n+1){}
-    fenwick(const vector<int>& v):fenwick((int)v.size()){
-        for(int i=1;i<=n;i++){
+    vector<T> t;
+
+    fenwick(int n_):n(n_), t(n+1) {}
+    fenwick(const vector<int>& v) : fenwick((int)v.size()) {
+        for (int i=1;i<=n;i++) {
             t[i]+=v[i-1]; int j=i+(i&-i); if(j<=n) t[j]+=t[i];
         }
     }
+
     void update(int i,int x){
         for(;i<=n;i+=i&-i){
             t[i]+=x;
         }
     }
-    ll query(int i){
-        ll res=0;
+
+    T query(int i){
+        T res=0;
         for(;i>0;i-=i&-i) res+=t[i];
         return res;
     }
-    ll query(int l,int r){
+
+    T query(int l,int r){
         return query(r)-query(l-1);
     }
-    int search(ll prefix){//equivalent to upper_bound(prefix)
+    int search(T prefix){//equivalent to upper_bound(prefix)
         int pos=0;
-        ll sum=0;
+        T sum=0;
         for(int i=20;i>=0;i--){
             if(pos+(1<<i)<=n&&(sum+t[pos+(1<<i)]<=prefix)){
                 pos+=(1<<i);

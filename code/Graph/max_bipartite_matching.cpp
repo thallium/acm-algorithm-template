@@ -1,18 +1,14 @@
+#include <vector>
+#include <cassert>
+using std::vector;
 struct augment_path {
+    int n, m;         // number of vertices of two sets
+    int dfn;          // time
     vector<vector<int> > g;
     vector<int> pa, pb;  // matchings
     vector<int> vis;
-    int n, m;         // number of vertices of two sets
-    int dfn;          // time
 
-    augment_path(int _n, int _m) : n(_n), m(_m) {
-        assert(0 <= n && 0 <= m);
-        pa = vector<int>(n, -1);
-        pb = vector<int>(m, -1);
-        vis = vector<int>(n);
-        g.resize(n);
-        dfn = 0;
-    }
+    augment_path(int _n, int _m) : n(_n), m(_m), dfn(0), pa(n, -1), pb(m, -1), vis(n), g(n) { }
 
     void add(int from, int to) {
         assert(0 <= from && from < n && 0 <= to && to < m);
