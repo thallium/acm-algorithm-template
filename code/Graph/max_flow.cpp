@@ -31,8 +31,7 @@ struct Flow {
         return false;
     }
     int dfs(int u, int t, int f) {
-        if (u == t)
-            return f;
+        if (u == t) return f;
         int r = f;
         for (int &i = cur[u]; i < int(g[u].size()); ++i) {
             int j = g[u][i];

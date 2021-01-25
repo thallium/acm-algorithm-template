@@ -40,18 +40,18 @@ struct fenwick{
         return pos+1;
     }
 };
-//fenwick trie with range update and range sum query
 
+//fenwick trie with range update and range sum query
 struct fenwick{
-    vector<ll> sum1,sum2;
     int n;
+    vector<ll> sum1,sum2;
     fenwick(int n_):n(n_),sum1(n),sum2(n){}
 
     void update(int p, ll x){
         for(int i=p;i<=n;i+=i&-i) sum1[i] += x, sum2[i] += x * p;
     }
     void update(int l,int r, ll x){
-        add(l, x), add(r + 1, -x);
+        update(l, x), update(r + 1, -x);
     }
     ll query(int p){
         ll res = 0;
