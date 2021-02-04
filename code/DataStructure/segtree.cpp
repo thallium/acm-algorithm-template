@@ -14,8 +14,8 @@ struct SegTree{
             return;
         }
         int mid=(l+r)>>1;
-        build(root<<1,l,mid,v);
-        build(root<<1|1,mid+1,r,v);
+        build(node<<1,l,mid,v);
+        build(node<<1|1,mid+1,r,v);
         pushup(node);
     }
     void update(int node,int i,int x,int l,int r){

@@ -41,7 +41,7 @@ struct fenwick{
     }
 };
 
-//fenwick trie with range update and range sum query
+//fenwick tree with range update and range sum query
 struct fenwick{
     int n;
     vector<ll> sum1,sum2;
