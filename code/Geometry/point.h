@@ -60,12 +60,6 @@ double orientedAngle(P a, P b, P c) {
     return 2*M_PI - angle(b-a, c-a);
 }
 
-double orientedAngle(P a, P b, P c) {
-  if (orient(a,b,c) >= 0)
-    return angle(b-a, c-a);
-  else
-    return 2*M_PI - angle(b-a, c-a);
-}
 
 bool isConvex(vector<P> p) {
   bool hasPos=false, hasNeg=false;
@@ -90,8 +84,8 @@ void polarSort(vector<P> &v) {
 }
 
 void polarSortAround(P o, vector<P> &v) {
-  sort(v.begin(), v.end(), [](P v, P w) {
-      return make_tuple(half(v-o), 0)) <
+  sort(v.begin(), v.end(), [&](P v, P w) {
+      return make_tuple(half(v-o), 0) <
         make_tuple(half(w-o), cross(v-o, w-o));
   });
 }
