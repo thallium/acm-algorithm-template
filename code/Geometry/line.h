@@ -1,13 +1,16 @@
 struct L {
-  P v; T c;
+  P ps[2]; P v; T c;
+  P& operator[](int i) { return ps[i]; }
   // From direction vector v and offset c
   L(P v, T c) : v(v), c(c) {}
   // From equation ax+by=c
   L(T a, T b, T c) : v({b,-a}), c(c) {}
   // From points P and Q
-  L(P p, P q) : v(q-p), c(cross(v,p)) {}
-  // Will be defined later:
-  // - these work with T = int
+  L(P p, P q) : v(q-p), c(cross(v,p)) {
+    ps[0] = p;
+    ps[1] = q;
+  }
+
   T side(P p) {return cross(v,p)-c;}
   double dist(P p) {return abs(side(p)) / abs(v);}
   double sqDist(P p) {return side(p)*side(p) / (double)sq(v);}
@@ -35,3 +38,6 @@ L bisector(L l1, L l2, bool interior) {
   return {l2.v/abs(l2.v) + l1.v/abs(l1.v) * sign,
     l2.c/abs(l2.v) + l1.c/abs(l1.v) * sign};
 }
+
+bool parallel(L l0, L l1) { return sign( l0.dir().det( l1.dir() ) ) == 0; }
+bool sameDir(L l0, L l1) { return parallel(l0, l1) && sign(l0.dir().dot(l1.dir()) ) == 1; }

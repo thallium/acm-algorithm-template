@@ -19,7 +19,7 @@ bool properInter(P a, P b, P c, P d, P &out) {
 }
 
 struct cmpX {
-  bool operator()(P a, P b) {
+  bool operator()(P a, P b) const {
     return make_pair(a.x, a.y) < make_pair(b.x, b.y);
   }
 };
@@ -39,8 +39,7 @@ double segPoint(P a, P b, P p) {
   if (a != b) {
     L l(a,b);
     if (l.cmpProj(a,p) && l.cmpProj(p,b)) // if closest to
-      projection
-        return l.dist(p); // output distance to
+      return l.dist(p); // output distance to
   }
   return min(abs(p-a), abs(p-b)); // otherwise distance to A or B
 }
