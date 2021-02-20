@@ -43,6 +43,27 @@ P linearTransfo(P p, P q, P r, P fp, P fq) {
   return fp + (r-p) * (fq-fp) / (q-p);
 }
 
+bool isPerp(P v, P w) {return dot(v,w) == 0;}
+
+double angle(P v, P w) {
+  return acos(clamp(dot(v,w) / abs(v) / abs(w), -1.0, 1.0));
+}
+
+T orient(P a, P b, P c) {return cross(b-a,c-a);}
+
+bool inAngle(P a, P b, P c, P p) {
+  assert(orient(a,b,c) != 0);
+  if (orient(a,b,c) < 0) swap(b,c);
+  return orient(a,b,p) >= 0 && orient(a,c,p) <= 0;
+}
+
+double orientedAngle(P a, P b, P c) {
+  if (orient(a,b,c) >= 0)
+    return angle(b-a, c-a);
+  else
+    return 2*M_PI - angle(b-a, c-a);
+}
+
 bool isConvex(vector<P> p) {
   bool hasPos=false, hasNeg=false;
   for (int i=0, n=p.size(); i<n; i++) {
