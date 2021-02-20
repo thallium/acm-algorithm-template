@@ -1,8 +1,9 @@
-constexpr int INF=1e9;
-vector<int> dijkstra(const vector<vector<pii>>& g, int start) {
-    vector<int> dis(g.size(), INF );
+constexpr long long INF=1e18;
+vector<long long> dijkstra(const vector<vector<pair<int, int>>>& g, int start) {
+    vector dis(g.size(), INF);
     // vector<pii> pre[N];
-    priority_queue<pii, vector<pii>, greater<pii>> q;
+    using node=pair<long long, int>;
+    priority_queue<node, vector<node>, greater<node>> q;
     dis[start] = 0;
     q.emplace(0, start);
     while (!q.empty()) {
@@ -17,7 +18,7 @@ vector<int> dijkstra(const vector<vector<pii>>& g, int start) {
                 q.emplace(dis[v], v);
             }
             // else if(dis[v]==dis[u]+cost)
-            // 	pre[v].pb({cost,u});
+            // pre[v].pb({cost,u});
         }
     }
     return dis;
