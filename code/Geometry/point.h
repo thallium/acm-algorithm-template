@@ -32,33 +32,25 @@ struct P {
 	double abs2() { return x * x + y * y; }
 	P rot90() { return P(-y,x);}
 	P unit() { return *this/abs(); }
-	int quad() const { return sign(y) == 1 || (sign(y) == 0 && sign(x) >= 0); }
+  int quad() const { return sign(y) == 1 || (sign(y) == 0 && sign(x) >= 0); }
 	P rot(double an){ return {x*cos(an)-y*sin(an),x*sin(an) + y*cos(an)}; }
 };
 
 #define cross(p1,p2,p3) ((p2.x-p1.x)*(p3.y-p1.y)-(p3.x-p1.x)*(p2.y-p1.y))
 #define crossOp(p1,p2,p3) sign(cross(p1,p2,p3))
-  
-P linearTransfo(P p, P q, P r, P fp, P fq) {
-  return fp + (r-p) * (fq-fp) / (q-p);
-}
-
-bool isPerp(P v, P w) {return dot(v,w) == 0;}
 
 double angle(P v, P w) {
-  return acos(clamp(dot(v,w) / abs(v) / abs(w), -1.0, 1.0));
+  return acos(clamp(v.dot(w) / v.abs() / w.abs(), -1.0, 1.0));
 }
 
-T orient(P a, P b, P c) {return cross(b-a,c-a);}
-
 bool inAngle(P a, P b, P c, P p) {
-  assert(orient(a,b,c) != 0);
-  if (orient(a,b,c) < 0) swap(b,c);
-  return orient(a,b,p) >= 0 && orient(a,c,p) <= 0;
+  assert(cross(a,b,c) != 0);
+  if (cross(a,b,c) < 0) swap(b,c);
+  return cross(a,b,p) >= 0 && cross(a,c,p) <= 0;
 }
 
 double orientedAngle(P a, P b, P c) {
-  if (orient(a,b,c) >= 0)
+  if (cross(a,b,c) >= 0)
     return angle(b-a, c-a);
   else
     return 2*M_PI - angle(b-a, c-a);
@@ -80,8 +72,8 @@ bool half(P p) {
 }
 
 void polarSortAround(P o, vector<P> &v) {
-  sort(v.begin(), v.end(), [](P v, P w) {
-      return make_tuple(half(v-o), 0)) <
+  sort(v.begin(), v.end(), [&o](P v, P w) {
+      return make_tuple(half(v-o), 0) <
         make_tuple(half(w-o), cross(o, v, w));
   });
 }
@@ -93,4 +85,23 @@ P proj(P p1, P p2, P q) {
   
 P reflect(P p1, P p2, P q){
 	return proj(p1,p2,q) * 2 - q;
+}
+
+// tested with https://open.kattis.com/problems/closestpair2
+pair<P, P> closest(vector<P> v) {
+  assert(sz(v) > 1);
+  set <P> S;
+  sort(v.begin(), v.end(), [](P a, P b) { return a.y < b.y; });
+  pair<T, pair<P, P>> ret{(T)1e18, {P(), P()}};
+  int j = 0;
+  for(P p : v) {
+    P d { 1 + (T) sqrt(ret.first), 0 };
+    while(p.y - v[j].y >= d.x) S.erase(v[j++]);
+    auto lo = S.lower_bound(p - d), hi = S.upper_bound(p + d);
+    for(; lo != hi; ++lo) {
+      ret = min(ret, {(p - (*lo)).abs2(), {*lo, p}});
+    }
+    S.insert(p);
+  }
+  return ret.second;
 }

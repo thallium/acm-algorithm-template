@@ -13,8 +13,8 @@ struct L {
   P dir() { return ps[1] - ps[0]; }
   bool include(P p) { return sign((ps[1] - ps[0]).det(p - ps[0])) > 0; }
   T side(P p) {return cross(P(0, 0), v,p)-c;}
-  double dist(P p) {return abs(side(p)) / v.abs();}
-  double sqDist(P p) {return side(p)*side(p) / (double)v.abs();}
+  T dist(P p) {return abs(side(p)) / v.abs();}
+  T sqDist(P p) {return side(p)*side(p) / (double)v.abs();}
   L perpThrough(P p) {return L(p, p + v.rot90());}
   bool cmpProj(P p, P q) {
     return v.dot(p) < v.dot(q);
