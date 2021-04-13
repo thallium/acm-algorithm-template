@@ -1,51 +1,35 @@
+template<typename T>
 struct Trie {
-    int child[100000][26], cnt=0;
-    bool leaf[100000];  // if this node is a end of a word
+    vector<map<T, int>> child;
+    vector<bool> is_leaf;
 
-    void insert(string s) {  
-        int p = 0;
-        for(auto ch:s){
-            int c = ch - 'a';
-            if (!child[p][c]) child[p][c] = ++cnt;  // if the node DNE, add it
-            p = child[p][c];
-        }
-        leaf[p] = 1;
+    Trie() {
+        child.resize(1);
+        is_leaf.resize(1);
     }
-    bool find(string s) {  
-        int p = 0;
-        for(auto ch:s){
-            int c = ch - 'a';
-            if (!child[p][c]) return 0;
-            p = child[p][c];
-        }
-        return leaf[p];
-    }
-};
 
-struct Trie{
-    array<unique_ptr<Trie>, 26> child;
-    bool isleaf=0,checked=0;
-    void insert(string s){
-        auto p=this;
-        for(auto ch:s){
-            int x=ch-'a';
-            if(p->child[x]==nullptr) p->child[x]= make_unique<Trie>();
-            p=p->child[x].get();
+    template<typename S>
+    void insert(const S& s) {
+        int p=0;
+        for (auto ch : s) {
+            if (!child[p].count(ch)) {
+                child[p][ch]=child.size();
+                child.emplace_back();
+                is_leaf.emplace_back();
+            }
+            p=child[p][ch];
         }
-        p->isleaf=true;
+        is_leaf[p]=true;
     }
-    int find(string s){
-        auto p=this;
-        for(auto ch:s){
-            int x=ch-'a';
-            if(p->child[x]==nullptr) return -1;
-            p=p->child[x].get();
+
+    template<typename S>
+        bool find(const S& s) {
+            int p=0;
+            for (auto ch : s) {
+                if (!child[p].count(ch)) return false;
+                p=child[p][ch];
+            }
+            return is_leaf[p];
         }
-        if(p->checked) return 0;
-        else {
-            p->checked=1;
-            return 1;
-        }
-    }
 };
 
