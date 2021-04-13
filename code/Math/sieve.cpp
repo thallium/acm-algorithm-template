@@ -22,7 +22,7 @@ namespace Sieve {
         return mn_factor[n]==0;
     }
 
-    vector<pair<int, int>> factorize(int n) {
+    vector<pair<int, int>> factor(int n) {
         vector<pair<int, int>> factors;
         while (n > 1) {
             int fac=mn_factor[n], cnt=0;
