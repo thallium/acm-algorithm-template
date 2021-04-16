@@ -1,8 +1,10 @@
+#include <bits/stdc++.h>
+using namespace std;
 struct Heavy_light {
     vector<vector<int>> g;
     vector<int> fa, dep, heavy, head, pos, posr; // initialize heavy with -1
     int cnt=0;
-    fenwick<ll> tr;
+    fenwick<long long> tr;
 
     Heavy_light(int n) : g(n), fa(n), dep(n), heavy(n, -1), head(n), pos(n), posr(n), tr(n) {}
 
@@ -35,8 +37,8 @@ struct Heavy_light {
         posr[u] = cnt;
     }
 
-    ll pathsum(int u, int v) {
-        ll res = 0;
+    long long pathsum(int u, int v) {
+        long long res = 0;
         while (head[u] != head[v]) {
             if (dep[head[u]] < dep[head[v]]) swap(u, v);
             res += tr.query(pos[head[u]], pos[u]);
@@ -45,5 +47,13 @@ struct Heavy_light {
         if (pos[u] > pos[v]) swap(u, v);
         res += tr.query(pos[u], pos[v]);
         return res;
+    }
+
+    int lca(int u, int v) {
+        while (head[u] != head[v]) {
+            if (dep[head[u]] > dep[head[v]]) u = fa[head[u]];
+            else v = fa[head[v]];
+        }
+        return dep[u] > dep[v] ? v : u;
     }
 };
