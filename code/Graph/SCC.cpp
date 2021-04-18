@@ -5,9 +5,9 @@ struct SCC {
     int n, pos=0;
     vector<vector<int>> g;
     vector<bool> vis;
-    vector<int> low, ord, stk;
+    vector<int> low, ord, stk, color;
     vector<vector<int>> comp;
-    SCC(int _n) : n(_n), g(n), vis(n), low(n), ord(n, -1) {}
+    SCC(int _n) : n(_n), g(n), vis(n), low(n), ord(n, -1), color(n) {}
 
     void add_edge(int u, int v) {
         g[u].push_back(v);
@@ -42,8 +42,10 @@ struct SCC {
         for (int i=0; i<n; i++) {
             if (ord[i]==-1) dfs(i);
         }
-        // reverse(comp.begin(), comp.end()); if you need to make sure that for
-        // each edge (a, b), the component that contains b cannot be earlier
-        // than the component that contains a
+        // reverse(comp.begin(), comp.end()); to sort components in topological order
+        for (int i=0; i<(int)comp.size(); i++) {
+            for (const auto& x : comp[i])
+                color[x]=i;
+        }
     }
 };
