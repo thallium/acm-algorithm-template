@@ -51,6 +51,17 @@ struct SegTree {
         if (ql > mid) return get(node << 1 | 1, ql, qr, mid+1, r);
         return get(node << 1, ql, qr, l, mid) + get(node << 1 | 1, ql, qr, mid+1, r);
     }
+    // wrapper
+    template <typename U>
+    void add(int l, int r, U x) {
+        assert(l >= 0 && l <= r && r < n);
+        add(1, l, r, 0, n-1, x);
+    }
+
+    T get(int l, int r) {
+        assert(l >= 0 && l <= r && r < n);
+        return get(1, l, r, 0, n-1);
+    }
 };
 
 struct node {
