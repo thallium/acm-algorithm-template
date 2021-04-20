@@ -1,17 +1,20 @@
+#include <bits/stdc++.h>
+using namespace std;
 // lazy propagation
+template<typename T>
 struct SegTree {
-    // remember to change the type and pushup function
     int n;
-    vector<int> t, lazy;
-    SegTree(int n_) : n(n_), t(4 * n), lazy(4 * n) {}
-    SegTree(const vector<int> &v) : SegTree((int)v.size()) {
+    vector<T> t;
+    SegTree(int n_) : n(n_), t(4 * n) {}
+    template<typename U>
+    SegTree(const vector<U> &v) : SegTree((int)v.size()) {
         build(1, 0, n - 1, v);
     }
     void pull(int node) { t[node] = t[node * 2] + t[node * 2 + 1]; }
-    void build(int node, int l, int r, const vector<int> &v) {
+    template<typename U>
+    void build(int node, int l, int r, const vector<U> &v) {
         if (l == r) {
-            t[node] = v[l];
-            return;
+            return t[node].apply(l, r, v[l]);
         }
         int mid = (l + r) / 2;
         build(node * 2, l, mid, v);
@@ -19,36 +22,48 @@ struct SegTree {
         pull(node);
     }
 
-    void addtag(int p, int x, int l, int r) {
-        t[p] += (r - l + 1) * x;
-        lazy[p] += x;
-    }
-
     void push(int p, int l, int r) {
-        if (lazy[p]) {
+        if (t[p].lazy) {
             int m = (l + r) / 2;
-            addtag(p * 2, lazy[p], l, m);
-            addtag(p * 2 + 1, lazy[p], m + 1, r);
-            lazy[p] = 0;
+            t[p * 2].apply(t[p].lazy, l, m);
+            t[p * 2 + 1].apply(t[p].lazy, m + 1, r);
+            t[p].lazy = 0;
         }
     }
 
-    void update(int node, int ql, int qr, int l, int r, int x) {
+    template<typename U>
+    void add(int node, int ql, int qr, int l, int r, U x) {
         if (r < ql || l > qr) return;
-        if (ql <= l && qr >= r) return addtag(node, x, l, r);
+        if (ql <= l && qr >= r) return t[node].apply(x, l, r);
         push(node, l, r);
         int mid = (l + r) / 2;
-        update(node * 2, ql, qr, l, mid, x);
-        update(node * 2 + 1, ql, qr, mid + 1, r, x);
+        add(node * 2, ql, qr, l, mid, x);
+        add(node * 2 + 1, ql, qr, mid + 1, r, x);
         pull(node);
     }
 
-    ll query(int node, int ql, int qr, int l, int r) {
-        if (r < ql || l > qr) return 0;
+    T get(int node, int ql, int qr, int l, int r) {
         if (ql <= l && qr >= r) return t[node];
         push(node, l, r);
         int mid = (l + r) / 2;
-        return query(node * 2, ql, qr, l, mid) +
-            query(node * 2 + 1, ql, qr, mid + 1, r);
+
+        if (qr <= mid) return get(node << 1, ql, qr, l, mid);
+        if (ql > mid) return get(node << 1 | 1, ql, qr, mid+1, r);
+        return get(node << 1, ql, qr, l, mid) + get(node << 1 | 1, ql, qr, mid+1, r);
+    }
+};
+
+struct node {
+    int v=0; // don't forget to set default value (used for leaves), not necessarily zero element
+    int lazy=0;
+    void apply(int l, int r, int x) {
+        v+=x;
+        lazy+=(r-l) * x;
+    }
+
+    node operator+(const node& b) const {
+        node res;
+        res.v=v+b.v;
+        return res;
     }
 };

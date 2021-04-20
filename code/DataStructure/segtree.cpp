@@ -62,14 +62,17 @@ struct SegTree {
     // wrapper
     template <typename U>
     void add(int i, U x) {
+        assert(i >= 0 && i < n);
         add(1, i, x, 0, n-1);
     }
 
     void set(int i, T x) {
+        assert(i >= 0 && i < n);
         set(1, i, x, 0, n-1);
     }
 
     T get(int l, int r) {
+        assert(l >= 0 && l <= r && r < n);
         return get(1, l, r, 0, n-1);
     }
 };
@@ -80,11 +83,11 @@ struct node {
     node() = default;
     // may need more constructor
 
-    node operator+(const node& rhs) const {
+    node operator+(const node& rhs) const { // used in get() and pull()
         return {v+rhs.v};
     }
 
-    node& operator +=(const node& rhs) {
+    node& operator +=(const node& rhs) { // used in add()
         v+=rhs.v;
         return *this;
     }
