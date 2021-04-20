@@ -26,7 +26,7 @@ struct SegTree {
     }
 
     template<typename U>
-    void update(int node, int i, U x, int l, int r) {
+    void add(int node, int i, U x, int l, int r) {
         if (l == r) {
             t[node] += x;
             return;
@@ -55,6 +55,19 @@ struct SegTree {
         if (qr <= mid) return get(node << 1, ql, qr, l, mid);
         if (ql > mid) return get(node << 1 | 1, ql, qr, mid+1, r);
         return get(node << 1, ql, qr, l, mid) + get(node << 1 | 1, ql, qr, mid+1, r);
+    }
+    // wrapper
+    template <typename U>
+    void add(int i, U x) {
+        add(1, i, x, 0, n-1);
+    }
+
+    void set(int i, T x) {
+        set(1, i, x, 0, n-1);
+    }
+
+    T get(int l, int r) {
+        return get(1, l, r, 0, n-1);
     }
 };
 
