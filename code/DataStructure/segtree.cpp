@@ -8,15 +8,18 @@ struct SegTree {
     SegTree(int n_) : n(n_), t(4 * n) {
         build(1, 0, n-1, vector(n, T()));
     }
+
+    template<typename U>
     SegTree(const vector<T> &v) : SegTree((int)v.size()) {
         build(1, 0, n - 1, v);
     }
 
     void pull(int node) { t[node] = t[node << 1] + t[node << 1 | 1]; }
 
-    void build(int node, int l, int r, const vector<T> &v) {
+    template<typename U>
+    void build(int node, int l, int r, const vector<U> &v) {
         if (l == r) {
-            t[node] = v[l];
+            t[node] = T(v[l]);
             return;
         }
         int mid = (l + r) >> 1;
@@ -73,6 +76,9 @@ struct SegTree {
 
 struct node {
     int v=0; // value for leaves
+
+    node() = default;
+    // may need more constructor
 
     node operator+(const node& rhs) const {
         return {v+rhs.v};
