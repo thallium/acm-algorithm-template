@@ -35,8 +35,8 @@ struct SegTree {
             return;
         }
         int mid = (l + r) / 2;
-        if (i <= mid) update(node << 1, i, x, l, mid);
-        else update(node << 1 | 1, i, x, mid + 1, r);
+        if (i <= mid) add(node << 1, i, x, l, mid);
+        else add(node << 1 | 1, i, x, mid + 1, r);
         pull(node);
     }
 
@@ -46,8 +46,8 @@ struct SegTree {
             return;
         }
         int mid = (l + r) / 2;
-        if (i <= mid) update(node << 1, i, x, l, mid);
-        else update(node << 1 | 1, i, x, mid + 1, r);
+        if (i <= mid) set(node << 1, i, x, l, mid);
+        else set(node << 1 | 1, i, x, mid + 1, r);
         pull(node);
     }
 

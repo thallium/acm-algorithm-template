@@ -107,7 +107,6 @@ template <typename T> struct Treap {
         rt = 0;
     }
     // interface
-    T get(int id) { return nodes[id].d; }
     int size() { return nodes[root].sz; }
     int kth(int k) { // returns the index of kth node
         int x, y, z;
