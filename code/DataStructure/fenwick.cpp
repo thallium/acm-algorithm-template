@@ -7,7 +7,7 @@ struct fenwick{
     vector<T> t;
 
     fenwick(int n_):n(n_), t(n+1) {}
-    fenwick(const vector<int>& v) : fenwick((int)v.size()) {
+    fenwick(const vector<int>& v) : fenwick((int)v.size()) { 
         for (int i=1;i<=n;i++) {
             t[i]+=v[i-1]; int j=i+(i&-i); if(j<=n) t[j]+=t[i];
         }

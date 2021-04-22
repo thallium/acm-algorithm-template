@@ -1,6 +1,6 @@
-double chord(double r, double ang) return sqrt(2*r*r*(1-cos(ang))); // or 2*r*sin(ang/2)
-double secarea(double r, double ang) {return (ang/2)*(r*r);} // rad
-double segarea(double r, double ang) {return secarea(r, ang) - r*r*sin(ang)/2;}
+// double chord(double r, double ang) return sqrt(2*r*r*(1-cos(ang))); // or 2*r*sin(ang/2)
+// double secarea(double r, double ang) {return (ang/2)*(r*r);} // rad
+// double segarea(double r, double ang) {return secarea(r, ang) - r*r*sin(ang)/2;}
 
 int type(P o1,double r1,P o2,double r2){
 	double d = o1.distTo(o2);
