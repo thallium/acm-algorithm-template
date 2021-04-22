@@ -1,3 +1,11 @@
+// add an edge (end, start) if to find Eulerian path, and remove it in the answer with:
+    // for (auto i : rep(1, ans.size())) {
+    //     if (ans[i-1]==n-1 && ans[i]==0) {
+    //         for (auto j : rep(i, ans.size()-1)) cout<<ans[j]+1<<' ';
+    //         for (auto j : rep(i)) cout<<ans[j]+1<<' ';
+    //         return;
+    //     }
+    // }
 struct Euler_tour {
     int n, edge_cnt=0;
     vector<vector<pair<int, int>>> g;
@@ -5,6 +13,7 @@ struct Euler_tour {
     vector<int> deg;
     vector<bool> used;
     // use in-degree and out-degree if directed graph
+    // vector<int> indeg, oudeg;
     bool bad=0;
 
     Euler_tour(int _n) : n(_n), g(n), deg(n) {}
@@ -28,12 +37,15 @@ struct Euler_tour {
     }
 
     vector<int> solve(int start) {
-        for (auto x : deg) if (x%2) return {}; // change if directed graph
+        for (auto x : deg) if (x%2) return {}; // change if directed graph:
+        // for (int i=0; i<n; i++) if(indeg[i]!=oudeg[i]) return {};
         used.resize(edge_cnt);
         dfs(-1, start);
         if (circuit.size()!=edge_cnt+1 || bad) return {};
         vector<int> ans;
         for (auto [u, v] : circuit) ans.push_back(v);
+        // reverse ans if directed
+        // reverse(ans.begin(), ans.end());
         return ans;
     }
 };
