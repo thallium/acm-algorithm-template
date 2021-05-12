@@ -1,5 +1,6 @@
 struct L {
   P ps[2]; P v; T c;
+  L() {}
   P& operator[](int i) { return ps[i]; }
   // From direction vector v and offset c
   L(P v, T c) : v(v), c(c) {}

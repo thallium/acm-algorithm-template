@@ -1,7 +1,3 @@
-bool inDisk(P a, P b, P p) {
-  return dot(a-p, b-p) <= 0;
-}
-
 struct cmpX {
   bool operator()(P a, P b) const {
     return make_pair(a.x, a.y) < make_pair(b.x, b.y);

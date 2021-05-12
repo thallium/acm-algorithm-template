@@ -39,23 +39,6 @@ struct P {
 #define cross(p1,p2,p3) ((p2.x-p1.x)*(p3.y-p1.y)-(p3.x-p1.x)*(p2.y-p1.y))
 #define crossOp(p1,p2,p3) sign(cross(p1,p2,p3))
 
-double angle(P v, P w) {
-  return acos(clamp(v.dot(w) / v.abs() / w.abs(), -1.0, 1.0));
-}
-
-bool inAngle(P a, P b, P c, P p) {
-  assert(cross(a,b,c) != 0);
-  if (cross(a,b,c) < 0) swap(b,c);
-  return cross(a,b,p) >= 0 && cross(a,c,p) <= 0;
-}
-
-double orientedAngle(P a, P b, P c) {
-  if (cross(a,b,c) >= 0)
-    return angle(b-a, c-a);
-  else
-    return 2*M_PI - angle(b-a, c-a);
-}
-
 bool isConvex(vector<P> p) {
   bool hasPos=false, hasNeg=false;
   for (int i=0, n=p.size(); i<n; i++) {
