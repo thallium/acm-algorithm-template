@@ -9,7 +9,8 @@ struct Flow {
     };
     std::vector<Edge> e;
     std::vector<std::vector<int>> g;
-    std::vector<int> cur, h;
+    std::vector<int> cur, h; // h = shortest distance from source, calculated in bfs
+    // after computing flow, edge (u, v) such that h[u]!=-1 and h[v]==-1 are part of min cut
     Flow(int n) : n(n), g(n) {}
     bool bfs(int s, int t) {
         h.assign(n, -1);
@@ -47,9 +48,9 @@ struct Flow {
         return f - r;
     }
     void addEdge(int u, int v, int c) {
-        g[u].push_back(e.size());
+        g[u].push_back((int)e.size());
         e.emplace_back(v, c);
-        g[v].push_back(e.size());
+        g[v].push_back((int)e.size());
         e.emplace_back(u, 0);
     }
     int maxFlow(int s, int t) {

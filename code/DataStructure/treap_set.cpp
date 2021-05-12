@@ -136,7 +136,7 @@ template <typename T> struct Treap {
         return nodes[mt].d;
     }
 
-    T precursor(const T& v) {
+    T predecessor(const T& v) {
         return find_by_order(order_of_key(v) - 1);
     } 
 
