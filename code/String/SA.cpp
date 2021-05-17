@@ -115,21 +115,17 @@ vector<int> suffix_array(const string& s, int char_bound) {
 }
 
 
-vector<int> build_lcp(const string& s, const vector<int>& sa) {
+vector<int> build_lcp(const string& s, const vector<int>& sa) { // lcp of suffix[i] ans suffix[i-1]
     int n=s.size();
     vector<int> pos(n);
     for (int i = 0; i < n; i++) pos[sa[i]] = i;
 
-    vector<int> lcp(max(n - 1, 0));
-    int k = 0;
-    for (int i = 0; i < n; i++) {
-        k = max(k - 1, 0);
-        if (pos[i] == n - 1) k = 0;
-        else {
-            int j = sa[pos[i] + 1];
-            while (i + k < n && j + k < n && s[i + k] == s[j + k]) k++;
-            lcp[pos[i]] = k;
-        }
+    vector<int> lcp(n);
+    for (int i = 0, k = 0; i < n; i++) {
+        if (pos[i] == 0) continue;
+        if (k) k--;
+        while (s[i+k] == s[sa[pos[i]-1]+k]) k++;
+        lcp[pos[i]] = k;
     }
     return lcp;
 }
