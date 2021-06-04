@@ -30,7 +30,7 @@ template <typename T> struct fenwick {
   }
 
   template <typename U>
-  U query(int l, int r) { return query(r) - (l ? query(l - 1) : U{}); }
+  U query(int l, int r) { return query<U>(r) - (l ? query<U>(l - 1) : U{}); }
 
   int search(T prefix) { // equivalent to upper_bound(prefix)
     int pos = 0;

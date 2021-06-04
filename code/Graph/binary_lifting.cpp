@@ -1,14 +1,14 @@
 #include <bits/stdc++.h>
 using namespace std;
 struct Binary_lifting {
-    int sz, level;
+    const int sz, level;
     const vector<vector<int>>& g;
     vector<vector<int>> pa;
     vector<int> dep;
 
     Binary_lifting(const vector<vector<int>>& g_) :
         sz((int)g_.size()),
-        level(__lg((int)g_.size())+1),
+        level(__lg(sz)+2),
         pa(sz, vector<int>(level)),
         g(g_),
         dep(g.size()) {}
@@ -16,7 +16,7 @@ struct Binary_lifting {
     void dfs(int u, int p) {
         pa[u][0] = p;
         dep[u] = dep[p] + 1;
-        for (int i = 1; i < 20; i++) {
+        for (int i = 1; i < level; i++) {
             pa[u][i] = pa[pa[u][i - 1]][i - 1];
         }
         for (auto v : g[u]) {

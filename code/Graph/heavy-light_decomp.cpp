@@ -1,4 +1,5 @@
 #include <bits/stdc++.h>
+#include "../DataStructure/fenwick.cpp"
 using namespace std;
 struct Heavy_light {
     vector<vector<int>> g;
