@@ -1,7 +1,8 @@
 #include <bits/stdc++.h>
 using namespace std;
 constexpr long long INF=1e18;
-vector<long long> dijkstra(const vector<vector<pair<int, int>>>& g, int start) {
+template<typename G>
+vector<long long> dijkstra(const G& g, int start) {
     vector dis(g.size(), INF);
     // vector<pii> pre[N];
     using node=pair<long long, int>;
