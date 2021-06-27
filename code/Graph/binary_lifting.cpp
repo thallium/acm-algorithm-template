@@ -9,8 +9,8 @@ struct Binary_lifting {
     Binary_lifting(const vector<vector<int>>& g_) :
         sz((int)g_.size()),
         level(__lg(sz)+2),
-        pa(sz, vector<int>(level)),
         g(g_),
+        pa(sz, vector<int>(level)),
         dep(g.size()) {}
 
     void dfs(int u, int p) {
