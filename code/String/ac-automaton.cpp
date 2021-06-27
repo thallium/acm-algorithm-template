@@ -17,12 +17,12 @@ using namespace std;
 struct AhoCorasick {
     enum { alpha = 26, first = 'a' }; // change this!
     struct Node {
-        // (nmatches is optional)
-        // back: failure link, points to longest suffix that is in the trie
-        // end: longest pattern that ends here, is -1 if no patten ends here
+        // back: failure link, points to longest suffix that is in the trie.
+        // end: longest pattern that ends here, is -1 if no patten ends here.
         // nmatches: number of (patterns that is a suffix of current
-        // node)/(duplicated patterns), depends on needs output: output link,
-        // points to the longest pattern that is a suffix of current node
+        // node)/(duplicated patterns), depends on needs.
+        // output: output link, points to the longest pattern that is a suffix 
+        // of current node
         int back, end = -1, nmatches = 0, output = -1;
         array<int, alpha> next;
         Node(int v = -1) { fill(next.begin(), next.end(), v); }
