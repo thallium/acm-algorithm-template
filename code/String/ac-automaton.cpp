@@ -37,10 +37,10 @@ struct AhoCorasick {
         for (char c : s) {
             int &m = N[n].next[c - first];
             if (m == -1) {
-                n = m = (int)N.size();
+                m = (int)N.size();
                 N.emplace_back();
-            } else
-                n = m;
+            }
+            n = m;
         }
         N[n].end = j;
         N[n].nmatches++;
