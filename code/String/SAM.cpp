@@ -1,12 +1,13 @@
+#include <bits/stdc++.h>
+using namespace std;
 struct SAM {
     vector<map<char,int>> edges; // edges[i]  : the labeled edges from node i
-    vector<int> link;            // link[i]   : the parent of i
-    vector<int> length;          // length[i] : the length of the longest string in the ith class
+    vector<int> link, length;            // link[i]   : the parent of i
     int last;                    // the index of the equivalence class of the whole string
 
     SAM(string s) {
         // add the initial node
-        edges.push_back(map<char,int>());
+        edges.emplace_back();
         link.push_back(-1);
         length.push_back(0);
         last = 0;
