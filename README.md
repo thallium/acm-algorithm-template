@@ -1,56 +1,69 @@
 # acm-algorithm-template
-some algorithm template for acm
+some algorithm templates for competitive programming. Most can copy-and-use.
 
 # There are:
 
 ## String:
-Trie
-
-KMP
-
-Z-function
-
-AC automaton
-
-Manacher
-
-Suffix array
+- Trie
+- KMP
+- Z-function
+- Aho-Corasick(AC) automaton
+- Manacher
+- Suffix array
+- Suffix automaton
+- Sting hashing
 
 ## Data stucture
-segment tree
+- Segment tree
+- Fenwick tree
+- Persistent segtree
+- Sparse table
+- Treap
+- Union Find
 
-fenwick tree
+## Graph theory
 
-persistent segtree
-
-sparse table
-
-## Graph theory:
-
-Lowest common ancestor
-
-Topological sort
-
-Shortest path
-
-Strong connected component
-
-Max Flow (Dinic)
-
-Heavy-light decomposation
+- Augmented path algorithm for bipartite matching
+- Bellman Ford for finding negative cycle
+- Bineary Lifting and Lowest Common Ancestor
+- Bridges Finding
+- Cut Vertices Finding
+- Dijkstra
+- Dinic algorithm for max flow
+- Divide and Conquer on Trees (aka Centroid Decomposition)
+- Euler Tour
+- Heavy-light decomposation
+- Hopcroft-Karp algorithm for bipartite matching
+- Hungarian
+- Push-relabel algorithm for max flow
+- Strongly connected components (Tarjan and Kosaraju)
+- Two-edge connected components (Tarjan)
 
 ## Math:
 
-Euler's totient function
+- BSGS
+- Chinese Remainder Theorem
+- Extended Euclidean algorithm
+- Euler's totient function
+- Factorization
+- FFT
+- Gauss-Jordan elimination
+- Linear sieve
+- Modular Multiplicative Inverse
+- Mod int
+- DFT
+- Simplex
 
-Linear sieve
+## Geometry:
 
-Extended Euclidean alg
+- Angle
+- Circle
+- General stuff
+- Line
+- Point
+- Polygon
+- Segment
 
-Modular Multiplicative Inverse
+## Misc:
 
-BSGS
-
-Gauss-Jordan elimination
-
-Chinese Remainder Theorem
+- Mo's algorithm
