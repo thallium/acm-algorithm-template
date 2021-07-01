@@ -1,5 +1,5 @@
 // using treap to maintain a sequence that support multiple operation, index
-// starts from 1!
+// 0-based index
 #include<bits/stdc++.h>
 using namespace std;
 mt19937 gen(chrono::high_resolution_clock::now().time_since_epoch().count());
@@ -23,21 +23,19 @@ template <typename T> struct Treap {
     struct node {
         int ch[2], sz;
         unsigned k;
-        T d, sum, lz_add;
-        node(T d_, int z = 1) : sz(z), k((unsigned)gen()), d(d_), sum(d) { ch[0] = ch[1] = 0; }
+        T d, sum, lazy;
+        node(T d_, int z = 1)
+            : sz(z), k((unsigned)gen()), d(d_), sum(d), lazy() {
+            ch[0] = ch[1] = 0;
+        }
     };
     vector<node> nodes;
-    int root, recyc, reserve_size;
-    Treap(int size=0) {
+    int root, recyc;
+    Treap(int size = 2e5) {
         nodes.clear();
-        nodes.reserve((size = max(size, 15)) + 1);
+        nodes.reserve(size);
         nodes.push_back(node(0, 0));
         root = recyc = 0;
-        reserve_size = size + 1;
-    }
-    void reserve() {
-        if (size() >= reserve_size)
-            nodes.reserve((reserve_size *= 2) + 1);
     }
     inline int &ch(int rt, int r) { return nodes[rt].ch[r]; }
     int new_node(const T &d) {
@@ -47,12 +45,13 @@ template <typename T> struct Treap {
             if (ch(recyc, 0) && ch(recyc, 1))
                 recyc = merge(ch(recyc, 0), ch(recyc, 1));
             else
-                recyc = ch(recyc, ch(recyc,0) ? 0 : 1);
+                recyc = ch(recyc, ch(recyc, 0) ? 0 : 1);
             nodes[id] = node(d);
-        } else nodes.push_back(node(d));
+        } else
+            nodes.push_back(node(d));
         return id;
     }
-    int update(int rt) {
+    int pull(int rt) {
         node &n = nodes[rt];
         n.sz = 1 + nodes[n.ch[0]].sz + nodes[n.ch[1]].sz;
         n.sum = n.d + nodes[n.ch[0]].sum + nodes[n.ch[1]].sum;
@@ -60,16 +59,16 @@ template <typename T> struct Treap {
     }
     void add(int rt, const T &d) {
         node &n = nodes[rt];
-        n.lz_add = n.lz_add + d;
+        n.lazy = n.lazy + d;
         n.d = n.d + d;
         n.sum = n.sum + d * n.sz;
     }
     void pushdown(int rt) {
         node &n = nodes[rt];
-        if (n.lz_add) {
-            add(n.ch[0], n.lz_add);
-            add(n.ch[1], n.lz_add);
-            n.lz_add = 0;
+        if (n.lazy) {
+            add(n.ch[0], n.lazy);
+            add(n.ch[1], n.lazy);
+            n.lazy = T();
         }
     }
     int merge(int tl, int tr) {
@@ -78,14 +77,14 @@ template <typename T> struct Treap {
         if (nodes[tl].k < nodes[tr].k) {
             pushdown(tl);
             ch(tl, 1) = merge(ch(tl, 1), tr);
-            return update(tl);
+            return pull(tl);
         } else {
             pushdown(tr);
             ch(tr, 0) = merge(tl, ch(tr, 0));
-            return update(tr);
+            return pull(tr);
         }
     }
-    void split(int rt, int k, int &x, int &y) { // split between k and k+1
+    void split(int rt, int k, int &x, int &y) { // split out first k element
         if (!rt) {
             x = y = 0;
             return;
@@ -94,11 +93,11 @@ template <typename T> struct Treap {
         if (k <= nodes[ch(rt, 0)].sz) {
             y = rt;
             split(ch(rt, 0), k, x, ch(rt, 0));
-            update(y);
+            pull(y);
         } else {
             x = rt;
             split(ch(rt, 1), k - nodes[ch(rt, 0)].sz - 1, ch(rt, 1), y);
-            update(x);
+            pull(x);
         }
     }
     void remove(int &rt) {
@@ -108,37 +107,43 @@ template <typename T> struct Treap {
     }
     // interface
     int size() { return nodes[root].sz; }
-    int kth(int k) { // returns the index of kth node
+    const T& operator[](int k) {
+        assert(k>=0 && k<size());
         int x, y, z;
-        split(root, k, y, z);
-        split(y, k - 1, x, y);
+        split(root, k+1, y, z);
+        split(y, k, x, y);
         root = merge(merge(x, y), z);
-        return y;
+        return nodes[y];
     }
+
     void insert(int k, T v) { // insert at kth position
+        assert(k>=0 && k<=size());
         int l, r;
-        split(root, k - 1, l, r);
+        split(root, k, l, r);
         int rt = new_node(v);
         root = merge(merge(l, rt), r);
     }
     void erase(int l, int r) {
+        assert(l>=0 && l<=r && r<size());
         int x, y, z;
-        split(root, r, y, z);
-        split(y, l - 1, x, y);
+        split(root, r + 1, y, z);
+        split(y, l, x, y);
         remove(y);
         root = merge(x, z);
     }
     void range_add(int l, int r, T v) {
+        assert(l>=0 && l<=r && r<size());
         int x, y, z;
-        split(root, r, y, z);
-        split(y, l - 1, x, y);
+        split(root, r + 1, y, z);
+        split(y, l, x, y);
         add(y, v);
         root = merge(merge(x, y), z);
     }
     T getsum(int l, int r) {
+        assert(l>=0 && l<=r && r<size());
         int x, y, z;
-        split(root, r, y, z);
-        split(y, l - 1, x, y);
+        split(root, r + 1, y, z);
+        split(y, l, x, y);
         T ret = nodes[y].sum;
         root = merge(merge(x, y), z);
         return ret;

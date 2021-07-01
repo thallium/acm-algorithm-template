@@ -25,8 +25,8 @@ struct SegTree {
     void push(int p, int l, int r) {
         if (t[p].lazy) {
             int m = (l + r) / 2;
-            t[p * 2].apply(t[p].lazy, l, m);
-            t[p * 2 + 1].apply(t[p].lazy, m + 1, r);
+            t[p * 2].apply(l, m, t[p].lazy);
+            t[p * 2 + 1].apply(m + 1, r, t[p].lazy);
             t[p].lazy = 0;
         }
     }
@@ -34,7 +34,7 @@ struct SegTree {
     template<typename U>
     void add(int node, int ql, int qr, int l, int r, U x) {
         if (r < ql || l > qr) return;
-        if (ql <= l && qr >= r) return t[node].apply(x, l, r);
+        if (ql <= l && qr >= r) return t[node].apply(l, r, x);
         push(node, l, r);
         int mid = (l + r) / 2;
         add(node * 2, ql, qr, l, mid, x);
