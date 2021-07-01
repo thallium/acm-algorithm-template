@@ -1,5 +1,5 @@
+// source: https://cp-algorithms.com/string/suffix-automaton.html
 #include <bits/stdc++.h>
-#include <unordered_map>
 using namespace std;
 struct SAM {
     struct state {

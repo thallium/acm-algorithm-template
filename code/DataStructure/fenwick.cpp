@@ -81,6 +81,6 @@ struct fenwick_rg {
 
     int64_t query(int l, int r) {
         assert(l >= 0 && l <= r && r < n);
-        return query(r) - l ? query(l - 1) : 0;
+        return query(r) - (l ? query(l - 1) : 0);
     }
 };

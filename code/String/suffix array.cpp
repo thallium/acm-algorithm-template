@@ -3,7 +3,7 @@ using namespace std;
 //O(n log(n)),actually calculates cyclic shifts
 vector<int> suffix_array(string s) {
     s+="#";
-    int n = s.size(), N = n + 256;
+    int n = (int)s.size(), N = n + 256;
     vector<int> sa(n), ra(n);
     for(int i = 0; i < n; i++) sa[i] = i, ra[i] = s[i];
     for(int k = 0; k < n; k ? k *= 2 : k++) {
