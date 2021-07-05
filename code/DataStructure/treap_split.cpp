@@ -30,12 +30,10 @@ template <typename T> struct Treap {
         }
     };
     vector<node> nodes;
-    int root, recyc;
+    int root=0, recyc=0;
     Treap(int size = 2e5) {
-        nodes.clear();
         nodes.reserve(size);
-        nodes.push_back(node(0, 0));
-        root = recyc = 0;
+        nodes.emplace_back(0, 0);
     }
     inline int &ch(int rt, int r) { return nodes[rt].ch[r]; }
     int new_node(const T &d) {
