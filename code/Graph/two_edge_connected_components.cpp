@@ -1,14 +1,12 @@
-#include <iostream>
-#include <vector>
+#include <bits/stdc++.h>
 using namespace std;
 
-struct LowLink {
-    int n, pos;
-    vector<int> ord, low, par, blg; //order, low link, parent, belong to which component
-    vector<vector<int>> g, C; //graph, component
+struct Bridge {
+    int n, pos=0;
+    vector<int> ord, low, color; // order, low link, belong to which component
+    vector<vector<int>> g, comp; // graph, component
 
-    LowLink(int n)
-        : n(n), pos(0), ord(n, -1), low(n), par(n, -1), blg(n, -1), g(n) {}
+    Bridge(int n) : n(n), ord(n, -1), low(n), color(n, -1), g(n) {}
 
     void add_edge(int u, int v) {
         g[u].emplace_back(v);
@@ -20,47 +18,41 @@ struct LowLink {
         return ord[u] < low[v];
     }
 
-    void dfs(int u) {
+    void dfs(int u, int p) {
         ord[u] = low[u] = pos++;
         int cnt = 0;
         for (int v : g[u]) {
-            if (v == par[u] && cnt == 0) {
+            // in case there're repeated edges, only skip the first one
+            if (v == p && cnt == 0) {
                 cnt++;
                 continue;
             }
-            if (ord[v]!=-1) {
-                low[u] = min(low[u], ord[v]);
-                continue;
-            }
-            par[v] = u;
-            dfs(v);
+
+            if (ord[v] == -1) dfs(v, u);
             low[u] = min(low[u], low[v]);
         }
     }
 
     void fill_component(int u) {
-        C[blg[u]].emplace_back(u);
+        comp.back().emplace_back(u);
         for (int v : g[u]) {
-            if (~blg[v] || is_bridge(v, u)) continue;
-            blg[v] = blg[u];
+            if (color[v] != -1 || is_bridge(v, u)) continue;
+            color[v] = color[u];
             fill_component(v);
         }
     }
 
-    void add_component(int u, int &k) {
-        if (~blg[u]) return;
-        blg[u] = k++;
-        C.emplace_back();
-        fill_component(u);
-    }
-
     int build() {
         for (int i = 0; i < n; i++)
-            if (ord[i] < 0) dfs(i);
+            if (ord[i] == -1) dfs(i, i);
 
         int k = 0;
-        for (int i = 0; i < n; i++)
-            add_component(i, k);
+        for (int i = 0; i < n; i++) {
+            if (color[i] != -1) continue;
+            color[i] = k++;
+            comp.emplace_back();
+            fill_component(i);
+        }
         return k;
     }
 };
@@ -69,18 +61,19 @@ int main() {
     int n, m;
     cin >> n >> m;
 
-    LowLink G(n);
+    Bridge g(n);
     for (int i = 0; i < m; i++) {
         int a, b;
-        cin>>a>>b;
-        G.add_edge(a, b);
+        cin >> a >> b;
+        g.add_edge(a, b);
     }
 
-    int k = G.build();
-    cout<<k<<'\n';
+    int k = g.build();
+    cout << k << '\n';
     for (int i = 0; i < k; i++) {
-        cout<<G.C[i].size()<<' ';
-        for (int v : G.C[i]) cout<<v<<' ';
+        cout << g.comp[i].size() << ' ';
+        for (int v : g.comp[i])
+            cout << v << ' ';
     }
     return 0;
 }
