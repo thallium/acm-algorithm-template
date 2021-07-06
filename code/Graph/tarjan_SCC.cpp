@@ -21,7 +21,7 @@ struct SCC {
         on_stk[u] = true;
         for (auto v : g[u]) {
             if (ord[v] == -1) dfs(v);
-            if (on_stk[v]) { low[u] = min(low[u], low[v]); }
+            if (on_stk[v]) low[u] = min(low[u], low[v]); 
         }
 
         if (low[u] == ord[u]) {

@@ -3,9 +3,8 @@ using namespace std;
 struct cut_vertex {
     int n, pos = 0;
     vector<vector<int>> g;
-    vector<int> ord, low, pa;
-    vector<int> cuts;
-    cut_vertex(int n_) : n(n_), g(n), ord(n, -1), low(n), pa(n, -1) {}
+    vector<int> ord, low, cuts;
+    cut_vertex(int n_) : n(n_), g(n), ord(n, -1), low(n) {}
 
     void add_edge(int u, int v) {
         g[u].push_back(v);
@@ -31,6 +30,7 @@ struct cut_vertex {
         }
         if (is_cut) cuts.push_back(u);
     }
+
     void solve() {
         for (int i = 0; i < n; i++) {
             if (ord[i] == -1) dfs(i, i);

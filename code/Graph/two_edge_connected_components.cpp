@@ -1,12 +1,12 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-struct Bridge {
+struct TECC {
     int n, pos=0;
     vector<int> ord, low, color; // order, low link, belong to which component
     vector<vector<int>> g, comp; // graph, component
 
-    Bridge(int n) : n(n), ord(n, -1), low(n), color(n, -1), g(n) {}
+    TECC(int n) : n(n), ord(n, -1), low(n), color(n, -1), g(n) {}
 
     void add_edge(int u, int v) {
         g[u].emplace_back(v);
@@ -61,7 +61,7 @@ int main() {
     int n, m;
     cin >> n >> m;
 
-    Bridge g(n);
+    TECC g(n);
     for (int i = 0; i < m; i++) {
         int a, b;
         cin >> a >> b;
