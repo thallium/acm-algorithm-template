@@ -1,3 +1,7 @@
+// Note that strictly speaking this is not the original tarjan's algorithm
+// because we use a slightly different definition for lowlink. However this
+// algorithm is still correctly and easier to code.
+// See: https://cs.stackexchange.com/questions/96635/tarjans-scc-example-showing-necessity-of-lowlink-definition-and-calculation-r?rq=1
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -17,9 +21,7 @@ struct SCC {
         on_stk[u] = true;
         for (auto v : g[u]) {
             if (ord[v] == -1) dfs(v);
-            if (on_stk[v]) {
-                low[u] = min(low[u], low[v]);
-            }
+            if (on_stk[v]) { low[u] = min(low[u], low[v]); }
         }
 
         if (low[u] == ord[u]) {
