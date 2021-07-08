@@ -1,5 +1,4 @@
 #include <vector>
-using namespace std;
 namespace Sieve {
     vector<int> primes;
     vector<int> mn_factor;
@@ -17,11 +16,9 @@ namespace Sieve {
             }
         }
     }
-
     bool is_prime(int n) {
         return mn_factor[n]==0;
     }
-
     vector<pair<int, int>> factor(int n) {
         vector<pair<int, int>> factors;
         while (n > 1) {
@@ -34,7 +31,6 @@ namespace Sieve {
         }
         return factors;
     };
-
     vector<int> phi;
     void get_euler(int n) {
         phi.resize(n+1);

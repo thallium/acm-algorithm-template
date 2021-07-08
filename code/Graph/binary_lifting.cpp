@@ -1,18 +1,14 @@
-#include <bits/stdc++.h>
-using namespace std;
 struct Binary_lifting {
     const int sz, level;
     const vector<vector<int>>& g;
     vector<vector<int>> pa;
     vector<int> dep;
-
     Binary_lifting(const vector<vector<int>>& g_) :
         sz((int)g_.size()),
         level(__lg(sz)+2),
         g(g_),
         pa(sz, vector<int>(level)),
         dep(g.size()) {}
-
     void dfs(int u, int p) {
         pa[u][0] = p;
         dep[u] = dep[p] + 1;
@@ -24,14 +20,12 @@ struct Binary_lifting {
             dfs(v, u);
         }
     };
-
     int jump(int u, int step) {
         for (int i=0; i<level; i++) {
             if (step>>i&1) u=pa[u][i];
         }
         return u;
     }
-
     int lca(int x, int y) {
         if (dep[x] > dep[y]) swap(x, y);
         y=jump(y, dep[y] - dep[x]);
@@ -45,4 +39,3 @@ struct Binary_lifting {
         return pa[x][0];
     }
 };
-

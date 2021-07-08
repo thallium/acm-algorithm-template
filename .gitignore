@@ -2,3 +2,12 @@ compile_flags.txt
 .vscode/
 code/Graph/graph.cpp
 .clang-format
+*.aux
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.synctex.gz
+*.toc
+test.pdf
+test.tex

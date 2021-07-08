@@ -5,13 +5,10 @@ struct BellmanFord {
     vector<bool> bad; //has negative cycle on the path
     vector<int> pre;
     vector<ll> dis;
-
     BellmanFord(int _n) : n(_n), bad(n), pre(n), dis(n, INF) {}
-
     void add_edge(int u, int v, int w) {
         edges.emplace_back(u, v, w);
     }
-
     void run(int start) {
         dis[start]=0;
         for (int i=0; i<n-1; i++) {
@@ -22,7 +19,6 @@ struct BellmanFord {
                 }
             }
         }
-
         for (auto [u, v, w] : edges) {
             if (dis[u]<INF && dis[v]>dis[u]+w) {
                 dis[v]=dis[u]+w;
@@ -37,7 +33,6 @@ struct BellmanFord {
             }
         }
     }
-
     vector<int> find_cycle() {
         dis.assign(n, 0); // without this, only cycle reachable from 0 will be counted
         run(0);
@@ -52,7 +47,6 @@ struct BellmanFord {
         reverse(cycle.begin(), cycle.end());
         return cycle;
     }
-
     long long get_dis(int x) {
         return bad[x] ? -INF : dis[x];
     }

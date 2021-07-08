@@ -4,7 +4,6 @@ ll extgcd(ll a, ll b, ll &x, ll &y) {
     if (b != 0) g = extgcd(b, a % b, y, x), y -= (a / b) * x;
     return g;
 }
-
 // Solve linear congruences equation:
 // a[i] * x = b[i] MOD m[i] (mi don't need to be co-prime)
 // M - lcm, x - smalleset integer solution
@@ -22,5 +21,3 @@ bool chinese(const vector<ll> &a, const vector<ll> &b, const vector<ll> &m, ll &
     x = (x + M) % M;
     return true;
 }
-
-

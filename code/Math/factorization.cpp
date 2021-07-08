@@ -1,17 +1,14 @@
 #include<bits/stdc++.h>
-using namespace std;
 // factor using naive or Rho algorithm, also see Sieve.cpp for faster factorization for small numbers
 namespace Fractorization {
     using u64 = uint64_t;
     using u128 = __uint128_t;
     using ll = long long;
-
     u64 binPow(u64 a, u64 b, u64 mod){
         if(b == 0) return 1;
         if(b&1) return (u128)a * binPow(a, b^1, mod) % mod;
         return binPow((u128)a * a % mod, b>>1, mod);
     }
-
     bool checkComp(u64 n, u64 a, u64 d, int s){
         u64 x = binPow(a, d, n);
         if(x == 1 || x == n-1) return false;
@@ -21,7 +18,6 @@ namespace Fractorization {
         }
         return true;
     }
-
     bool RabinMiller(u64 n){
         if(n < 2) return false;
         int r = 0;
@@ -67,7 +63,6 @@ namespace Fractorization {
         for (auto& p : fact) facts.push_back(p);
         return facts;
     }
-
     vector<pair<int, int>> factor(int n) {
         vector<pair<int, int>> facts;
         for (int f=2; f*f<=n; f++) {
@@ -83,5 +78,4 @@ namespace Fractorization {
         return facts;
     }
 }
-
 using namespace Fractorization;

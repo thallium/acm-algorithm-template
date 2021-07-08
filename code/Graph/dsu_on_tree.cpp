@@ -1,6 +1,3 @@
-#include <bits/stdc++.h>
-using namespace std;
-
 int main() {
     vector<int> bch(n, -1);
     int cur_big = -1;

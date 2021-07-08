@@ -1,19 +1,9 @@
-/**
- * Modified from:
+/** Modified from:
  * https://github.com/kth-competitive-programming/kactl/blob/master/content/strings/AhoCorasick.h
- * Description: Aho-Corasick automaton, used for multiple pattern matching.
- * The automaton start node will be at index 0. find(word) returns for each
- * position the index of the longest word that ends there, or -1 if none.
  * Try to handdle duplicated patterns beforehand, otherwise change 'end' to
- * vector; empty patterns are not allowed. For large alphabets, split each
- * symbol into chunks, with sentinel bits for symbol boundaries. Time:
- * construction takes $O(26N)$, where $N =$ sum of length of patterns. find(x)
- * is $O(N)$, where N = length of x. findAll is $O(N+M)$ where M is number of
- * occurrence of all pattern (up to N*sqrt(N))
- */
-#include <bits/stdc++.h>
-using namespace std;
-
+ * vector; empty patterns are not allowed. Time: construction takes $O(26N)$,
+ * where $N =$ sum of length of patterns. find(x) is $O(N)$, where N = length of
+ * x. findAll is $O(N+M)$ where M is number of occurrence of all pattern (up to N*sqrt(N)) */
 struct AhoCorasick {
     enum { alpha = 26, first = 'a' }; // change this!
     struct Node {
@@ -21,16 +11,14 @@ struct AhoCorasick {
         // end: longest pattern that ends here, is -1 if no patten ends here.
         // nmatches: number of (patterns that is a suffix of current
         // node)/(duplicated patterns), depends on needs.
-        // output: output link, points to the longest pattern that is a suffix 
+        // output: output link, points to the longest pattern that is a suffix
         // of current node
         int back, end = -1, nmatches = 0, output = -1;
         array<int, alpha> next;
         Node(int v = -1) { fill(next.begin(), next.end(), v); }
     };
     vector<Node> N;
-
     AhoCorasick() : N(1) {}
-
     void insert(string &s, int j) { // j: id of string s
         assert(!s.empty());
         int n = 0;
@@ -45,11 +33,9 @@ struct AhoCorasick {
         N[n].end = j;
         N[n].nmatches++;
     }
-
     void build() {
         N[0].back = (int)N.size();
         N.emplace_back(0);
-
         queue<int> q;
         q.push(0);
         while (!q.empty()) {
@@ -72,7 +58,6 @@ struct AhoCorasick {
             }
         }
     }
-
     // for each position, finds the longest pattern that ends here
     vector<int> find(const string &text) {
         int len = (int)text.size();

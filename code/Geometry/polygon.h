@@ -4,7 +4,6 @@ double area(vector<P> ps){
   for(int i=0; i< ps.size(); i++) ret += ps[i].det(ps[(i+1)%ps.size()]); 
 	return ret/2;
 }
-  
 int contain(vector<P> ps, P p){ //2:inside,1:on_seg,0:outside
 	int n = ps.size(), ret = 0; 
 	for(int i = 0; i < n; i++) {
@@ -16,7 +15,6 @@ int contain(vector<P> ps, P p){ //2:inside,1:on_seg,0:outside
 	}
 	return ret*2;
 }
-  
 vector<P> convexHull(vector<P> ps) {
 	int n = ps.size(); if(n <= 1) return ps;
 	sort(ps.begin(), ps.end());
@@ -28,7 +26,6 @@ vector<P> convexHull(vector<P> ps) {
 	qs.resize(k - 1);
 	return qs;
 }
-  
 vector<P> convexHullNonStrict(vector<P> ps) {
 	//caution: need to unique the Ps first
 	int n = ps.size(); if(n <= 1) return ps;
@@ -41,7 +38,6 @@ vector<P> convexHullNonStrict(vector<P> ps) {
 	qs.resize(k - 1);
 	return qs;
 }
-  
 double convexDiameter(vector<P> ps){
 	int n = ps.size(); if(n <= 1) return 0;
 	int is = 0, js = 0; for(int k = 1; k < n; k++) is = ps[k]<ps[is]?k:is, js = ps[js] < ps[k]?k:js;
@@ -56,7 +52,6 @@ double convexDiameter(vector<P> ps){
 	}while(i!=is || j!=js);
 	return ret;
 }
-  
 vector<P> convexCut(const vector<P>&ps, P q1, P q2) {
 	vector<P> qs;
 	int n = ps.size();

@@ -24,19 +24,15 @@ struct L {
   L shiftLeft(double dist) {return L(v, c + dist*v.abs());}
   L shiftRight(double dist) {return L(v, c - dist*v.abs());}
 };
-
 bool chkLL(P p1, P p2, P q1, P q2) {
 	double a1 = cross(q1, q2, p1), a2 = -cross(q1, q2, p2);
 	return sign(a1+a2) != 0;
 }
- 
 P isLL(P p1, P p2, P q1, P q2) {
 	double a1 = cross(q1, q2, p1), a2 = -cross(q1, q2, p2);
 	return (p1 * a2 + p2 * a1) / (a1 + a2);
 }
-  
 P isLL(L l1,L l2){ return isLL(l1[0],l1[1],l2[0],l2[1]); }
-
 bool parallel(L l0, L l1) { return sign( l0.dir().det( l1.dir() ) ) == 0; }
 bool sameDir(L l0, L l1) { return parallel(l0, l1) && sign(l0.dir().dot(l1.dir()) ) == 1; }
 bool cmp (P a,  P b) {
@@ -53,11 +49,9 @@ bool operator < (L l0, L l1) {
 		return cmp( l0.dir(), l1.dir() );
 	}
 }
-  
 bool check(L u, L v, L w) { 
 	return w.include(isLL(u,v)); 
 }
-  
 vector<P> halfPlaneIS(vector<L> &l) {
 	sort(l.begin(), l.end());
 	deque<L> q;

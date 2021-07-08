@@ -1,13 +1,11 @@
 struct Trie {
   Trie * child[26];
   int nums=0;  
-
   Trie() {
     for(int i=0;i<26;i++) child[i]=NULL;
     nums=0;
   }
 };
-
 void insert(Trie *root, const string &s) {
   Trie* r=root;
   for(int i=0;i<s.size();i++){
@@ -17,7 +15,6 @@ void insert(Trie *root, const string &s) {
   }
   ++r->nums;
 }
-
 bool find(Trie *root, const string &s) {
   Tree* r=root;
   for(int i=0;i<s.size();++i){

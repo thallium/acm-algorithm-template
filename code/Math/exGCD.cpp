@@ -1,5 +1,4 @@
 #include<bits/stdc++.h>
-using namespace std;
 using ll=long long;
 //   {g, x, y}: ax+by=gcd(a,b)
 tuple<ll, ll, ll> exgcd(ll a, ll b) {
@@ -7,7 +6,6 @@ tuple<ll, ll, ll> exgcd(ll a, ll b) {
     auto [g, x, y]=exgcd(b, a%b);
     return {g, y, x-a/b*y};
 }
-
 /*
 solve ax+by=c, equivalently ax=c (mod b)
 all solutions: x=x0+b/g*t, y=y0-a/g*t

@@ -1,20 +1,15 @@
 // source: https://cp-algorithms.com/string/suffix-automaton.html
-#include <bits/stdc++.h>
-using namespace std;
 struct SAM {
     struct state {
         int len = 0, link = -1;
         unordered_map<char, int> next;
     };
-
     int last = 0; // the index of the equivalence class of the whole string
     vector<state> st;
-
     void extend(char c) {
         int cur = (int)st.size();
         st.emplace_back();
         st[cur].len = st[last].len + 1;
-
         int p = last;
         while (p != -1 && !st[p].next.count(c)) {
             st[p].next[c] = cur;
@@ -38,9 +33,7 @@ struct SAM {
         }
         last = cur;
     }
-
     SAM() { st.emplace_back(); }
-
     SAM(const string &s) : SAM() {
         for (auto c : s)
             extend(c);

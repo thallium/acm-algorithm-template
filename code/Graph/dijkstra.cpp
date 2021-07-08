@@ -1,5 +1,3 @@
-#include <bits/stdc++.h>
-using namespace std;
 constexpr long long INF=1e18;
 template<typename G>
 vector<long long> dijkstra(const G& g, int start) {
@@ -26,12 +24,10 @@ vector<long long> dijkstra(const G& g, int start) {
     }
     return dis;
 }
-
 // dijkstra for small edge weight (less than 10) aka 1-k bfs
 vector<int> SmallDijkstra(const vector<vector<pair<int, int>>>& g, int src, int lim) {
     vector<vector<int>> qs(lim);
     vector<int> dis(g.size(), -1);
-
     dis[src] = 0; 
     qs[0].push_back(src);
     for (int d = 0, maxd = 0; d <= maxd; ++d) {

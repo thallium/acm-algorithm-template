@@ -11,7 +11,6 @@ void calSize(int u,int p){
         subtreeSize[u]+=subtreeSize[v];
     }
 }
-
 //if needed solveTree can return value
 void solveTree(int root){
     queue<pii> cur;//store the result for current subtree
@@ -41,7 +40,6 @@ void go(int entry){
     calSize(entry,entry);
     int centroid=entry;
     int bestSize=subtreeSize[entry];
-
     queue<int> q;
     q.push(entry);
     while(!q.empty()){

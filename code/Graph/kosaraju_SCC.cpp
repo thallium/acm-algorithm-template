@@ -1,31 +1,25 @@
-#include <bits/stdc++.h>
-using namespace std;
 struct kosaraju {
     int n;
     vector<bool> vis;
     vector<int> color, order;
     vector<vector<int>> g, g2, comp;
     kosaraju(int n_) : n(n_), vis(n), color(n, -1), g(n), g2(n) {}
-
     void add_edge(int u, int v) {
         g[u].push_back(v);
         g2[v].push_back(u);
     }
-
     void dfs1(int u) {
         vis[u] = true;
         for (int v : g[u])
             if (!vis[v]) dfs1(v);
         order.push_back(u);
     }
-
     void dfs2(int u) {
         comp.back().push_back(u);
         for (int v : g2[u])
             if (color[v] == -1)
                 dfs2(v);
     }
-
     void solve() {
         for (int i = 0; i < n; ++i)
             if (!vis[i]) dfs1(i);

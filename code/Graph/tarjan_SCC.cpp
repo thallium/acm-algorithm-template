@@ -2,9 +2,6 @@
 // because we use a slightly different definition for lowlink. However this
 // algorithm is still correctly and easier to code.
 // See: https://cs.stackexchange.com/questions/96635/tarjans-scc-example-showing-necessity-of-lowlink-definition-and-calculation-r?rq=1
-#include <bits/stdc++.h>
-using namespace std;
-
 struct SCC {
     int n, pos = 0;
     vector<vector<int>> g;
@@ -12,9 +9,7 @@ struct SCC {
     vector<int> low, ord, stk, color;
     vector<vector<int>> comp;
     SCC(int _n) : n(_n), g(n), on_stk(n), low(n), ord(n, -1), color(n) {}
-
     void add_edge(int u, int v) { g[u].push_back(v); }
-
     void dfs(int u) {
         low[u] = ord[u] = pos++;
         stk.push_back(u);
@@ -23,7 +18,6 @@ struct SCC {
             if (ord[v] == -1) dfs(v);
             if (on_stk[v]) low[u] = min(low[u], low[v]); 
         }
-
         if (low[u] == ord[u]) {
             comp.emplace_back();
             while (true) {
@@ -35,7 +29,6 @@ struct SCC {
             }
         }
     }
-
     void solve() {
         for (int i = 0; i < n; i++)
             if (ord[i] == -1) dfs(i);

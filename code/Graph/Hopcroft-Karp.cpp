@@ -1,5 +1,3 @@
-#include <bits/stdc++.h>
-using namespace std;
 struct Dinic {
     static constexpr int INF = 1e9;
     int n;
@@ -71,7 +69,6 @@ struct HopcroftKarp {
     void add_edge(int u, int v) {
         flow.addEdge(u, n+v, 1);
     }
-
     int solve() {
         for (int i=0; i<n; i++)
             flow.addEdge(n+m, i, 1);
@@ -87,7 +84,6 @@ struct HopcroftKarp {
         return res;
     }
 };
-
 int main() {
     ios::sync_with_stdio(false);
     int l, r, m;

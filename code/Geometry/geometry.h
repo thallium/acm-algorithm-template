@@ -1,9 +1,7 @@
 typedef double T;
-
 const double EPS = 1e-9;
 inline int sign(double a) { return a < -EPS ? -1 : a > EPS; }
 inline int cmp(double a, double b){ return sign(a-b); }
-
 struct P {
   T x,y;
   P() {}
@@ -12,7 +10,6 @@ struct P {
   P operator-(P p) {return {x-p.x, y-p.y};}
   P operator*(T d) {return {x*d, y*d};}
   P operator/(T d) {return {x/d, y/d};} // only for floatingpoint
-
   bool operator<(P p) const { 
     int c = cmp(x, p.x);
     if (c) return c == -1;
@@ -23,7 +20,6 @@ struct P {
 	}
   double dot(P p) { return x * p.x + y * p.y; }
   double det(P p) { return x * p.y - y * p.x; }
-
 	double distTo(P p) { return (*this-p).abs(); }
 	double alpha() { return atan2(y, x); }
   void read() { cin>>x>>y; }
@@ -35,10 +31,8 @@ struct P {
   int quad() const { return sign(y) == 1 || (sign(y) == 0 && sign(x) >= 0); }
 	P rot(double an){ return {x*cos(an)-y*sin(an),x*sin(an) + y*cos(an)}; }
 };
-
 #define cross(p1,p2,p3) ((p2.x-p1.x)*(p3.y-p1.y)-(p3.x-p1.x)*(p2.y-p1.y))
 #define crossOp(p1,p2,p3) sign(cross(p1,p2,p3))
-
 bool isConvex(vector<P> p) {
   bool hasPos=false, hasNeg=false;
   for (int i=0, n=p.size(); i<n; i++) {
@@ -48,28 +42,23 @@ bool isConvex(vector<P> p) {
   }
   return !(hasPos && hasNeg);
 }
-
 bool half(P p) {
   assert(p.x != 0 || p.y != 0); // (0, 0) is not covered
   return p.y > 0 || (p.y == 0 && p.x < 0);
 }
-
 void polarSortAround(P o, vector<P> &v) {
   sort(v.begin(), v.end(), [&o](P v, P w) {
       return make_tuple(half(v-o), 0) <
         make_tuple(half(w-o), cross(o, v, w));
   });
 }
-
 P proj(P p1, P p2, P q) {
 	P dir = p2 - p1;
 	return p1 + dir * (dir.dot(q - p1) / dir.abs2());
 }
-  
 P reflect(P p1, P p2, P q){
 	return proj(p1,p2,q) * 2 - q;
 }
-
 // tested with https://open.kattis.com/problems/closestpair2
 pair<P, P> closest(vector<P> v) {
   assert(sz(v) > 1);
@@ -114,19 +103,15 @@ struct L {
   L shiftLeft(double dist) {return L(v, c + dist*v.abs());}
   L shiftRight(double dist) {return L(v, c - dist*v.abs());}
 };
-
 bool chkLL(P p1, P p2, P q1, P q2) {
 	double a1 = cross(q1, q2, p1), a2 = -cross(q1, q2, p2);
 	return sign(a1+a2) != 0;
 }
- 
 P isLL(P p1, P p2, P q1, P q2) {
 	double a1 = cross(q1, q2, p1), a2 = -cross(q1, q2, p2);
 	return (p1 * a2 + p2 * a1) / (a1 + a2);
 }
-  
 P isLL(L l1,L l2){ return isLL(l1[0],l1[1],l2[0],l2[1]); }
-
 bool parallel(L l0, L l1) { return sign( l0.dir().det( l1.dir() ) ) == 0; }
 bool sameDir(L l0, L l1) { return parallel(l0, l1) && sign(l0.dir().dot(l1.dir()) ) == 1; }
 bool cmp (P a,  P b) {
@@ -143,11 +128,9 @@ bool operator < (L l0, L l1) {
 		return cmp( l0.dir(), l1.dir() );
 	}
 }
-  
 bool check(L u, L v, L w) { 
 	return w.include(isLL(u,v)); 
 }
-  
 vector<P> halfPlaneIS(vector<L> &l) {
 	sort(l.begin(), l.end());
 	deque<L> q;
@@ -168,57 +151,46 @@ struct cmpX {
     return make_pair(a.x, a.y) < make_pair(b.x, b.y);
   }
 };
-
 bool intersect(double l1,double r1,double l2,double r2){
 	if(l1>r1) swap(l1,r1); if(l2>r2) swap(l2,r2); 
 	return !( cmp(r1,l2) == -1 || cmp(r2,l1) == -1 );
 }
-  
 bool isSS(P p1, P p2, P q1, P q2){
 	return intersect(p1.x,p2.x,q1.x,q2.x) && intersect(p1.y,p2.y,q1.y,q2.y) && 
 	crossOp(p1,p2,q1) * crossOp(p1,p2,q2) <= 0 && crossOp(q1,q2,p1)
 			* crossOp(q1,q2,p2) <= 0;
 }
-  
 bool isSS_strict(P p1, P p2, P q1, P q2){
 	return crossOp(p1,p2,q1) * crossOp(p1,p2,q2) < 0 && crossOp(q1,q2,p1)
 			* crossOp(q1,q2,p2) < 0;
 }
-  
 bool isMiddle(double a, double m, double b) {
 	return sign(a - m) == 0 || sign(b - m) == 0 || (a < m != b < m);
 }
-  
 bool isMiddle(P a, P m, P b) {
 	return isMiddle(a.x, m.x, b.x) && isMiddle(a.y, m.y, b.y);
 }
-  
 bool onSeg(P p1, P p2, P q){
 	return crossOp(p1,p2,q) == 0 && isMiddle(p1, q, p2);
 }
- 
 bool onSeg_strict(P p1, P p2, P q){
 	return crossOp(p1,p2,q) == 0 && sign((q-p1).dot(p1-p2)) * sign((q-p2).dot(p1-p2)) < 0;
 }
- 
 double nearest(P p1,P p2,P q){
 	P h = proj(p1,p2,q);
 	if(isMiddle(p1,h,p2))
 		return q.distTo(h);
 	return min(p1.distTo(q),p2.distTo(q));
 }
-  
 double disSS(P p1, P p2, P q1, P q2){
 	if(isSS(p1,p2,q1,q2)) return 0;
 	return min(min(nearest(p1,p2,q1),nearest(p1,p2,q2)), min(nearest(q1,q2,p1),nearest(q1,q2,p2)));
 }
 double DEG_to_RAD(double d) { return d*M_PI/180.0; }
 double RAD_to_DEG(double r) { return r*180.0/M_PI; }
-
 double rad(P p1,P p2){
 	return atan2l(p1.det(p2),p1.dot(p2));
 }
-
 bool inAngle(P a, P b, P c, P p) {
   assert(crossOp(a,b,c) != 0);
   if (crossOp(a,b,c) < 0) swap(b,c);
@@ -231,11 +203,9 @@ double orientedAngle(P a, P b, P c) { // BAC
   if (crossOp(a,b,c) >= 0) return angle(b-a, c-a);
   else return 2*M_PI - angle(b-a, c-a);
 }
-
 // double chord(double r, double ang) return sqrt(2*r*r*(1-cos(ang))); // or 2*r*sin(ang/2)
 // double secarea(double r, double ang) {return (ang/2)*(r*r);} // rad
 // double segarea(double r, double ang) {return secarea(r, ang) - r*r*sin(ang)/2;}
-
 int type(P o1,double r1,P o2,double r2){
 	double d = o1.distTo(o2);
 	if(cmp(d,r1+r2) == 1) return 4; // outside each other
@@ -244,14 +214,12 @@ int type(P o1,double r1,P o2,double r2){
 	if(cmp(d,abs(r1-r2)) == 0) return 1; // touch inside
 	return 0;
 }
-
 vector<P> isCL(P o,double r,P p1,P p2){
 	if (cmp(abs((o-p1).det(p2-p1)/p1.distTo(p2)),r)>0) return {};
 	double x = (p1-o).dot(p2-p1), y = (p2-p1).abs2(), d = x * x - y * ((p1-o).abs2() - r*r);
 	d = max(d,0.0); P m = p1 - (p2-p1)*(x/y), dr = (p2-p1)*(sqrt(d)/y);
 	return {m-dr,m+dr}; //along dir: p1->p2
 }
-  
 vector<P> isCC(P o1, double r1, P o2, double r2) { //need to check whether two circles are the same
 	double d = o1.distTo(o2); 
 	if (cmp(d, r1 + r2) == 1) return {};
@@ -262,7 +230,6 @@ vector<P> isCC(P o1, double r1, P o2, double r2) { //need to check whether two c
 	P q1 = o1 + dr * y, q2 = dr.rot90() * x;
 	return {q1-q2,q1+q2};//along circle 1
 }
-
 vector<P> tanCP(P o, double r, P p) {
 	double x = (p - o).abs2(), d = x - r * r;
 	if (sign(d) <= 0) return {}; // on circle => no tangent
@@ -270,7 +237,6 @@ vector<P> tanCP(P o, double r, P p) {
 	P q2 = (p - o).rot90() * (r * sqrt(d) / x);
 	return {q1-q2,q1+q2}; //counter clock-wise
 }
-  
 vector<L> extanCC(P o1, double r1, P o2, double r2) {
 	vector<L> ret;
 	if (cmp(r1, r2) == 0) {
@@ -283,7 +249,6 @@ vector<L> extanCC(P o1, double r1, P o2, double r2) {
 	}
 	return ret;
 }
-  
 vector<L> intanCC(P o1, double r1, P o2, double r2) {
 	vector<L> ret;
 	P p = (o1 * r2 + o2 * r1) / (r1 + r2);
@@ -291,7 +256,6 @@ vector<L> intanCC(P o1, double r1, P o2, double r2) {
 	for(int i = 0; i < min(ps.size(),qs.size()); i++) ret.push_back(L(ps[i], qs[i])); //c1 counter-clock wise
 	return ret;
 }
-  
 double areaCT(double r, P p1, P p2){
 	vector<P> is = isCL(P(0,0),r,p1,p2);
 	if(is.empty()) return r*r*rad(p1,p2)/2;
@@ -310,13 +274,11 @@ P inCenter(P A, P B, P C) {
 	double a = (B - C).abs(), b = (C - A).abs(), c = (A - B).abs();
 	return (A * a + B * b + C * c) / (a + b + c);
 }
- 
 P circumCenter(P a, P b, P c) { 
 	P bb = b - a, cc = c - a;
 	double db = bb.abs2(), dc = cc.abs2(), d = 2 * bb.det(cc);
 	return a - P(bb.y * dc - cc.y * db, cc.x * db - bb.x * dc) / d;
 }
- 
 P othroCenter(P a, P b, P c) { 
 	P ba = b - a, ca = c - a, bc = b - c;
 	double Y = ba.y * ca.y * bc.y,
@@ -331,7 +293,6 @@ double area(vector<P> ps){
   for(int i=0; i< ps.size(); i++) ret += ps[i].det(ps[(i+1)%ps.size()]); 
 	return ret/2;
 }
-  
 int contain(vector<P> ps, P p){ //2:inside,1:on_seg,0:outside
 	int n = ps.size(), ret = 0; 
 	for(int i = 0; i < n; i++) {
@@ -343,7 +304,6 @@ int contain(vector<P> ps, P p){ //2:inside,1:on_seg,0:outside
 	}
 	return ret*2;
 }
-  
 vector<P> convexHull(vector<P> ps) {
 	int n = ps.size(); if(n <= 1) return ps;
 	sort(ps.begin(), ps.end());
@@ -355,7 +315,6 @@ vector<P> convexHull(vector<P> ps) {
 	qs.resize(k - 1);
 	return qs;
 }
-  
 vector<P> convexHullNonStrict(vector<P> ps) {
 	//caution: need to unique the Ps first
 	int n = ps.size(); if(n <= 1) return ps;
@@ -368,7 +327,6 @@ vector<P> convexHullNonStrict(vector<P> ps) {
 	qs.resize(k - 1);
 	return qs;
 }
-  
 double convexDiameter(vector<P> ps){
 	int n = ps.size(); if(n <= 1) return 0;
 	int is = 0, js = 0; for(int k = 1; k < n; k++) is = ps[k]<ps[is]?k:is, js = ps[js] < ps[k]?k:js;
@@ -383,7 +341,6 @@ double convexDiameter(vector<P> ps){
 	}while(i!=is || j!=js);
 	return ret;
 }
-  
 vector<P> convexCut(const vector<P>&ps, P q1, P q2) {
 	vector<P> qs;
 	int n = ps.size();

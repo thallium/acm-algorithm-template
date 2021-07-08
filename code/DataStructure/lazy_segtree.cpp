@@ -1,5 +1,3 @@
-#include <bits/stdc++.h>
-using namespace std;
 // lazy propagation
 template<typename T>
 struct SegTree {
@@ -21,7 +19,6 @@ struct SegTree {
         build(node * 2 + 1, mid + 1, r, v);
         pull(node);
     }
-
     void push(int p, int l, int r) {
         if (t[p].lazy) {
             int m = (l + r) / 2;
@@ -30,7 +27,6 @@ struct SegTree {
             t[p].lazy = 0;
         }
     }
-
     template<typename U>
     void add(int node, int ql, int qr, int l, int r, U x) {
         if (r < ql || l > qr) return;
@@ -41,12 +37,10 @@ struct SegTree {
         add(node * 2 + 1, ql, qr, mid + 1, r, x);
         pull(node);
     }
-
     T get(int node, int ql, int qr, int l, int r) {
         if (ql <= l && qr >= r) return t[node];
         push(node, l, r);
         int mid = (l + r) / 2;
-
         if (qr <= mid) return get(node << 1, ql, qr, l, mid);
         if (ql > mid) return get(node << 1 | 1, ql, qr, mid+1, r);
         return get(node << 1, ql, qr, l, mid) + get(node << 1 | 1, ql, qr, mid+1, r);
@@ -57,13 +51,11 @@ struct SegTree {
         assert(l >= 0 && l <= r && r < n);
         add(1, l, r, 0, n-1, x);
     }
-
     T get(int l, int r) {
         assert(l >= 0 && l <= r && r < n);
         return get(1, l, r, 0, n-1);
     }
 };
-
 struct node {
     int v=0; // don't forget to set default value (used for leaves), not necessarily zero element
     int lazy=0;
@@ -71,7 +63,6 @@ struct node {
         v+=x;
         lazy+=(r-l) * x;
     }
-
     node operator+(const node& b) const {
         node res;
         res.v=v+b.v;

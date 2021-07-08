@@ -15,9 +15,7 @@ struct Euler_tour {
     // use in-degree and out-degree if directed graph
     // vector<int> indeg, oudeg;
     bool bad=0;
-
     Euler_tour(int _n) : n(_n), g(n), deg(n) {}
-
     void add_edge(int u, int v) { // change if directed graph
         g[u].emplace_back(v, edge_cnt);
         g[v].emplace_back(u, edge_cnt);
@@ -35,7 +33,6 @@ struct Euler_tour {
         if (!circuit.empty() && circuit.back().first!=u) bad=true;
         circuit.emplace_back(pre, u);
     }
-
     vector<int> solve(int start) {
         for (auto x : deg) if (x%2) return {}; // change if directed graph:
         // for (int i=0; i<n; i++) if(indeg[i]!=oudeg[i]) return {};

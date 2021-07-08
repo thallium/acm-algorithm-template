@@ -1,6 +1,4 @@
-#include <bits/stdc++.h>
-using namespace std;
-// Mo's algorithm (莫队算法), solve m offline queries on array of length n in O(n sqrt(m))
+// Mo's algorithm, solve m offline queries on array of length n in O(n sqrt(m))
 struct MO {
     int n, m=0;
     struct node {
@@ -8,11 +6,9 @@ struct MO {
     };
     vector<node> query;
     MO(int _n) : n(_n) {}
- 
     void add_query(int l, int r) {
         query.push_back({l, r, m++});
     }
- 
     template<typename F>
     vector<int> solve(F&& move) {
         const int BLOCK_SIZE = (n<=m ? ceil(sqrt(n)) : n/ceil(sqrt(m)));
@@ -32,13 +28,11 @@ struct MO {
         return ans;
     }
 };
-
 // example: find the most occurrence in ranges
 int main() {
     int n, q;
     MO mo(n);
-    vector<int> a(n);
-    vector<int> counter(n+1), freq(3e5+1);
+    vector<int> a(n), counter(n+1), freq(3e5+1);
     auto ans=mo.solve([&](int i, int dir, int& cur) {
         int val=a[i];
         int c=freq[val];

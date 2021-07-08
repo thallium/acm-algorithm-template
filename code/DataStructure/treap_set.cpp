@@ -1,7 +1,6 @@
 // using treap to maintain a sequence that support multiple operation, index
 // starts from 0!
 #include<bits/stdc++.h>
-using namespace std;
 mt19937 gen(chrono::high_resolution_clock::now().time_since_epoch().count());
 struct data {
     long long v;
@@ -74,7 +73,6 @@ template <typename T> struct Treap {
         }
         pull(rt);
     }
-
     void split_val(int rt, const T& target, int& x, int& y) {// split into two sets such that one contains <=k and other contains >k
         if (!rt) {
             x=y=0;
@@ -102,31 +100,25 @@ template <typename T> struct Treap {
     }
     // interface
     int size() { return nodes[root].sz; }
-
     void insert(const T& v) { // insert at kth position
         int lt, rt;
         split_val(root, v, lt, rt);
         root = merge(merge(lt, new_node(v)), rt);
     }
-
     bool erase(const T& v, bool all=false) {
         int lt, mt, nt, rt;
         split_val(root, v - 1, lt, mt);
         split_val(mt, v, nt, rt);
-
         bool found=nodes[nt].d==v;
         if (found && (all or nt==0))
             root = merge(lt, rt);
         else
             root = merge(merge(merge(lt, ch(nt, 0)), ch(nt, 1)), rt);
         return found;
-
     }
-
     int order_of_key(const T& v) {
         return order_of_key(root, v);
     }
-
     T find_by_order(int x)  {// order starts from 0!
         assert(x<size() && x>=-1);
         int lt, mt, rt;
@@ -135,11 +127,9 @@ template <typename T> struct Treap {
         root = merge(merge(lt, mt), rt);
         return nodes[mt].d;
     }
-
     T predecessor(const T& v) {
         return find_by_order(order_of_key(v) - 1);
     } 
-
     T successor(const T& v) {
         int x, y;
         split_val(root, v, x, y);

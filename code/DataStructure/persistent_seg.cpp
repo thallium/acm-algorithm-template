@@ -1,6 +1,5 @@
 //find the nth biggest number
 #include<bits/stdc++.h>
-using namespace std;
 struct PST {
     int n, tot=0;
     vector<int> lc, rc, sum, roots; // left child, right child

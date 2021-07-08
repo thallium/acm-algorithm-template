@@ -1,24 +1,7 @@
 // using treap to maintain a sequence that support multiple operation, index
-// 0-based index
+// 0-based index, change pull(), add(), pushdown() according to the problem
 #include<bits/stdc++.h>
-using namespace std;
 mt19937 gen(chrono::high_resolution_clock::now().time_since_epoch().count());
-struct data {
-    int v;
-    data(int _v = 0) : v(_v) {}
-    data operator+(const data &d) const {
-        data r;
-        r.v = v + d.v;
-        return r;
-    }
-    data operator*(int t) const {
-        data r;
-        r.v = v * t;
-        return r;
-    }
-    operator bool() const { return v != 0; }
-    operator int() const { return v; }
-};
 template <typename T> struct Treap {
     struct node {
         int ch[2], sz;
@@ -113,7 +96,6 @@ template <typename T> struct Treap {
         root = merge(merge(x, y), z);
         return nodes[y];
     }
-
     void insert(int k, T v) { // insert at kth position
         assert(k>=0 && k<=size());
         int l, r;
