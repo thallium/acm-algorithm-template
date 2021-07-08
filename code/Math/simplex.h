@@ -13,14 +13,11 @@
  * Time: O(NM * \#pivots), where a pivot may be e.g. an edge relaxation. O(2^n) in the general case.
  * Status: seems to work?
  */
-#pragma once
-
 typedef double T; // long double, Rational, double + mod<P>...
 typedef vector<T> vd;
 typedef vector<vd> vvd;
 
 const T eps = 1e-8, inf = 1/.0;
-#define MP make_pair
 #define ltj(X) if(s == -1 || MP(X[j],N[j]) < MP(X[s],N[s])) s=j
 
 struct LPSolver {

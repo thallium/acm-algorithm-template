@@ -1,20 +1,29 @@
 \documentclass[11pt]{article}
-\usepackage[left=0.4in,right=0.4in,top=0.7in,bottom=0.4in]{geometry}
+\usepackage[a4paper, left=0.4in,right=0.4in,top=0.7in,bottom=0.4in]{geometry}
 \usepackage{hyperref}
 \usepackage{fancyhdr}
 \usepackage{listings}
-\usepackage{xcolor}
+\usepackage[usenames,dvipsnames]{xcolor}
 \usepackage{tocloft}
 \usepackage{pdflscape}
 \usepackage{multicol}
+\usepackage[scaled]{noto}
+\usepackage{titlesec}
 
 \setlength{\headheight}{13.59999pt}
+\renewcommand{\familydefault}{\sfdefault}
+\titlespacing*{\section}
+{0pt}{0ex}{0ex}
+\titlespacing*{\subsection}
+{0pt}{0ex}{-1ex}
 
-\renewcommand*{\ttdefault}{pcr}
+% \renewcommand*\familydefault{\ttdefault} %% Only if the base font of the document is to be typewriter style
+\usepackage[T1]{fontenc}
+
 \renewcommand\cftsecfont{\fontsize{8}{9}\bfseries}
 \renewcommand\cftsecpagefont{\fontsize{8}{9}\mdseries}
-\renewcommand\cftsubsecfont{\fontsize{5}{6}\mdseries}
-\renewcommand\cftsubsecpagefont{\fontsize{5}{6}\mdseries}
+\renewcommand\cftsubsecfont{\fontsize{6}{6}\mdseries}
+\renewcommand\cftsubsecpagefont{\fontsize{6}{6}\mdseries}
 \renewcommand\cftsecafterpnum{\vspace{-1ex}}
 \renewcommand\cftsubsecafterpnum{\vspace{-1ex}}
 
@@ -23,14 +32,14 @@
     breaklines=true,
     xleftmargin=\parindent,
     showstringspaces=false,
-    basicstyle=\fontsize{7.5}{8}\ttfamily,
+    basicstyle=\fontsize{7.3}{8}\ttfamily,
 }
 \lstdefinestyle{cpp}{
-	style=shared,
+    style=shared,
     language=C++,
-    keywordstyle=\bfseries\color{green!40!black},
-    commentstyle=\itshape\color{red!80!black},
-    identifierstyle=\color{blue},
+    keywordstyle=\color{SkyBlue},
+    commentstyle=\itshape\color{gray},
+    identifierstyle=\color{ForestGreen},
     stringstyle=\color{purple!40!black},
 }
 \lstdefinestyle{java}{
@@ -54,19 +63,18 @@
 }
 \lstset{escapechar=@}
 
-\pagestyle{fancy}
-\fancyhead[L]{York University}
+\fancyhead[L]{York University Team York Red}
 \fancyhead[R]{\thepage}
 \fancyfoot[C]{}
 
 \fancypagestyle{plain}
 {
-\fancyhead[L]{York University}
+\fancyhead[L]{York University Team York Red}
 \fancyhead[R]{\thepage}
 \fancyfoot[C]{}
 }
 
-\title{\vspace{-4ex}\Large{York University Team Notebook C++ (2019-2020)}}
+\title{\vspace{-4ex}\Large{York University Team Notebook C++ (2019-2021)}}
 \author{}
 \date{}
 
