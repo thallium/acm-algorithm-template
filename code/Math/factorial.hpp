@@ -8,11 +8,9 @@ namespace Factorial {
         invfac[n]=fac[n].inv();
         for (int i=n-1; i>=0; i--) invfac[i]=invfac[i+1]*(i+1);
     }
-
     mint C(int n, int m) { // n choose m
         return fac[n]*invfac[n-m]*invfac[m];
     }
-
     mint P(int n, int m) { // n choose m with permutation
         return fac[n]*invfac[n-m];
     }
