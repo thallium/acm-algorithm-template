@@ -23,7 +23,7 @@ template <typename T> struct Treap {
     int root, recyc;
     Treap(int size=2e5) {
         nodes.reserve((size = max(size, 15)) + 1);
-        nodes.push_back(node());
+        nodes.emplace_back();
         root = recyc = 0;
     }
     inline int &ch(int rt, int r) { return nodes[rt].ch[r]; }

@@ -1,9 +1,9 @@
-#include<bits/stdc++.h>
-// factor using naive or Rho algorithm, also see Sieve.cpp for faster factorization for small numbers
 namespace Fractorization {
     using u64 = uint64_t;
     using u128 = __uint128_t;
-    using ll = long long;
+    using ull = unsigned long long;
+    mt19937 rand(chrono::steady_clock::now().time_since_epoch().count());
+    
     u64 binPow(u64 a, u64 b, u64 mod){
         if(b == 0) return 1;
         if(b&1) return (u128)a * binPow(a, b^1, mod) % mod;
@@ -30,36 +30,34 @@ namespace Fractorization {
         }
         return true;
     }
-    ll mult(ll a, ll b, ll mod){
-        return (__int128)a * b % mod;
+    ull mult(ull a, ull b, ull mod){
+        return (u128)a * b % mod;
     }
-    ll f(ll x, ll c, ll mod){
-        return (mult(x, x, mod) + c) % mod;
-    }
-    ll rho(ll n){ // Works in O(n^(1/4) * log(n))
-        ll x = 2, y = 2, g = 1;
-        ll c = rand() % n + 1;
-        while(g == 1){
-            x = f(x, c, n);
-            y = f(y, c, n);
-            y = f(y, c, n);
-            g = gcd(abs(x - y), n);
+    ull rho(ull n) { // wiull find a factor < n, but not necessarily prime
+        if (~n & 1) return 2;
+        ull c = rand() % n, x = rand() % n, y = x, d = 1;
+        while (d == 1) {
+            x = (mult(x, x, n) + c) % n;
+            y = (mult(y, y, n) + c) % n;
+            y = (mult(y, y, n) + c) % n;
+            d = gcd(max(x, y)-min(x, y), n);
         }
-        return g==n ? rho(n) : g;
+        return d == n ? rho(n) : d;
     }
-    vector<pair<ll, int>> factorRho(ll n) {
-        map <ll, int> fact;
-        function<void(ll)> factRho=[&](ll n){
+    vector<pair<ull, int>> factorRho(ull n) {
+        map <ull, int> fact;
+        function<void(ull)> factRho=[&](ull n){
             if(n == 1) return;
             if(RabinMiller(n)){
                 fact[n]++;
                 return;
             }
-            ll factor = rho(n);
+            ull factor = rho(n);
             factRho(factor);
             factRho(n/factor);
         };
-        vector<pair<ll, int>> facts;
+        factRho(n);
+        vector<pair<ull, int>> facts;
         for (auto& p : fact) facts.push_back(p);
         return facts;
     }

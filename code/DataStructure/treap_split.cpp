@@ -1,6 +1,5 @@
 // using treap to maintain a sequence that support multiple operation, index
 // 0-based index, change pull(), add(), pushdown() according to the problem
-#include<bits/stdc++.h>
 mt19937 gen(chrono::high_resolution_clock::now().time_since_epoch().count());
 template <typename T> struct Treap {
     struct node {

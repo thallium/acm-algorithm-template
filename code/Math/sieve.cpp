@@ -1,4 +1,3 @@
-#include <vector>
 namespace Sieve {
     vector<int> primes;
     vector<int> mn_factor;
