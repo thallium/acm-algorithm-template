@@ -60,8 +60,8 @@ struct node {
     int v=0; // don't forget to set default value (used for leaves), not necessarily zero element
     int lazy=0;
     void apply(int l, int r, int x) {
-        v+=x;
-        lazy+=(r-l) * x;
+        lazy += x;
+        v += (r - l) * x;
     }
     node operator+(const node& b) const {
         node res;
