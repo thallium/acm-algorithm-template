@@ -1,29 +1,34 @@
+#include <bits/stdc++.h>
+using namespace  std;
 template<typename T>
 struct Trie {
-    vector<map<T, int>> child;
-    vector<bool> is_leaf;
+    struct node {
+        map<T, int> ch;
+        bool is_leaf;
+    };
+    vector<node> t;
     Trie() { new_node(); }
     int new_node() {
-        child.emplace_back();
-        is_leaf.emplace_back();
-        return child.size()-1;
+        t.emplace_back();
+        return (int)t.size()-1;
     }
     template<typename S> void insert(const S& s) {
         int p=0;
-        for (auto ch : s) {
-            if (!child[p].count(ch)) {
-                child[p][ch]=new_node();
+        for (int i=0; i<(int)s.size(); i++) {
+            auto ch=s[i];
+            if (!t[p].ch.count(ch)) {
+                t[p].ch[ch]=new_node();
             }
-            p=child[p][ch];
+            p=t[p].ch[ch];
         }
-        is_leaf[p]=true;
+        t[p].is_leaf=true;
     }
     template<typename S> bool find(const S& s) {
         int p=0;
         for (auto ch : s) {
-            if (!child[p].count(ch)) return false;
-            p=child[p][ch];
+            if (!t[p].ch.count(ch)) return false;
+            p=t[p].ch[ch];
         }
-        return is_leaf[p];
+        return t[p].is_leaf;
     }
 };

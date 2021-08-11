@@ -100,7 +100,7 @@ template <typename T> struct Treap {
     }
     // interface
     int size() { return nodes[root].sz; }
-    void insert(const T& v) { // insert at kth position
+    void insert(const T& v) {
         int lt, rt;
         split_val(root, v, lt, rt);
         root = merge(merge(lt, new_node(v)), rt);
