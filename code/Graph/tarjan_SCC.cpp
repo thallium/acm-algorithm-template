@@ -2,6 +2,9 @@
 // because we use a slightly different definition for lowlink. However this
 // algorithm is still correctly and easier to code.
 // See: https://cs.stackexchange.com/questions/96635/tarjans-scc-example-showing-necessity-of-lowlink-definition-and-calculation-r?rq=1
+
+#include <vector>
+using namespace std;
 struct SCC {
     int n, pos = 0;
     vector<vector<int>> g;

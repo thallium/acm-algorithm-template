@@ -6,7 +6,7 @@ struct SegTree {
         build(1, 0, n-1, vector(n, T()));
     }
     template<typename U>
-    SegTree(const vector<T> &v) : SegTree((int)v.size()) {
+    SegTree(const vector<U> &v) : SegTree((int)v.size()) {
         build(1, 0, n - 1, v);
     }
     void pull(int node) { t[node] = t[node << 1] + t[node << 1 | 1]; }

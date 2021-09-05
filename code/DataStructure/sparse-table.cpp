@@ -11,7 +11,7 @@ template <typename T> struct sparse {
             for (int j = 0; j + (1 << i) - 1 < n; j++)
                 v[i][j] = F(v[i - 1][j], v[i - 1][j + (1 << (i - 1))]);
     }
-    int query(int x, int y) {
+    T query(int x, int y) {
         int s = __lg(y - x + 1);
         return F(v[s][x], v[s][y - (1 << s) + 1]);
     }
