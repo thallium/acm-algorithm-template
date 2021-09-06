@@ -23,7 +23,7 @@ vector<int> suffix_array(string s) {
     sa.erase(sa.begin());
     return sa;
 }
-vector<int> build_lcp(const string& s, const vector<int>& sa) { // lcp of suffix[i] ans suffix[i-1]
+vector<int> build_lcp(const string& s, const vector<int>& sa) { // lcp of sa[i] and sa[i-1]
     int n = (int)s.size();
     vector<int> pos(n);
     for (int i = 0; i < n; i++) pos[sa[i]] = i;

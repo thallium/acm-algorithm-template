@@ -14,7 +14,6 @@ struct two_SAT {
     SCC g;
     two_SAT(int n) : n(n), g(n*2) {} // n is the number of literals
     void add(int u, bool neg_u, int v, bool neg_v) { // neg_u is if u is negated, same for v
-        de(u, neg_u, v, neg_v);
         g.add_edge(2*u+neg_u, 2*v+!neg_v);
         g.add_edge(2*v+neg_v, 2*u+!neg_u);
     }
