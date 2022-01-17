@@ -1,5 +1,9 @@
 # acm-algorithm-template
-some algorithm templates for competitive programming. Most can copy-and-use.
+
+Some algorithm templates for competitive programming. Trying to be extensive and easy to use.
+
+There are two branches: master and icpc. The master branch is for online contest and on-site contests that don't limit the number of pages of your reference so this branch will try to be as extensive as possible. On the other hand, the icpc branch is for some ICPC contest that limit the number of pages of your reference so you can't just print everything and the coding style may also change in order to save space.
+
 
 # There are:
 
