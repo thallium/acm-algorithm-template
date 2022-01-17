@@ -12,7 +12,7 @@ template <typename T> struct Treap {
         }
     };
     vector<node> nodes;
-    int root=0, recyc=0;
+    int root=0;
     Treap(int size = 2e5) {
         nodes.reserve(size);
         nodes.emplace_back(0, 0);
@@ -20,15 +20,7 @@ template <typename T> struct Treap {
     inline int &ch(int rt, int r) { return nodes[rt].ch[r]; }
     int new_node(const T &d) {
         int id = (int)nodes.size();
-        if (recyc) {
-            id = recyc;
-            if (ch(recyc, 0) && ch(recyc, 1))
-                recyc = merge(ch(recyc, 0), ch(recyc, 1));
-            else
-                recyc = ch(recyc, ch(recyc, 0) ? 0 : 1);
-            nodes[id] = node(d);
-        } else
-            nodes.push_back(node(d));
+        nodes.push_back(node(d));
         return id;
     }
     int pull(int rt) {
@@ -64,65 +56,69 @@ template <typename T> struct Treap {
             return pull(tr);
         }
     }
-    void split(int rt, int k, int &x, int &y) { // split out first k element
-        if (!rt) {
-            x = y = 0;
-            return;
-        }
+    void split_by_size(int rt, int k, int &x, int &y) { // split out first k element
+        if (!rt) { x = y = 0; return; }
         pushdown(rt);
         if (k <= nodes[ch(rt, 0)].sz) {
             y = rt;
-            split(ch(rt, 0), k, x, ch(rt, 0));
-            pull(y);
+            split_by_size(ch(rt, 0), k, x, ch(rt, 0));
         } else {
             x = rt;
-            split(ch(rt, 1), k - nodes[ch(rt, 0)].sz - 1, ch(rt, 1), y);
-            pull(x);
+            split_by_size(ch(rt, 1), k - nodes[ch(rt, 0)].sz - 1, ch(rt, 1), y);
         }
+        pull(rt);
     }
-    void remove(int &rt) {
-        if (recyc == 0) recyc = rt;
-        else recyc = merge(recyc, rt);
-        rt = 0;
+    void split_by_val(int rt, const T& target, int& x, int& y) {// split into two sets such that one contains <=k and other contains >k
+        if (!rt) { x=y=0; return; }
+        pushdown(rt);
+        if (target < nodes[rt].d) {
+            y = rt;
+            split_by_val(ch(rt, 0), target, x, ch(rt, 0));
+        } else {
+            x = rt;
+            split_by_val(ch(rt, 1), target, ch(rt, 1), y);
+        }
+        pull(rt);
     }
+    void remove(int &rt) { rt = 0; }
     // interface
     int size() { return nodes[root].sz; }
     const T& operator[](int k) {
         assert(k>=0 && k<size());
         int x, y, z;
-        split(root, k+1, y, z);
-        split(y, k, x, y);
+        split_by_size(root, k+1, y, z);
+        split_by_size(y, k, x, y);
         root = merge(merge(x, y), z);
         return nodes[y];
     }
     void insert(int k, T v) { // insert at kth position
         assert(k>=0 && k<=size());
         int l, r;
-        split(root, k, l, r);
+        split_by_size(root, k, l, r);
         int rt = new_node(v);
         root = merge(merge(l, rt), r);
     }
     void erase(int l, int r) {
         assert(l>=0 && l<=r && r<size());
         int x, y, z;
-        split(root, r + 1, y, z);
-        split(y, l, x, y);
+        split_by_size(root, r + 1, y, z);
+        split_by_size(y, l, x, y);
         remove(y);
         root = merge(x, z);
     }
     void range_add(int l, int r, T v) {
         assert(l>=0 && l<=r && r<size());
         int x, y, z;
-        split(root, r + 1, y, z);
-        split(y, l, x, y);
+        split_by_size(root, r + 1, y, z);
+        split_by_size(y, l, x, y);
         add(y, v);
         root = merge(merge(x, y), z);
     }
     T getsum(int l, int r) {
         assert(l>=0 && l<=r && r<size());
         int x, y, z;
-        split(root, r + 1, y, z);
-        split(y, l, x, y);
+        split_by_size(root, r + 1, y, z);
+        split_by_size(y, l, x, y);
         T ret = nodes[y].sum;
         root = merge(merge(x, y), z);
         return ret;
