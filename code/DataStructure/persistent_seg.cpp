@@ -1,33 +1,39 @@
 //find the nth biggest number
 #include<bits/stdc++.h>
+using namespace std;
 struct PST {
     int n, tot=0;
-    vector<int> lc, rc, sum, roots; // left child, right child
-    PST(int n_) : n(n_), lc(n<<5), rc(n<<5), sum(n<<5), roots(1) { // change the size to n<<6 if there are 2*n modification 
+    struct node {
+        int lc, rc, sum;
+    };
+    vector<node> t;
+    vector<int> roots; // left child, right child
+    PST(int n_) : n(n_), t(n<<5), roots(1) { // change the size to n<<6 if there are 2*n modification 
         build(0, n-1, roots[0]); // the initial root node is 1!
     }
+#define lc(rt) t[t[rt].lc]
+#define rc(rt) t[t[rt].rc]
     void pushup(int rt) {
-        sum[rt] = sum[lc[rt]] + sum[rc[rt]];
+        t[rt].sum = lc(rt).sum + rc(rt).sum;
     }
     void build(int l, int r, int& rt) {
         rt = ++tot;
         if (l == r) return;
         int mid = (l + r) >> 1;
-        build(l, mid, lc[rt]);
-        build(mid + 1, r, rc[rt]);
+        build(l, mid, t[rt].lc);
+        build(mid + 1, r, t[rt].rc);
         pushup(rt);
     }
     void update(int pos, int val, int l, int r, int old, int& rt) {
         rt = ++tot;
-        lc[rt] = lc[old];
-        rc[rt] = rc[old];
+        t[rt] = t[old];
         if (l == r) {
-            sum[rt] = sum[old] + val;
+            t[rt].sum = t[old].sum + val;
             return;
         }
         int mid = (l + r) >> 1;
-        if (pos <= mid) update(pos, val, l, mid, lc[old], lc[rt]);
-        else update(pos, val, mid + 1, r, rc[old], rc[rt]);
+        if (pos <= mid) update(pos, val, l, mid, t[old].lc, t[rt].lc);
+        else update(pos, val, mid + 1, r, t[old].rc, t[rt].rc);
         pushup(rt);
     }
     int update(int pos, int val) { // return the root of the new version
@@ -38,9 +44,9 @@ struct PST {
     }
     int query(int u, int v, int l, int r, int k) {
         if (l==r) return l;
-        int mid=(l+r)/2, x=sum[lc[v]]-sum[lc[u]];
-        if (k<=x) return query(lc[u], lc[v], l, mid, k);
-        return query(rc[u], rc[v], mid+1, r, k-x);
+        int mid=(l+r)/2, x=lc(v).sum-lc(u).sum;
+        if (k<=x) return query(t[u].lc, t[v].lc, l, mid, k);
+        return query(t[u].rc, t[v].rc, mid+1, r, k-x);
     }
 };
 int main(){
