@@ -25,7 +25,7 @@ struct Eulerian_path {
             if (x % 2) return {};
         used.resize(edge_cnt);
         dfs(start);
-        if (path.size() != edge_cnt + 1)
+        if ((int)path.size() != edge_cnt + 1)
             return {}; // the graph is not connected
         reverse(path.begin(), path.end());
         return path;
@@ -34,7 +34,8 @@ struct Eulerian_path {
     vector<int> solve(int start, int end) {
         add_edge(start, end);
         auto res = solve(end);
-        res.erase(res.begin()); // the first edge has to be the newly added edge
+        if (!empty(res))
+            res.erase(res.begin()); // the first edge has to be the newly added edge
         return res;
     }
 };
