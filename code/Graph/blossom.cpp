@@ -1,4 +1,5 @@
 // https://codeforces.com/blog/entry/92339
+// another faster algorithm https://judge.yosupo.jp/submission/51928
 #include <bits/stdc++.h>
 
 using namespace std;
