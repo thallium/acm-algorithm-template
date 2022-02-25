@@ -11,3 +11,5 @@ code/Graph/graph.cpp
 *.toc
 test.pdf
 test.tex
+.DS_Store
+
