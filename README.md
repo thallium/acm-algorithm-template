@@ -5,7 +5,7 @@ Some algorithm templates for competitive programming. Trying to be extensive and
 There are two branches: master and icpc. The master branch is for online contest and on-site contests that don't limit the number of pages of your reference so this branch will try to be as extensive as possible. On the other hand, the icpc branch is for some ICPC contest that limit the number of pages of your reference so you can't just print everything and the coding style may also change in order to save space.
 
 
-# There are:
+# There are (maybe incomplete, I'm too lazy to update):
 
 ## String:
 - Trie
@@ -29,14 +29,14 @@ There are two branches: master and icpc. The master branch is for online contest
 
 - Augmented path algorithm for bipartite matching
 - Bellman Ford for finding negative cycle
-- Bineary Lifting and Lowest Common Ancestor
+- Binary Lifting and Lowest Common Ancestor
 - Bridges Finding
 - Cut Vertices Finding
 - Dijkstra
 - Dinic algorithm for max flow
 - Divide and Conquer on Trees (aka Centroid Decomposition)
 - Euler Tour
-- Heavy-light decomposation
+- Heavy-light decomposition
 - Hopcroft-Karp algorithm for bipartite matching
 - Hungarian
 - Push-relabel algorithm for max flow
