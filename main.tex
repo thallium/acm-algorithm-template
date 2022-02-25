@@ -1,5 +1,6 @@
+%! TeX program = lualatex
 \documentclass[11pt]{article}
-\usepackage[a4paper, left=0.4in,right=0.4in,top=0.7in,bottom=0.4in]{geometry}
+\usepackage[a4paper, left=0.4in,right=0.4in,top=0.7in,bottom=0.5in]{geometry}
 \usepackage{hyperref}
 \usepackage{fancyhdr}
 \usepackage{listings}
@@ -8,24 +9,24 @@
 \usepackage{pdflscape}
 \usepackage{multicol}
 \usepackage[scaled]{noto}
+\usepackage[T1]{fontenc}
 \usepackage{titlesec}
 
+\setlength\parindent{0pt} % No indent for all paragraph
 \setlength{\headheight}{13.59999pt}
-\renewcommand{\familydefault}{\sfdefault}
+\renewcommand{\familydefault}{\sfdefault} % change default font style
 \titlespacing*{\section}
 {0pt}{0ex}{0ex}
 \titlespacing*{\subsection}
 {0pt}{0ex}{-1ex}
 
-% \renewcommand*\familydefault{\ttdefault} %% Only if the base font of the document is to be typewriter style
-\usepackage[T1]{fontenc}
 
 \renewcommand\cftsecfont{\fontsize{8}{9}\bfseries}
 \renewcommand\cftsecpagefont{\fontsize{8}{9}\mdseries}
 \renewcommand\cftsubsecfont{\fontsize{6}{6}\mdseries}
 \renewcommand\cftsubsecpagefont{\fontsize{6}{6}\mdseries}
-\renewcommand\cftsecafterpnum{\vspace{-1ex}}
-\renewcommand\cftsubsecafterpnum{\vspace{-1ex}}
+\renewcommand\cftsecafterpnum{\vspace{-1ex}} % TOC line spacing
+\renewcommand\cftsubsecafterpnum{\vspace{-1ex}} % TOC line spacing
 
 \lstdefinestyle{shared}{
     belowcaptionskip=1\baselineskip,
@@ -61,26 +62,18 @@
 \lstdefinestyle{txt}{
     style=shared,
 }
-\lstset{escapechar=@}
 
-\fancyhead[L]{York University Team York Red}
+\pagestyle{fancy}
+\fancyhead[L]{York University Team 1}
 \fancyhead[R]{\thepage}
 \fancyfoot[C]{}
 
-\fancypagestyle{plain}
-{
-\fancyhead[L]{York University Team York Red}
-\fancyhead[R]{\thepage}
-\fancyfoot[C]{}
-}
-
-\title{\vspace{-4ex}\Large{York University Team Notebook C++ (2019-2021)}}
-\author{}
-\date{}
+\title{\vspace{-4ex}\Large{York University Team Notebook C++ (2021-2022)}}
+\author{York University ACM}
 
 \begin{document}
 \begin{landscape}
-\begin{multicols}{2}
+\begin{multicols*}{2}
 
 \maketitle
 \vspace{-13ex}
@@ -89,6 +82,6 @@
 
 \input contents.tex
 
-\end{multicols}
+\end{multicols*}
 \end{landscape}
 \end{document}
