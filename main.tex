@@ -8,8 +8,8 @@
 \usepackage{tocloft}
 \usepackage{pdflscape}
 \usepackage{multicol}
-\usepackage[scaled]{noto}
 \usepackage[T1]{fontenc}
+\usepackage[scaled]{noto}
 \usepackage{titlesec}
 
 \setlength\parindent{0pt} % No indent for all paragraph
@@ -35,14 +35,23 @@
     showstringspaces=false,
     basicstyle=\fontsize{7.3}{8}\ttfamily,
 }
+% black version
 \lstdefinestyle{cpp}{
     style=shared,
     language=C++,
-    keywordstyle=\color{SkyBlue},
+    keywordstyle=\bfseries\color{black},
     commentstyle=\itshape\color{gray},
-    identifierstyle=\color{ForestGreen},
-    stringstyle=\color{purple!40!black},
+    identifierstyle=\color{black},
 }
+% colored version
+% \lstdefinestyle{cpp}{
+%     style=shared,
+%     language=C++,
+%     keywordstyle=\color{SkyBlue},
+%     commentstyle=\itshape\color{gray},
+%     identifierstyle=\color{ForestGreen},
+%     stringstyle=\color{purple!40!black},
+% }
 \lstdefinestyle{java}{
     style=shared,
     language=Java,
@@ -63,12 +72,15 @@
     style=shared,
 }
 
-\pagestyle{fancy}
+\fancypagestyle{plain}{
 \fancyhead[L]{York University Team 1}
 \fancyhead[R]{\thepage}
 \fancyfoot[C]{}
+}
+\pagestyle{plain}
 
 \title{\vspace{-4ex}\Large{York University Team Notebook C++ (2021-2022)}}
+
 \author{York University ACM}
 
 \begin{document}
