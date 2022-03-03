@@ -8,17 +8,20 @@
 \usepackage{tocloft}
 \usepackage{pdflscape}
 \usepackage{multicol}
-\usepackage[T1]{fontenc}
-\usepackage[scaled]{noto}
+\usepackage{fontspec}
 \usepackage{titlesec}
 
 \setlength\parindent{0pt} % No indent for all paragraph
 \setlength{\headheight}{13.59999pt}
-\renewcommand{\familydefault}{\sfdefault} % change default font style
 \titlespacing*{\section}
 {0pt}{0ex}{0ex}
 \titlespacing*{\subsection}
 {0pt}{0ex}{-1ex}
+
+% change font to your favorites
+\setmonofont{FiraCode Nerd Font}
+\setmainfont{Source Han Sans SC}
+% \setmonofont{Iosevka}
 
 
 \renewcommand\cftsecfont{\fontsize{8}{9}\bfseries}
