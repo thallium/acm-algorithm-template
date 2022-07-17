@@ -1,3 +1,4 @@
+using ll = long long;
 // a x + b y = gcd(a, b)
 ll extgcd(ll a, ll b, ll &x, ll &y) {
     ll g = a; x = 1; y = 0;
@@ -15,7 +16,7 @@ bool chinese(const vector<ll> &a, const vector<ll> &b, const vector<ll> &m, ll &
         ll y, t, g = extgcd(a_, m_, y, t);
         if (b_ % g) return false;
         b_ /= g; m_ /= g;
-        x += M * (y * b_ % m_);
+        x += M * (__int128_t(y) * __int128_t(b_) % m_);
         M *= m_;
     }
     x = (x + M) % M;
