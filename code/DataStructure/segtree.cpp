@@ -66,7 +66,7 @@ struct SegTree {
 };
 struct node {
     int v=0; // value for leaves
-    node() = default;
+    // node() = default;
     // may need more constructor
     node operator+(const node& rhs) const { // used in get() and pull()
         return {v+rhs.v};
