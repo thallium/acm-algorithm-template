@@ -1,7 +1,9 @@
+#pragma once
+#include <vector>
 template <typename T> struct fenwick {
-    int n; vector<T> t;
+    int n; std::vector<T> t;
     fenwick(int n_) : n(n_), t(n + 1) {}
-    fenwick(const vector<T> &v) : fenwick((int)v.size()) {
+    fenwick(const std::vector<T> &v) : fenwick((int)v.size()) {
         for (int i = 1; i <= n; i++) {
             t[i] += v[i - 1];
             int j = i + (i & -i);
@@ -41,7 +43,7 @@ template <typename T> struct fenwick {
 // fenwick tree with range update and range sum query
 struct fenwick_rg {
     int n;
-    vector<int64_t> sum1, sum2;
+    std::vector<int64_t> sum1, sum2;
     fenwick_rg(int n_) : n(n_), sum1(n + 1), sum2(n + 1) {}
   private:
     void add(int i, int x) {
