@@ -1,38 +1,42 @@
-struct Binary_lifting {
-    const int sz, level;
-    const vector<vector<int>> &g;
-    vector<vector<int>> pa;
-    vector<int> dep;
-    Binary_lifting(const vector<vector<int>> &g_)
-        : sz((int)g_.size()), level(__lg(sz) + 2), g(g_),
-          pa(sz, vector<int>(level)), dep(g.size()) {}
-    void dfs(int u, int p) {
+#include "misc/util.hpp"
+#include <vector>
+struct BinaryLifting {
+    const int n, level;
+    std::vector<std::vector<int>> pa;
+    std::vector<int> dep, tin, tout;
+    BinaryLifting(const std::vector<std::vector<int>> &g, int root)
+        : n((int)g.size()), level(lg(n) + 1),
+          pa(n, std::vector<int>(level)), dep(n), tin(n), tout(n) {
+        int timer = 0;
+        dfs(root, root, g, timer);
+    }
+    void dfs(int u, int p, const std::vector<std::vector<int>>& g, int& timer) {
+        tin[u] = timer++;
         pa[u][0] = p;
-        dep[u] = dep[p] + 1;
         for (int i = 1; i < level; i++) {
             pa[u][i] = pa[pa[u][i - 1]][i - 1];
         }
         for (auto v : g[u]) {
             if (v == p) continue;
-            dfs(v, u);
+            dep[v] = dep[u] + 1;
+            dfs(v, u, g, timer);
         }
+        tout[u] = timer;
     };
-    int jump(int u, int step) {
-        for (int i = 0; i < level; i++) {
-            if (step >> i & 1) u = pa[u][i];
-        }
-        return u;
+
+    // check if u is ancestor of v
+    bool is_ancestor(int u, int v) {
+        return tin[v] >= tin[u] && tin[v] < tout[u];
     }
-    int lca(int x, int y) {
-        if (dep[x] > dep[y]) swap(x, y);
-        y = jump(y, dep[y] - dep[x]);
-        if (x == y) return x;
+
+    int lca(int u, int v) {
+        if (is_ancestor(u, v)) return u;
+        if (is_ancestor(v, u)) return v;
         for (int i = level - 1; i >= 0; i--) {
-            if (pa[x][i] != pa[y][i]) {
-                x = pa[x][i];
-                y = pa[y][i];
+            if (!is_ancestor(pa[u][i], v)) {
+                u = pa[u][i];
             }
         }
-        return pa[x][0];
+        return pa[u][0];
     }
 };
