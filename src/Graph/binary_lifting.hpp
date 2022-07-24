@@ -1,15 +1,18 @@
 #include "misc/util.hpp"
 #include <vector>
+
 struct BinaryLifting {
     const int n, level;
     std::vector<std::vector<int>> pa;
     std::vector<int> dep, tin, tout;
+
     BinaryLifting(const std::vector<std::vector<int>> &g, int root)
         : n((int)g.size()), level(lg(n) + 1),
           pa(n, std::vector<int>(level)), dep(n), tin(n), tout(n) {
         int timer = 0;
         dfs(root, root, g, timer);
     }
+
     void dfs(int u, int p, const std::vector<std::vector<int>>& g, int& timer) {
         tin[u] = timer++;
         pa[u][0] = p;
@@ -38,5 +41,10 @@ struct BinaryLifting {
             }
         }
         return pa[u][0];
+    }
+
+    int dis(int u, int v) {
+        int l = lca(u, v);
+        return dep[u] - dep[l] + dep[v] - dep[l];
     }
 };

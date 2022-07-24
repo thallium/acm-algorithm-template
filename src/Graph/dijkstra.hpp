@@ -1,10 +1,13 @@
-constexpr long long INF=1e18;
-template<typename G>
-vector<long long> dijkstra(const G& g, int start) {
-    vector dis(g.size(), INF);
-    // vector<pii> pre[N];
-    using node=pair<long long, int>;
-    priority_queue<node, vector<node>, greater<>> q;
+#include <vector>
+#include <queue>
+
+constexpr long long INF = 1e18;
+template <typename G>
+std::vector<long long> dijkstra(const G &g, int start) {
+    std::vector dis(g.size(), INF);
+    // std::vector<pii> pre[N];
+    using node = std::pair<long long, int>;
+    std::priority_queue<node, std::vector<node>, std::greater<>> q;
     dis[start] = 0;
     q.emplace(0, start);
     while (!q.empty()) {
@@ -25,13 +28,15 @@ vector<long long> dijkstra(const G& g, int start) {
     return dis;
 }
 // dijkstra for small edge weight (less than 10) aka 1-k bfs
-vector<int> SmallDijkstra(const vector<vector<pair<int, int>>>& g, int src, int lim) {
-    vector<vector<int>> qs(lim);
-    vector<int> dis(g.size(), -1);
-    dis[src] = 0; 
+inline std::vector<int>
+SmallDijkstra(const std::vector<std::vector<std::pair<int, int>>> &g,
+              int src, int lim) {
+    std::vector<std::vector<int>> qs(lim);
+    std::vector<int> dis(g.size(), -1);
+    dis[src] = 0;
     qs[0].push_back(src);
     for (int d = 0, maxd = 0; d <= maxd; ++d) {
-        for (auto& q = qs[d % lim]; q.size(); ) {
+        for (auto &q = qs[d % lim]; q.size();) {
             int u = q.back();
             q.pop_back();
             if (dis[u] != d) continue;
@@ -39,7 +44,7 @@ vector<int> SmallDijkstra(const vector<vector<pair<int, int>>>& g, int src, int 
                 if (dis[v] != -1 && dis[v] <= d + c) continue;
                 dis[v] = d + c;
                 qs[(d + c) % lim].push_back(v);
-                maxd = max(maxd, d + c);
+                maxd = std::max(maxd, d + c);
             }
         }
     }
