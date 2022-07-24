@@ -10,30 +10,24 @@ struct VirtualTree {
         : n(g.size()), lca(g, root), tree(n) {}
 
     auto build_tree(std::vector<int> &v)
-        -> std::pair<int, const std::vector<std::vector<int>>&> {
+        -> std::pair<int, const std::vector<std::vector<int>> &> {
         std::sort(v.begin(), v.end(), [&](int u, int v) { return lca.pos[u] < lca.pos[v]; });
-        std::vector<int> stk;
+        int len = v.size();
+        for (int i = 1; i < len; i++) {
+            v.push_back(lca.lca(v[i - 1], v[i]));
+        }
+        std::sort(v.begin(), v.end(), [&](int u, int v) { return lca.pos[u] < lca.pos[v]; });
+        v.erase(std::unique(v.begin(), v.end()), v.end());
+        for (int i = 1; i < (int)v.size(); i++) {
+            tree[lca.lca(v[i - 1], v[i])].push_back(v[i]);
+        }
+        return {v[0], tree};
+    }
+
+    void clear(const std::vector<int> v) {
         for (auto u : v) {
-            if (!stk.empty()) {
-                int l = lca.lca(stk.back(), u);
-                if (l != stk.back()) {
-                    while (stk.size() >= 2 && lca.dep[stk[stk.size() - 2]] >= lca.dep[l]) {
-                        tree[stk[stk.size() - 2]].push_back(stk.back());
-                        stk.pop_back();
-                    }
-                    if (stk.back() != l) {
-                        tree[l].push_back(stk.back());
-                        stk.back() = l;
-                    }
-                }
-            }
-            stk.push_back(u);
+            tree[u].clear();
         }
-        assert(!stk.empty());
-        for (size_t i = 0; i < stk.size() - 1; i++) {
-            tree[stk[i]].push_back(stk[i + 1]);
-        }
-        return {stk[0], tree};
     }
 
     void clear(int root) {
