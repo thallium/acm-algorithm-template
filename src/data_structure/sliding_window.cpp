@@ -1,7 +1,10 @@
-template<typename T, typename compare = less<T>>
+#include <functional>
+#include <queue>
+
+template<typename T, typename compare = std::less<T>>
 struct sliding_window {
     int k; // width of the window
-    deque<pair<int, T>> q;
+    std::deque<std::pair<int, T>> q;
     compare cmp;
     sliding_window(int k_) : k(k_), cmp() {}
     void add(int i, T x) {

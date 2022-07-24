@@ -11,10 +11,10 @@ constexpr unsigned lg(unsigned long x) {
     return sizeof(unsigned long) * 8 - 1 - __builtin_clzl(x);
 }
 constexpr unsigned lg(long long x) {
-    return sizeof(long) * 8 - 1 - __builtin_clzll(x);
+    return sizeof(long long) * 8 - 1 - __builtin_clzll(x);
 }
 constexpr unsigned lg(unsigned long long x) {
-    return sizeof(unsigned long) * 8 - 1 - __builtin_clzll(x);
+    return sizeof(unsigned long long) * 8 - 1 - __builtin_clzll(x);
 }
 
 constexpr unsigned ceil_lg(int n) {

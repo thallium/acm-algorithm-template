@@ -1,7 +1,9 @@
-// augmented path algorithm for maximum-caredinality bipartite matching
-// Worst time complexity: O(nm), but very hard to hack (since we can shuffle),
-// usually runs extremely fast, 2e5 vertices and edges in 60 ms.
-mt19937 rng(1);
+// augmented path algorithm for maximum-caredinality bipartite
+// matching Worst time complexity: O(nm), but very hard to hack (since
+// we can shuffle), usually runs extremely fast, 2e5 vertices and
+// edges in 60 ms.
+#include <random>
+std::mt19937 rng(1);
 struct aug_path {
     vector<vector<int>> g;
     vector<int> L, R, vis;
@@ -27,15 +29,15 @@ struct aug_path {
         return false;
     }
     int solve() {
-        // shuffle to avoid counter test case, but may be slightly slower
-        // for (auto& v : g) 
+        // shuffle to avoid counter test case, but may be slightly
+        // slower for (auto& v : g)
         //     shuffle(v.begin(), v.end(), rng);
         // vector<int> order(L.size());
         // iota(order.begin(), order.end(), 0);
         // shuffle(order.begin(), order.end(), rng);
         bool ok = true;
         while (ok) {
-            ok=false;
+            ok = false;
             fill(vis.begin(), vis.end(), 0);
             // for (auto i : order)
             for (int i = 0; i < (int)L.size(); ++i)
@@ -50,15 +52,15 @@ struct aug_path {
 int main() {
     ios::sync_with_stdio(false);
     int l, r, m;
-    cin>>l>>r>>m;
+    cin >> l >> r >> m;
     aug_path g(l, r);
     while (m--) {
         int u, v;
-        cin>>u>>v;
+        cin >> u >> v;
         g.add_edge(u, v);
     }
-    cout<<g.solve()<<'\n';
-    for (int i=0; i<l; i++) {
-        if (g.L[i]!=-1) cout<<i<<' '<<g.L[i]<<'\n';
+    cout << g.solve() << '\n';
+    for (int i = 0; i < l; i++) {
+        if (g.L[i] != -1) cout << i << ' ' << g.L[i] << '\n';
     }
 }

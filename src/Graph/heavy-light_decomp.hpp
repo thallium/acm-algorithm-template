@@ -1,8 +1,8 @@
 #pragma once
 #include <vector>
+#include "data_structure/lazy_segtree_non-recursive.hpp"
 using namespace std;
 
-#include "data_structure/lazy_segtree_non-recursive.hpp"
 template <typename T> struct HLD {
     int n;
     vector<int> parent, dep, heavy_child, head, pos, posr;
@@ -25,7 +25,7 @@ template <typename T> struct HLD {
         }
         tr = lazy_segtree<T>(a);
     }
-    int dfs(int u, vector<vector<int>> &g) {
+    int dfs(int u, const vector<vector<int>> &g) {
         int size = 1;
         int max_size = 0;
         for (int v : g[u]) {
@@ -42,7 +42,7 @@ template <typename T> struct HLD {
         }
         return size;
     }
-    void dfs2(int u, int h, vector<vector<int>> &g) {
+    void dfs2(int u, int h, const vector<vector<int>> &g) {
         head[u] = h;
         pos[u] = cnt++;
         if (heavy_child[u] != -1) { dfs2(heavy_child[u], h, g); }
