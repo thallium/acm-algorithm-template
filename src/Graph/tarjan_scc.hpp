@@ -13,8 +13,8 @@ inline auto scc(const std::vector<std::vector<int>>& g) -> std::pair<int, std::v
     int n = (int)size(g);
     int pos = 0;
     std::vector<bool> on_stk(n);
-    std::vector<int> low(n), ord(n, -1), stk;
-    std::vector<std::vector<int>> comp;
+    std::vector<int> low(n), ord(n, -1), color(n), stk;
+    int cnt = 0;
 
     auto dfs = [&](auto& slf, int u) -> void {
         low[u] = ord[u] = pos++;
@@ -25,14 +25,14 @@ inline auto scc(const std::vector<std::vector<int>>& g) -> std::pair<int, std::v
             if (on_stk[v]) low[u] = std::min(low[u], low[v]);
         }
         if (low[u] == ord[u]) {
-            comp.emplace_back();
             while (true) {
                 int v = stk.back();
                 stk.pop_back();
                 on_stk[v] = false;
-                comp.back().push_back(v);
+                color[v] = cnt;
                 if (u == v) break;
             }
+            cnt++;
         }
     };
 
@@ -42,12 +42,5 @@ inline auto scc(const std::vector<std::vector<int>>& g) -> std::pair<int, std::v
         }
     }
 
-    std::vector<int> color(n);
-    int cnt = comp.size();
-    for (int i = 0; i < cnt; i++) {
-        for (auto x : comp[i]) {
-            color[x] = i;
-        }
-    }
     return {cnt, color};
 }

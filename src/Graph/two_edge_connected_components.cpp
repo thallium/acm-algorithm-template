@@ -1,14 +1,17 @@
+#include <vector>
+#include <iostream>
+
 struct TECC {
     int n, pos=0;
-    vector<int> ord, low, color; // order, low link, belong to which component
-    vector<vector<int>> g, comp; // graph, component
+    std::vector<int> ord, low, color; // order, low link, belong to which component
+    std::vector<std::vector<int>> g, comp; // graph, component
     TECC(int n) : n(n), ord(n, -1), low(n), color(n, -1), g(n) {}
     void add_edge(int u, int v) {
         g[u].emplace_back(v);
         g[v].emplace_back(u);
     }
     bool is_bridge(int u, int v) {
-        if (ord[u] > ord[v]) swap(u, v);
+        if (ord[u] > ord[v]) std::swap(u, v);
         return ord[u] < low[v];
     }
     void dfs(int u, int p) {
@@ -21,7 +24,7 @@ struct TECC {
                 continue;
             }
             if (ord[v] == -1) dfs(v, u);
-            low[u] = min(low[u], low[v]);
+            low[u] = std::min(low[u], low[v]);
         }
     }
     void fill_component(int u) {
@@ -46,6 +49,7 @@ struct TECC {
     }
 };
 int main() {
+    using std::cin, std::cout;
     int n, m;
     cin >> n >> m;
     TECC g(n);

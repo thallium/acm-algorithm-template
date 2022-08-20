@@ -13,7 +13,7 @@ struct BCC {
     void dfs(int u, int pa) {
         low[u] = ord[u] = pos++;
         stk.push_back(u);
-        int cnt=0;
+        int cnt = 0;
         bool is_cut = false;
         for (auto v : g[u]) {
             if (v == pa) continue;
@@ -23,8 +23,8 @@ struct BCC {
                 low[u] = min(low[u], low[v]);
                 if (low[v] >= ord[u]) {
                     if (u != pa || cnt > 1) is_cut = true;
-                    // the subtree will be disconnected if we remove vertex u,
-                    // do something if needed
+                    // the subtree will be disconnected if we remove
+                    // vertex u, do something if needed
                     comps.emplace_back();
                     while (true) {
                         int back = stk.back();
@@ -34,7 +34,9 @@ struct BCC {
                     }
                     comps.back().push_back(u);
                 }
-            } else low[u]=min(low[u], ord[v]);
+            } else {
+                low[u] = min(low[u], ord[v]);
+            }
         }
         if (is_cut) cuts.push_back(u);
     }

@@ -1,3 +1,7 @@
+#include <vector>
+#include <array>
+#include <string>
+#include <queue>
 /** Modified from:
  * https://github.com/kth-competitive-programming/kactl/blob/master/content/strings/AhoCorasick.h
  * Try to handdle duplicated patterns beforehand, otherwise change 'end' to
@@ -14,12 +18,12 @@ struct AhoCorasick {
         // output: output link, points to the longest pattern that is a suffix
         // of current node
         int back, end = -1, nmatches = 0, output = -1;
-        array<int, alpha> next;
-        Node(int v = -1) { fill(next.begin(), next.end(), v); }
+        std::array<int, alpha> next;
+        Node(int v = -1) { std::fill(next.begin(), next.end(), v); }
     };
-    vector<Node> N;
+    std::vector<Node> N;
     AhoCorasick() : N(1) {}
-    void insert(string &s, int j) { // j: id of string s
+    void insert(std::string &s, int j) { // j: id of string s
         assert(!s.empty());
         int n = 0;
         for (char c : s) {
@@ -36,7 +40,7 @@ struct AhoCorasick {
     void build() {
         N[0].back = (int)N.size();
         N.emplace_back(0);
-        queue<int> q;
+        std::queue<int> q;
         q.push(0);
         while (!q.empty()) {
             int n = q.front();
@@ -59,9 +63,9 @@ struct AhoCorasick {
         }
     }
     // for each position, finds the longest pattern that ends here
-    vector<int> find(const string &text) {
+    std::vector<int> find(const std::string &text) {
         int len = (int)text.size();
-        vector<int> res(len);
+        std::vector<int> res(len);
         int n = 0;
         for (int i = 0; i < len; i++) {
             n = N[n].next[text[i] - first];
@@ -70,9 +74,9 @@ struct AhoCorasick {
         return res;
     }
     // for each position, finds the all that ends here
-    vector<vector<int>> find_all(const string &text) {
+    std::vector<std::vector<int>> find_all(const std::string &text) {
         int len = (int)text.size();
-        vector<vector<int>> res(len);
+        std::vector<std::vector<int>> res(len);
         int n = 0;
         for (int i = 0; i < len; i++) {
             n = N[n].next[text[i] - first];

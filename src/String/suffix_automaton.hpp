@@ -1,11 +1,14 @@
+#include <vector>
+#include <unordered_map>
+#include <string>
 // source: https://cp-algorithms.com/string/suffix-automaton.html
 struct SAM {
     struct state {
         int len = 0, link = -1;
-        unordered_map<char, int> next;
+        std::unordered_map<char, int> next;
     };
     int last = 0; // the index of the equivalence class of the whole string
-    vector<state> st;
+    std::vector<state> st;
     void extend(char c) {
         int cur = (int)st.size();
         st.emplace_back();
@@ -34,7 +37,7 @@ struct SAM {
         last = cur;
     }
     SAM() { st.emplace_back(); }
-    SAM(const string &s) : SAM() {
+    SAM(const std::string &s) : SAM() {
         for (auto c : s)
             extend(c);
     }

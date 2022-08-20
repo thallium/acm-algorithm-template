@@ -1,11 +1,13 @@
-#include<bits/stdc++.h>
+#include<vector>
+#include<string>
+
 using ll = long long;
 struct PolyHash {
     static constexpr int mod = (int)1e9 + 123;
-    static vector<int> pow;
+    static std::vector<int> pow;
     static constexpr int base = 233;
-    vector<int> pref;
-    PolyHash(const string &s) : pref(s.size() + 1) {
+    std::vector<int> pref;
+    PolyHash(const std::string &s) : pref(s.size() + 1) {
         assert(base < mod);
         int n = (int)s.size();
         while ((int)pow.size() <= n) {
@@ -22,4 +24,4 @@ struct PolyHash {
         return (pref[pos + len] - (ll)pref[pos] * pow[len] % mod + mod) % mod;
     }
 };
-vector<int> PolyHash::pow{1};
+std::vector<int> PolyHash::pow{1};
