@@ -21,4 +21,13 @@ template <typename mint> struct Factorial {
         assert(!fac.empty());
         return fac[n] * invfac[n - m];
     }
+
+    // evaluate expressions consisting of multiplication and division
+    // if the number is multiplied, pass the number as argument
+    // if divided, pass its negation
+    // Example: a! * b! / c! => eval(a, b, -c);
+    template<typename... Args>
+    constexpr mint eval(Args... args) {
+        return ((args > 0 ? fac[args] : invfac[-args]) * ...);
+    }
 };

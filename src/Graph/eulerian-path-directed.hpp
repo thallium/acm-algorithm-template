@@ -1,8 +1,9 @@
+#include <vector>
 struct Eulerian_path {
     int n, edge_cnt = 0;
-    vector<vector<pair<int, int>>> g;
-    vector<int> path, indeg, outdeg;
-    vector<bool> used;
+    std::vector<std::vector<std::pair<int, int>>> g;
+    std::vector<int> path, indeg, outdeg;
+    std::vector<bool> used;
     Eulerian_path(int _n) : n(_n), g(n), indeg(n), outdeg(n) {}
     void add_edge(int u, int v) {
         g[u].emplace_back(v, edge_cnt);
@@ -19,7 +20,7 @@ struct Eulerian_path {
         }
         path.push_back(u);
     }
-    vector<int> solve(int start) {
+    std::vector<int> solve(int start) {
         for (int i = 0; i < n; i++)
             if (indeg[i] != outdeg[i]) return {};
         used.resize(edge_cnt);
@@ -30,7 +31,7 @@ struct Eulerian_path {
         return path;
     }
 
-    vector<int> solve(int start, int end) {
+    std::vector<int> solve(int start, int end) {
         add_edge(start, end);
         auto res = solve(end);
         if (!empty(res))

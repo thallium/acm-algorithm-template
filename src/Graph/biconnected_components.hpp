@@ -1,10 +1,9 @@
 #include <vector>
-using namespace std;
 struct BCC {
     int n, pos = 0;
-    vector<vector<int>> g;
-    vector<int> ord, low, cuts, stk;
-    vector<vector<int>> comps; // components
+    std::vector<std::vector<int>> g;
+    std::vector<int> ord, low, cuts, stk;
+    std::vector<std::vector<int>> comps; // components
     BCC(int n_) : n(n_), g(n), ord(n, -1), low(n) {}
     void add_edge(int u, int v) {
         g[u].push_back(v);
@@ -20,7 +19,7 @@ struct BCC {
             if (ord[v] == -1) {
                 cnt++;
                 dfs(v, u);
-                low[u] = min(low[u], low[v]);
+                low[u] = std::min(low[u], low[v]);
                 if (low[v] >= ord[u]) {
                     if (u != pa || cnt > 1) is_cut = true;
                     // the subtree will be disconnected if we remove
@@ -35,7 +34,7 @@ struct BCC {
                     comps.back().push_back(u);
                 }
             } else {
-                low[u] = min(low[u], ord[v]);
+                low[u] = std::min(low[u], ord[v]);
             }
         }
         if (is_cut) cuts.push_back(u);

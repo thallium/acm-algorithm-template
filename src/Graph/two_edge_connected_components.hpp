@@ -48,22 +48,23 @@ struct TECC {
         return k;
     }
 };
-int main() {
-    using std::cin, std::cout;
-    int n, m;
-    cin >> n >> m;
-    TECC g(n);
-    for (int i = 0; i < m; i++) {
-        int a, b;
-        cin >> a >> b;
-        g.add_edge(a, b);
-    }
-    int k = g.build();
-    cout << k << '\n';
-    for (int i = 0; i < k; i++) {
-        cout << g.comp[i].size() << ' ';
-        for (int v : g.comp[i])
-            cout << v << ' ';
-    }
-    return 0;
-}
+// Example:
+// int main() {
+//     using std::cin, std::cout;
+//     int n, m;
+//     cin >> n >> m;
+//     TECC g(n);
+//     for (int i = 0; i < m; i++) {
+//         int a, b;
+//         cin >> a >> b;
+//         g.add_edge(a, b);
+//     }
+//     int k = g.build();
+//     cout << k << '\n';
+//     for (int i = 0; i < k; i++) {
+//         cout << g.comp[i].size() << ' ';
+//         for (int v : g.comp[i])
+//             cout << v << ' ';
+//     }
+//     return 0;
+// }

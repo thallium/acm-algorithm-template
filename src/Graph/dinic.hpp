@@ -1,4 +1,6 @@
-// indexed from 0!
+#include <vector>
+#include <queue>
+
 struct Dinic {
     static constexpr int INF = 1e9;
     int n;
@@ -6,9 +8,9 @@ struct Dinic {
         int to, cap;
         Edge(int to, int cap) : to(to), cap(cap) {}
     };
-    vector<Edge> e;
-    vector<std::vector<int>> g;
-    vector<int> cur, h; // h = shortest distance from source, calculated in bfs
+    std::vector<Edge> e;
+    std::vector<std::vector<int>> g;
+    std::vector<int> cur, h; // h = shortest distance from source, calculated in bfs
     // after computing flow, edge (u, v) such that h[u]!=-1 and h[v]==-1 are part of min cut
     Dinic(int n) : n(n), g(n) {}
     bool bfs(int s, int t) {

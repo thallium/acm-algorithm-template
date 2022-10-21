@@ -9,8 +9,9 @@ struct VirtualTree {
     VirtualTree(const std::vector<std::vector<int>> &g, int root)
         : n(g.size()), lca(g, root), tree(n) {}
 
-    auto build_tree(std::vector<int> &v)
+    auto build_tree(const std::vector<int> &vertices)
         -> std::pair<int, const std::vector<std::vector<int>> &> {
+        auto v(vertices);
         std::sort(v.begin(), v.end(), [&](int u, int v) { return lca.pos[u] < lca.pos[v]; });
         int len = v.size();
         for (int i = 1; i < len; i++) {

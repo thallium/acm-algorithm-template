@@ -1,23 +1,29 @@
-// credits: https://github.com/the-tourist/algo/blob/master/flows/hungarian.cpp
-// hungarian algorithm for bipartite graph matching, matches every node on the
-// left with a node on the right and the sum of the weights is minimal.
-// a[i][j] is the cost for i in L to be matched with j in R. (0-indexed)
-// pa[i] is the node in R matched with i
+// credits:
+// https://github.com/the-tourist/algo/blob/master/flows/hungarian.cpp
+// hungarian algorithm for bipartite graph matching, matches every
+// node on the left with a node on the right and the sum of the
+// weights is minimal. a[i][j] is the cost for i in L to be matched
+// with j in R. (0-indexed) pa[i] is the node in R matched with i
 // pb[j] is the node in L matched with j
 // Negate the cost for max cost.
 // Time: O(n^2M)
-template<typename T>
-struct Hungarian {
+#include <vector>
+#include <limits>
+
+template <typename T> struct Hungarian {
     int n, m;
-    vector< vector<T> > a;
-    vector<T> u, v;
-    vector<int> pa, pb, way;
-    vector<T> minv;
-    vector<bool> used;
+    std::vector<std::vector<T>> a;
+    std::vector<T> u, v;
+    std::vector<int> pa, pb, way;
+    std::vector<T> minv;
+    std::vector<bool> used;
     T inf;
-    Hungarian(int _n, int _m) : n(_n), m(_m), a(n, vector<T>(m)), u(n+1), v(m+1), pa(n+1, -1), pb(m+1, -1), way(m, -1), minv(m), used(m+1) {
+    Hungarian(int _n, int _m)
+        : n(_n), m(_m), a(n, std::vector<T>(m)), u(n + 1), v(m + 1),
+          pa(n + 1, -1), pb(m + 1, -1), way(m, -1), minv(m),
+          used(m + 1) {
         assert(n <= m);
-        inf = numeric_limits<T>::max();
+        inf = std::numeric_limits<T>::max();
     }
     inline void add_row(int i) {
         fill(minv.begin(), minv.end(), inf);
@@ -60,9 +66,7 @@ struct Hungarian {
             j0 = j1;
         } while (j0 != m);
     }
-    inline T current_score() {
-        return -v[m];
-    }
+    inline T current_score() { return -v[m]; }
     inline T solve() {
         for (int i = 0; i < n; i++) {
             add_row(i);

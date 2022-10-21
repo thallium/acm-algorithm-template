@@ -1,14 +1,15 @@
 #include <vector>
 #include <queue>
-using namespace std;
-using ll = long long;
+#include <array>
+
 struct Flow {
-    static inline constexpr ll INF = INT64_MAX >> 1;
+    using ll = long long;
+    static constexpr ll INF = INT64_MAX >> 1;
     int n;
-    vector<tuple<int, int, int>> e;
-    vector<vector<int>> g;
-    vector<int> prev;
-    vector<ll> h; // distance, also potential
+    std::vector<std::array<int, 3>> e;
+    std::vector<std::vector<int>> g;
+    std::vector<int> prev;
+    std::vector<ll> h; // distance, also potential
     Flow(int n) : n(n), g(n), h(n), prev(n) {}
     void addEdge(int u, int v, int w, int c) {
         if (u == v) return;
@@ -18,9 +19,9 @@ struct Flow {
         e.emplace_back(u, 0, -c);
     }
     bool dijkstra(int s, int t) {
-        priority_queue<pair<ll, int>> q;
+        std::priority_queue<std::pair<ll, int>> q;
         fill(prev.begin(), prev.end(), -1);
-        vector<ll> d(n, INF);
+        std::vector<ll> d(n, INF);
         d[s] = 0;
         q.push({0, s});
         while (!q.empty()) {
@@ -42,19 +43,19 @@ struct Flow {
         }
         return h[t] != INF;
     }
-    pair<ll, ll> maxFlow(int s, int t) {
+    std::pair<ll, ll> maxFlow(int s, int t) {
         ll flow = 0, cost = 0;
         while (dijkstra(s, t)) {
             int f = INT_MAX, now = t;
-            vector<int> r;
+            std::vector<int> r;
             while (now != s) {
                 r.emplace_back(prev[now]);
-                f = min(f, get<1>(e[prev[now]]));
-                now = get<0>(e[prev[now] ^ 1]);
+                f = std::min(f, (e[prev[now]][1]));
+                now = e[prev[now] ^ 1][0];
             }
             for (auto i : r) {
-                get<1>(e[i]) -= f;
-                get<1>(e[i ^ 1]) += f;
+                e[i][1] -= f;
+                e[i ^ 1][1] += f;
             }
             flow += f;
             cost += ll(f) * h[t];
