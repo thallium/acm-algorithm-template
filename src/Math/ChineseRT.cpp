@@ -1,3 +1,5 @@
+#include <vector>
+
 using ll = long long;
 // a x + b y = gcd(a, b)
 ll extgcd(ll a, ll b, ll &x, ll &y) {
@@ -8,7 +10,7 @@ ll extgcd(ll a, ll b, ll &x, ll &y) {
 // Solve linear congruences equation:
 // a[i] * x = b[i] MOD m[i] (mi don't need to be co-prime)
 // M - lcm, x - smalleset integer solution
-bool chinese(const vector<ll> &a, const vector<ll> &b, const vector<ll> &m, ll &x, ll &M) {
+bool chinese(const std::vector<ll> &a, const std::vector<ll> &b, const std::vector<ll> &m, ll &x, ll &M) {
     ll n = a.size();
     x = 0; M = 1;
     for(int i = 0; i < n; i++) {
