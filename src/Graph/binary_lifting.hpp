@@ -27,6 +27,16 @@ struct BinaryLifting {
         tout[u] = timer;
     };
 
+    int go_up(int u, int dis) {
+        dis = std::min(dis, (1 << level) - 1);
+        for (int j = level - 1; j >= 0; j--) {
+            if (dis >> j & 1) {
+                u = pa[u][j];
+            }
+        }
+        return u;
+    }
+
     // check if u is ancestor of v
     bool is_ancestor(int u, int v) {
         return tin[v] >= tin[u] && tin[v] < tout[u];
