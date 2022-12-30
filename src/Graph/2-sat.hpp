@@ -12,10 +12,12 @@ struct TwoSAT {
     int n;
     std::vector<std::vector<int>> g;
     TwoSAT(int n) : n(n), g(n * 2) {} // n is the number of literals
+                                      // 2 * u represents the node u
+                                      // 2 * u + 1 represents the node !u
 
     void add(int u, bool neg_u, int v, bool neg_v) { // neg_u is if u is negated, same for v
-        g[2 * u + neg_u].push_back(2 * v + !neg_v);
-        g[2 * v + neg_v].push_back(2 * u + !neg_u);
+        g[2 * u + !neg_u].push_back(2 * v + neg_v);
+        g[2 * v + !neg_v].push_back(2 * u + neg_u);
     }
 
     std::vector<bool> solve() {
@@ -24,7 +26,10 @@ struct TwoSAT {
         std::vector<bool> res(n);
         for (int i = 0; i < n; i++) {
             if (color[2 * i] == color[2 * i + 1]) return {};
-            res[i] = color[2 * i] > color[2 * i + 1];
+            // as Tarjan's algorithm finds node in reverse topological order,
+            // color[2 * i] < color[2 * i + 1] => there might be a path fron !i to i
+            // so it's safe to set i = true
+            res[i] = color[2 * i] < color[2 * i + 1];
         }
         return res;
     }
