@@ -1,4 +1,6 @@
 #include <limits>
+#include <algorithm>
+#include <array>
 template <typename T> struct XorBasis {
     static constexpr int B = 8 * sizeof(T);
     T basis[B]{};
@@ -17,6 +19,17 @@ template <typename T> struct XorBasis {
         }
     }
 
+    bool is_in(T x) {
+        for (int i = B - 1; i >= 0; i--) {
+            if (x >> i == 0)
+                continue;
+            if (!basis[i])
+                return false;
+            x ^= basis[i];
+        }
+        return true;
+    }
+
     T max_value(T start = 0) {
         for (int i = B - 1; i >= 0; i--) {
             if (basis[i]) {
@@ -26,22 +39,19 @@ template <typename T> struct XorBasis {
         return start;
     }
 
-    // return the kth smallest element in the vector space
+    // return the kth (0-indexed) smallest element in the vector space
     T kth(long long k) {
-        assert(k > 0 && k <= (1LL << sz));
+        assert(k >= 0 && k < (1LL << sz));
         T ans{};
-        long long tot = 1LL << sz;
+        int b = sz - 1;
         for (int i = B - 1; i >= 0; i--) {
             if (basis[i]) {
-                auto low = tot / 2;
-
-                if ((low < k && (ans >> i & 1) == 0) || (low >= k && (ans >> i & 1)))
-                    ans ^= basis[i];
-
-                if (low < k)
-                    k -= low;
-
-                tot /= 2;
+                if (k >> b & 1) {
+                    ans = std::max(ans, ans ^ basis[i]);
+                } else {
+                    ans = std::min(ans, ans ^ basis[i]);
+                }
+                b--;
             }
         }
         return ans;

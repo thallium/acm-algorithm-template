@@ -2,13 +2,12 @@
 #include <functional>
 #include "misc/util.hpp"
 
-template <typename T> struct SparseTable {
+template <typename T, auto F> struct SparseTable {
     size_t n, logn;
     std::vector<std::vector<T>> v;
-    std::function<T(T, T)> F;
     SparseTable() = default;
-    SparseTable(const std::vector<T> &a, std::function<T(T, T)> func)
-        : n(a.size()), logn(lg(n)), v(logn + 1, std::vector<T>(n + 1)), F(func) {
+    SparseTable(const std::vector<T> &a)
+        : n(a.size()), logn(lg(n)), v(logn + 1, std::vector<T>(n)) {
         v[0] = a;
         for (size_t i = 1; i <= logn; i++)
             for (size_t j = 0; j + (1 << i) - 1 < n; j++)
