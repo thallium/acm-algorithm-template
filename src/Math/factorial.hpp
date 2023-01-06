@@ -12,7 +12,14 @@ template <typename mint> struct Factorial {
             invfac[i] = invfac[i + 1] * (i + 1);
         }
     }
-    mint C(int n, int k) { // n choose m
+    mint operator[](int k) const {
+        assert(k < (int)size(fac));
+        return fac[k];
+    }
+    mint operator()(int n, int k) const {
+        return C(n, k);
+    }
+    mint C(int n, int k) const { // n choose m
         if (k < 0 || k > n) return 0;
         assert((int)size(fac) > n);
         return fac[n] * invfac[n - k] * invfac[k];
