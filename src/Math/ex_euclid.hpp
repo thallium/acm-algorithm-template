@@ -4,7 +4,7 @@
 
 // Returns {x, y, g} which is a solution to a * x + b * y = g = gcd(a, b)
 inline std::array<int64_t, 3> exgcd(int64_t a, int64_t b) {
-    if (b == 0) return {a, 1, 0};
+    if (b == 0) return {1, 0, a};
     auto [x, y, g] = exgcd(b, a % b);
     return {y, x - a / b * y, g};
 }
