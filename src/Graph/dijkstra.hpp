@@ -1,9 +1,9 @@
 #include <vector>
 #include <queue>
 
-constexpr long long INF = 1e18;
 template <typename G>
 std::vector<long long> dijkstra(const G &g, int start) {
+    constexpr long long INF = 1e18;
     std::vector dis(g.size(), INF);
     // std::vector<pii> pre[N];
     using node = std::pair<long long, int>;
@@ -15,8 +15,8 @@ std::vector<long long> dijkstra(const G &g, int start) {
         q.pop();
         if (d != dis[u]) continue;
         for (auto [v, cost] : g[u]) {
-            if (dis[v] > dis[u] + cost) {
-                dis[v] = dis[u] + cost;
+            if (dis[v] > d + cost) {
+                dis[v] = d + cost;
                 // pre[v].clear();
                 // pre[v].pb({cost,u});
                 q.emplace(dis[v], v);

@@ -26,16 +26,14 @@ struct monotonic_dp_hull {
         assert(lines.empty() ||
                k >= lines.back().k); // ensure slope is monotonic
         line cur{k, b};
-        while (lines.size() >= 2 &&
-               bad(*(lines.rbegin() + 1), lines.back(), cur))
+        while (lines.size() >= 2 && bad(lines.rbegin()[1], lines.back(), cur))
             lines.pop_back();
         lines.push_back(cur);
     }
 
     ll query(ll x) {
         assert(!lines.empty());
-        while (lines.size() >= 2 &&
-               lines[0].eval(x) <= lines[1].eval(x))
+        while (lines.size() >= 2 && lines[0].eval(x) <= lines[1].eval(x))
             lines.pop_front();
         return lines[0].eval(x);
     }

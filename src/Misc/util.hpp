@@ -1,3 +1,4 @@
+#pragma once
 constexpr unsigned lg(int x) {
     return sizeof(int) * 8 - 1 - __builtin_clz(x);
 }
