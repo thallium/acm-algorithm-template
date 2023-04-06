@@ -9,7 +9,7 @@ struct EulerLCA {
     EulerLCA(const std::vector<std::vector<int>>& g, int root) : n(g.size()), pos(n), dep(n) {
         seq.reserve(2 * n);
         dfs(root, root, g);
-        st = SparseTable<int>(seq, [&](int u, int v) { return pos[u] < pos[v] ? u : v; });
+        st = SparseTable<int, mn>(seq);
     }
 
     void dfs(int u, int p, const std::vector<std::vector<int>>& g) {
@@ -26,5 +26,9 @@ struct EulerLCA {
     int lca(int u, int v) {
         if (pos[u] > pos[v]) std::swap(u, v);
         return st.query(pos[u], pos[v] + 1);
+    }
+
+    int mn(int u, int v) {
+        return pos[u] < pos[v] ? u : v;
     }
 };

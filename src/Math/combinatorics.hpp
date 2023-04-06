@@ -1,8 +1,9 @@
 #include <vector>
 
-template <typename mint> struct Factorial {
+template <typename mint>
+struct Combi {
     std::vector<mint> fac, invfac;
-    Factorial(int n) : fac(n + 1), invfac(n + 1) {
+    Combi(int n) : fac(n + 1), invfac(n + 1) {
         fac[0] = 1;
         for (int i = 1; i <= n; i++) {
             fac[i] = fac[i - 1] * i;

@@ -1,10 +1,10 @@
 #include <vector>
-struct Eulerian_path {
+struct Eulerian {
     int n, edge_cnt = 0;
     std::vector<std::vector<std::pair<int, int>>> g;
     std::vector<int> path, deg;
     std::vector<bool> used;
-    Eulerian_path(int _n) : n(_n), g(n), deg(n) {}
+    Eulerian(int _n) : n(_n), g(n), deg(n) {}
     void add_edge(int u, int v) {
         g[u].emplace_back(v, edge_cnt);
         g[v].emplace_back(u, edge_cnt);
@@ -21,7 +21,7 @@ struct Eulerian_path {
         }
         path.push_back(u);
     }
-    std::vector<int> solve(int start) {
+    std::vector<int> find_cycle(int start) {
         for (auto x : deg)
             if (x % 2) return {};
         used.resize(edge_cnt);
@@ -32,11 +32,40 @@ struct Eulerian_path {
         return path;
     }
 
-    std::vector<int> solve(int start, int end) {
-        add_edge(start, end);
-        auto res = solve(end);
+    std::vector<int> find_path() {
+        std::vector<int> odd_deg;
+        for (int i = 0; i < n; i++) {
+            if (deg[i] % 2) {
+                odd_deg.push_back(i);
+            }
+        }
+        if (odd_deg.size() != 2) {
+            return {};
+        }
+        add_edge(odd_deg[0], odd_deg[1]);
+        auto res = find_cycle(odd_deg[1]);
         if (!empty(res))
             res.erase(res.begin()); // the first edge has to be the newly added edge
         return res;
+    }
+
+    // returns:
+    // - 0 if neither path nor cycle exists
+    // - 1 if cycle exists
+    // - 2 if path exists
+    int exist() {
+        int cnt = 0;
+        for (int i = 0; i < n; i++) {
+            if (deg[i] % 2) {
+                cnt++;
+            }
+        }
+        if (cnt == 0) {
+            return 1;
+        } else if (cnt == 2) {
+            return 2;
+        } else {
+            return 0;
+        }
     }
 };
