@@ -1,3 +1,4 @@
+#pragma once
 // suppose you have some boolean variables a, b, c, d...
 // assign each variable true or false such that the expression like
 // the following is true:

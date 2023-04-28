@@ -1,3 +1,4 @@
+#pragma once
 #include "graph/euler_lca.hpp"
 #include <vector>
 
@@ -7,13 +8,13 @@ struct VirtualTree {
     std::vector<std::vector<int>> tree;
 
     VirtualTree(const std::vector<std::vector<int>> &g, int root)
-        : n(g.size()), lca(g, root), tree(n) {}
+        : n((int)g.size()), lca(g, root), tree(n) {}
 
     auto build_tree(const std::vector<int> &vertices)
         -> std::pair<int, const std::vector<std::vector<int>> &> {
         auto v(vertices);
         std::sort(v.begin(), v.end(), [&](int u, int v) { return lca.pos[u] < lca.pos[v]; });
-        int len = v.size();
+        int len = (int)v.size();
         for (int i = 1; i < len; i++) {
             v.push_back(lca.lca(v[i - 1], v[i]));
         }
