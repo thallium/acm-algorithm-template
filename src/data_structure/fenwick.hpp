@@ -22,7 +22,7 @@ template <typename T> struct Fenwick {
     }
 
     // Returns `data[0] + ... + data[i - 1]`.
-    template <typename U = T> U query(int i) {
+    template <typename U = T> U get(int i) {
         assert(i >= 0 && i <= n);
         U res{};
         for (; i > 0; i -= i & -i)
@@ -31,11 +31,11 @@ template <typename T> struct Fenwick {
     }
 
     // Returns `data[l] + ... + data[r - 1]`.
-    template <typename U = T> U query(int l, int r) {
+    template <typename U = T> U get(int l, int r) {
         assert(l >= 0);
         assert(l < r);
         assert(r <= n);
-        return query<U>(r) - query<U>(l);
+        return get<U>(r) - get<U>(l);
     }
 
     // Returns the position of the first element in the prefix sum array
