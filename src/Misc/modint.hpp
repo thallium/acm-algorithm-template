@@ -8,7 +8,7 @@ template <typename T, T MOD>
 struct ModInt {
     using prod_type = std::conditional_t<std::is_same_v<T, int>, long long, __int128>;
     T val;
-    constexpr ModInt(const T v = 0) : val(v % MOD) { if (val < 0) val += MOD; }
+    constexpr ModInt(const int64_t v = 0) : val(v % MOD) { if (val < 0) val += MOD; }
     constexpr ModInt operator+() const { return ModInt(val); }
     constexpr ModInt operator-() const { return ModInt(MOD - val); }
     constexpr ModInt inv() const {
@@ -42,6 +42,9 @@ struct ModInt {
         return os << x.val;
     }
     constexpr static ModInt identity() { return 1; }
+    constexpr ModInt pow(int64_t p) {
+        return qpow(*this, p);
+    }
 };
 using ModInt1000000007 = ModInt<int, 1'000'000'007>;
 using ModInt998244353 = ModInt<int, 998244353>;
