@@ -1,6 +1,7 @@
+#pragma once
+
 #include <vector>
 #include <algorithm>
-using namespace std;
 
 template <class S, auto op, auto e>
 struct PST {
@@ -9,11 +10,11 @@ struct PST {
         S d;
     };
     int n, cnt = 0;
-    vector<node> t;
-    vector<int> roots;
+    std::vector<node> t;
+    std::vector<int> roots;
     PST() = default;
-    explicit PST(int n) : PST(vector(n, e())){}
-    PST(const vector<S>& v) : n((int)size(v)), roots(1) {
+    explicit PST(int n) : PST(std::vector(n, e())){}
+    PST(const std::vector<S>& v) : n((int)size(v)), roots(1) {
         t.resize(n << 5);
         build(roots[0], 0, n - 1, v);
     }
@@ -26,7 +27,7 @@ struct PST {
         t.emplace_back();
         return (int)size(t) - 1;
     }
-    void build(int p, int l, int r, const vector<S>& v) {
+    void build(int p, int l, int r, const std::vector<S>& v) {
         if (l == r) {
             t[p].d = v[l];
             return;
@@ -87,21 +88,47 @@ static int op(int x, int y) {
 static int e() { return 0; }
 
 template<typename T>
-struct RangeStats : PST<int, op, e> {
-    vector<T> comp;
+struct RangeStats : private PST<int, op, e> {
+    std::vector<T> comp;
 
-    RangeStats(const vector<T>& a) {
+    RangeStats(const std::vector<T>& a) {
         comp = a;
         sort(begin(comp), end(comp));
         comp.erase(unique(begin(comp), end(comp)), end(comp));
         n = (int)size(comp);
         t.resize(n << 5);
         roots.emplace_back();
-        build(roots[0], 0, n - 1, vector(n, e()));
+        build(roots[0], 0, n - 1, std::vector(n, e()));
         for (auto x : a) {
             int p = int(lower_bound(begin(comp), end(comp), x) - begin(comp));
             add(p, 1);
         }
+    }
+
+    // Returns the k-th smallest element in [l, r], k is 1-indexed.
+    T kth(int l, int r, int k) {
+        assert(0 <= l);
+        assert(l <= r);
+        assert(r + 1 < (int)roots.size());
+        return comp[kth(roots[l],  roots[r + 1], 0, n - 1, k)];
+    }
+
+    int count_less_than(int l, int r, T target) {
+        assert(0 <= l);
+        assert(l <= r);
+        assert(r + 1 < (int)roots.size());
+        int p = int(lower_bound(begin(comp), end(comp), target) - begin(comp));
+        return count_less_than(roots[l], roots[r + 1], 0, n - 1, p);
+    }
+
+private:
+    int count_less_than(int u, int v, int l, int r, int target) {
+        if (l == r) return l < target ? t[v].d - t[u].d : 0;
+        int mid = (l + r) / 2, x = t[t[v].lc].d - t[t[u].lc].d;
+        if (mid < target) {
+            return x + count_less_than(t[u].rc, t[v].rc, mid + 1, r, target);
+        }
+        return count_less_than(t[u].lc, t[v].lc, l, mid, target);
     }
 
     int kth(int u, int v, int l, int r, int k) {
@@ -112,28 +139,4 @@ struct RangeStats : PST<int, op, e> {
         }
         return kth(t[u].rc, t[v].rc, mid + 1, r, k - x);
     };
-    // Returns the k-th smallest element in [l, r], k is 1-indexed.
-    T kth(int l, int r, int k) {
-        assert(0 <= l);
-        assert(l <= r);
-        assert(r + 1 < (int)roots.size());
-        return comp[kth(roots[l],  roots[r + 1], 0, n - 1, k)];
-    }
-
-    int count_less_than(int u, int v, int l, int r, int target) {
-        if (l == r) return l < target ? t[v].d - t[u].d : 0;
-        int mid = (l + r) / 2, x = t[t[v].lc].d - t[t[u].lc].d;
-        if (mid < target) {
-            return x + count_less_than(t[u].rc, t[v].rc, mid + 1, r, target);
-        }
-        return count_less_than(t[u].lc, t[v].lc, l, mid, target);
-    }
-
-    int count_less_than(int l, int r, T target) {
-        assert(0 <= l);
-        assert(l <= r);
-        assert(r + 1 < (int)roots.size());
-        int p = int(lower_bound(begin(comp), end(comp), target) - begin(comp));
-        return count_less_than(roots[l], roots[r + 1], 0, n - 1, p);
-    }
 };
