@@ -33,7 +33,7 @@ template <typename T> struct Fenwick {
     // Returns `data[l] + ... + data[r - 1]`.
     template <typename U = T> U get(int l, int r) {
         assert(l >= 0);
-        assert(l < r);
+        assert(l <= r);
         assert(r <= n);
         return get<U>(r) - get<U>(l);
     }

@@ -36,7 +36,7 @@ static void fft(std::vector<cd> &a, bool invert) {
 
 // calculates the convolution of a and b
 static
-std::vector<int> convolve(const std::vector<int> &a, const std::vector<int> &b) {
+std::vector<int> convolve_fft(const std::vector<int> &a, const std::vector<int> &b) {
     std::vector<cd> fa(a.begin(), a.end()), fb(b.begin(), b.end());
     int n = 1 << (lg(size(a) + size(b) - 1) + 1);
     fa.resize(n);
