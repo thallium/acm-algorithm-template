@@ -1,78 +1,91 @@
-template <typename T>
-struct SegTree {
+#include <vector>
+using namespace std;
+
+template <class S, auto op, auto e> struct SegTree {
     int n;
-    vector<T> t;
-    SegTree(int n_) : n(n_), t(4 * n) {
-        build(1, 0, n-1, vector(n, T()));
+    vector<S> d;
+    explicit SegTree(int n) : n(n), d(4 * n) {
+        build(1, 0, n - 1, vector<S>(n, e()));
     }
-    template<typename U>
-    SegTree(const vector<U> &v) : SegTree((int)v.size()) {
+    SegTree(const vector<S> &v) : SegTree((int)v.size()) {
         build(1, 0, n - 1, v);
     }
-    void pull(int node) { t[node] = t[node << 1] + t[node << 1 | 1]; }
-    template<typename U>
-    void build(int node, int l, int r, const vector<U> &v) {
+    void pull(int k) { d[k] = d[k * 2] + d[k * 2 + 1]; }
+    void build(int p, int l, int r, const vector<S> &v) {
         if (l == r) {
-            t[node] = T(v[l]);
+            d[p] = v[l];
             return;
         }
         int mid = (l + r) >> 1;
-        build(node << 1, l, mid, v);
-        build(node << 1 | 1, mid + 1, r, v);
-        pull(node);
+        build(p * 2, l, mid, v);
+        build(p * 2 + 1, mid + 1, r, v);
+        pull(p);
     }
-    template<typename U>
-    void add(int node, int i, U x, int l, int r) {
+    void set(int p, int i, S x, int l, int r) {
         if (l == r) {
-            t[node] += x;
+            d[p] = x;
             return;
         }
-        int mid = (l + r) / 2;
-        if (i <= mid) add(node << 1, i, x, l, mid);
-        else add(node << 1 | 1, i, x, mid + 1, r);
-        pull(node);
+        int m = (l + r) / 2;
+        if (i <= m) set(p * 2, i, x, l, m);
+        else set(p * 2 + 1, i, x, m + 1, r);
+        pull(p);
     }
-    void set(int node, int i, T x, int l, int r) {
-        if (l == r) {
-            t[node] = x;
-            return;
-        }
-        int mid = (l + r) / 2;
-        if (i <= mid) set(node << 1, i, x, l, mid);
-        else set(node << 1 | 1, i, x, mid + 1, r);
-        pull(node);
+    S get(int p, int ql, int qr, int l, int r) {
+        if (ql > r || qr < l) return e();
+        if (ql <= l && qr >= r) return d[p];
+        int m = (l + r) / 2;
+        return op(get(p * 2, ql, qr, l, m), get(p * 2 + 1, ql, qr, m + 1, r));
     }
-    T get(int node, int ql, int qr, int l, int r) {
-        if (ql <= l && qr >= r) return t[node];
-        int mid = (l + r) >> 1;
-        if (qr <= mid) return get(node << 1, ql, qr, l, mid);
-        if (ql > mid) return get(node << 1 | 1, ql, qr, mid+1, r);
-        return get(node << 1, ql, qr, l, mid) + get(node << 1 | 1, ql, qr, mid+1, r);
-    }
-    // wrapper
-    template <typename U>
-    void add(int i, U x) {
+    S get(int i) {
         assert(i >= 0 && i < n);
-        add(1, i, x, 0, n-1);
+        return get(1, i, i, 0, n - 1);
     }
-    void set(int i, T x) {
-        assert(i >= 0 && i < n);
-        set(1, i, x, 0, n-1);
-    }
-    T get(int l, int r) {
+    S get(int l, int r) {
         assert(l >= 0 && l <= r && r < n);
-        return get(1, l, r, 0, n-1);
+        return get(1, l, r, 0, n - 1);
     }
-};
-struct node {
-    int v=0; // value for leaves
-    node() = default;
-    // may need more constructor
-    node operator+(const node& rhs) const { // used in get() and pull()
-        return {v+rhs.v};
+    void set(int i, S x) {
+        assert(i >= 0 && i < n);
+        set(1, i, x, 0, n - 1);
     }
-    node& operator +=(const node& rhs) { // used in add()
-        v+=rhs.v;
-        return *this;
+    // return the largest r such that f(op(d[ql], ..., d[r])) is true
+    template<class G> int max_right(int ql, G f) {
+        assert(0 <= ql && ql <= n);
+        assert(f(e()));
+        S sum = e();
+        auto rec = [&](auto& slf, int k, int l, int r) {
+            if (l >= ql && f(op(sum, d[k]))) {
+                sum = op(sum, d[k]);
+                return r;
+            }
+            if (l == r) return l - 1;
+            int mid = (l + r) / 2;
+            if (ql <= mid) {
+                int res = slf(slf, k * 2, l, mid);
+                if (res != mid) return res;
+            }
+            return slf(slf, k * 2 + 1, mid + 1, r);
+        };
+        return rec(rec, 1, 0, n - 1);
+    }
+    template<class G> int min_left(int qr, G f) {
+        assert(-1 <= qr && qr < n);
+        assert(f(e()));
+        S sum = e();
+        auto rec = [&](auto& slf, int k, int l, int r) {
+            if (r <= qr && f(op(d[k], sum))) {
+                sum = op(d[k], sum);
+                return l;
+            }
+            if (l == r) return l + 1;
+            int mid = (l + r) / 2;
+            if (qr > mid) {
+                int res = slf(slf, k * 2 + 1, mid + 1, r);
+                if (res != mid + 1) return res;
+            }
+            return slf(slf, k * 2, l, mid);
+        };
+        return rec(rec, 1, 0, n - 1);
     }
 };

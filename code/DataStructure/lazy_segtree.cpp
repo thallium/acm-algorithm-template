@@ -1,86 +1,117 @@
-// lazy propagation
+// segment tree with lazy propagation
 #include<bits/stdc++.h>
 using namespace std;
-struct SegTree {
-    struct node {
-        int v=0; // don't forget to set default value (used for leaves), not necessarily zero element
-        int lazy=0;
 
-        void apply(int l, int r, int x) {
-            lazy += x;
-            v += (r - l + 1) * x;
-        }
+struct LazySegTree {
+    struct S {
 
-        bool has_lazy() { // used to check if need to propagate
-            return lazy!=0;
-        }
-
-        void clear_lazy() {
-            lazy=0;
-        }
-
-        node merge(const node& b) const {
-            node res;
-            res.v=v+b.v;
-            return res;
-        }
     };
+    struct F {
+
+    };
+
+    S e() {}
+    S op(const S& x, const S& y) {}
+    F id() {}
+    F comp(const F& neo, const F& old) {}
+    S mp(F, S) {}
+
     int n;
-    vector<node> t;
-    SegTree(int n_) : n(n_), t(4 * n) {}
-    SegTree(int n_, int x) : SegTree(n_) {
-        build(1, 0, n - 1, [&](int i) { return x; });
+    vector<S> d;
+    vector<F> lz;
+    explicit LazySegTree(int n) : LazySegTree(vector<S>(n, e())) {}
+    LazySegTree(const vector<S> &v) : n((int)size(v)), d(4 * n), lz(4 * n) {
+        build(1, 0, n - 1, v);
     }
-    SegTree(int n_, function<int(int)> f) : SegTree(n_) {
-        build(1, 0, n-1, f);
-    }
-    SegTree(const vector<int> &v) : SegTree((int)v.size()) {
-        build(1, 0, n - 1, [&](int i) { return v[i]; });
-    }
-    void pull(int node) { t[node] = t[node * 2].merge(t[node * 2 + 1]); }
-    void build(int node, int l, int r, function<int(int)> f) {
+    void pull(int k) { d[k] = op(d[k * 2], d[k * 2 + 1]); }
+    void build(int k, int l, int r, const vector<S>& v) {
         if (l == r) {
-            return t[node].apply(l, r, f(l));
+            d[k] = v[l];
+            return;
         }
         int mid = (l + r) / 2;
-        build(node * 2, l, mid, f);
-        build(node * 2 + 1, mid + 1, r, f);
-        pull(node);
+        build(k * 2, l, mid, v);
+        build(k * 2 + 1, mid + 1, r, v);
+        pull(k);
     }
-    void push(int p, int l, int r) {
-        if (t[p].has_lazy()) {
-            int m = (l + r) / 2;
-            t[p * 2].apply(l, m, t[p].lazy);
-            t[p * 2 + 1].apply(m + 1, r, t[p].lazy);
-            t[p].clear_lazy();
-        }
+    void all_apply(int k, F f) {
+        d[k] = mp(f, d[k]);
+        lz[k] = comp(f, lz[k]);
     }
-    template<typename U>
-    void update(int node, int ql, int qr, int l, int r, U x) {
+    void push(int k) {
+        all_apply(k * 2, lz[k]);
+        all_apply(k * 2 + 1, lz[k]);
+        lz[k] = id();
+    }
+    void apply(int k, int ql, int qr, int l, int r, F x) {
         if (r < ql || l > qr) return;
-        if (ql <= l && qr >= r) return t[node].apply(l, r, x);
-        push(node, l, r);
+        if (ql <= l && qr >= r) {
+            return all_apply(k, x);
+        }
+        push(k);
         int mid = (l + r) / 2;
-        update(node * 2, ql, qr, l, mid, x);
-        update(node * 2 + 1, ql, qr, mid + 1, r, x);
-        pull(node);
+        apply(k * 2, ql, qr, l, mid, x);
+        apply(k * 2 + 1, ql, qr, mid + 1, r, x);
+        pull(k);
     }
-    node get(int node, int ql, int qr, int l, int r) {
-        if (ql <= l && qr >= r) return t[node];
-        push(node, l, r);
+    S get(int k, int ql, int qr, int l, int r) {
+        if (qr < l || ql > r) return e();
+        if (ql <= l && qr >= r) return d[k];
+        push(k);
         int mid = (l + r) / 2;
-        if (qr <= mid) return get(node << 1, ql, qr, l, mid);
-        if (ql > mid) return get(node << 1 | 1, ql, qr, mid+1, r);
-        return get(node << 1, ql, qr, l, mid).merge(get(node << 1 | 1, ql, qr, mid+1, r));
+        return op(get(k * 2, ql, qr, l, mid), get(k * 2 + 1, ql, qr, mid + 1, r));
     }
-    // wrapper
-    template <typename U>
-    void add(int l, int r, U x) {
+    void apply(int l, int r, F x) {
+        if (r < l) return;
         assert(l >= 0 && l <= r && r < n);
-        update(1, l, r, 0, n-1, x);
+        apply(1, l, r, 0, n - 1, x);
     }
-    node get(int l, int r) {
+    S get(int p) {
+        assert(p >= 0 && p < n);
+        return get(1, p, p, 0, n - 1);
+    }
+    S get(int l, int r) {
         assert(l >= 0 && l <= r && r < n);
-        return get(1, l, r, 0, n-1);
+        return get(1, l, r, 0, n - 1);
+    }
+    template<class G> int max_right(int ql, G f) {
+        assert(0 <= ql && ql <= n);
+        assert(f(e()));
+        S sum = e();
+        auto rec = [&](auto& slf, int k, int l, int r) {
+            if (S s = op(sum, d[k]); l >= ql && f(s)) {
+                sum = s;
+                return r;
+            }
+            if (l == r) return l - 1;
+            push(k);
+            int mid = (l + r) / 2;
+            if (ql <= mid) {
+                int res = slf(slf, k * 2, l, mid);
+                if (res != mid) return res;
+            }
+            return slf(slf, k * 2 + 1, mid + 1, r);
+        };
+        return rec(rec, 1, 0, n - 1);
+    }
+    template<class G> int min_left(int qr, G f) {
+        assert(-1 <= qr && qr < n);
+        assert(f(e()));
+        S sum = e();
+        auto rec = [&](auto& slf, int k, int l, int r) {
+            if (S s = op(d[k], sum); r <= qr && f(s)) {
+                sum = s;
+                return l;
+            }
+            if (l == r) return l + 1;
+            push(k);
+            int mid = (l + r) / 2;
+            if (qr > mid) {
+                int res = slf(slf, k * 2 + 1, mid + 1, r);
+                if (res != mid + 1) return res;
+            }
+            return slf(slf, k * 2, l, mid);
+        };
+        return rec(rec, 1, 0, n - 1);
     }
 };
