@@ -4,7 +4,7 @@
 #include <functional>
 #include <type_traits>
 
-template <typename T, auto f = std::multiplies()>
+template <typename T>
 constexpr static T qpow(T a, int64_t b) {
     T res;
     if constexpr (std::is_arithmetic_v<T>) {
@@ -14,10 +14,10 @@ constexpr static T qpow(T a, int64_t b) {
     }
     while (b) {
         if (b & 1) {
-            res = f(res, a);
+            res = res * a;
         }
         b >>= 1;
-        a = f(a, a);
+        a = a * a;
     }
     return res;
 }
