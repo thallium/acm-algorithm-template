@@ -2,19 +2,19 @@
 #include <vector>
 #include "misc/util.hpp"
 template <typename T> struct Fenwick {
-    int n;
+    std::size_t n;
     std::vector<T> t;
 
-    Fenwick(int n_) : n(n_), t(n + 1) {}
-    Fenwick(const std::vector<T> &v) : Fenwick((int)v.size()) {
-        for (int i = 1; i <= n; i++) {
+    Fenwick(std::size_t n_) : n(n_), t(n + 1) {}
+    Fenwick(const std::vector<T> &v) : Fenwick(v.size()) {
+        for (std::size_t i = 1; i <= n; i++) {
             t[i] += v[i - 1];
-            int j = i + (i & -i);
+            std::size_t j = i + (i & -i);
             if (j <= n) t[j] += t[i];
         }
     }
 
-    void add(int i, const T& x) {
+    void add(std::size_t i, const T& x) {
         assert(i >= 0 && i < n);
         for (i++; i <= n; i += i & -i) {
             t[i] += x;
@@ -22,7 +22,7 @@ template <typename T> struct Fenwick {
     }
 
     // Returns `data[0] + ... + data[i - 1]`.
-    template <typename U = T> U get(int i) {
+    template <typename U = T> U get(std::size_t i) {
         assert(i >= 0 && i <= n);
         U res{};
         for (; i > 0; i -= i & -i)
@@ -31,7 +31,7 @@ template <typename T> struct Fenwick {
     }
 
     // Returns `data[l] + ... + data[r - 1]`.
-    template <typename U = T> U get(int l, int r) {
+    template <typename U = T> U get(std::size_t l, std::size_t r) {
         assert(l >= 0);
         assert(l <= r);
         assert(r <= n);
@@ -41,11 +41,11 @@ template <typename T> struct Fenwick {
     // Returns the position of the first element in the prefix sum array
     // that doesn't satisfy predicate p
     template<class UnaryPredicate>
-    int partition_point(UnaryPredicate p) {
-        int pos = 0;
+    std::size_t partition_point(UnaryPredicate p) {
+        std::size_t pos = 0;
         T sum{};
-        for (int i = lg(n); i >= 0; i--) {
-            int next = pos + (1 << i);
+        for (std::size_t i = lg(n); i >= 0; i--) {
+            std::size_t next = pos + (1 << i);
             if (next <= n && p(sum + t[next])) {
                 sum += t[next];
                 pos = next;
@@ -56,13 +56,13 @@ template <typename T> struct Fenwick {
 
     // Returns the position of the first element in the prefix sum array
     // that is greater than or equal to target
-    int lower_bound(const T& target) {
+    std::size_t lower_bound(const T& target) {
         return partition_point([&](auto x) { return x < target; });
     }
 
     // Returns the position of the first element in the prefix sum array
     // that is greater than target
-    int upper_bound(const T& target) {
+    std::size_t upper_bound(const T& target) {
         return partition_point([&](auto x) { return x <= target; });
     }
 };
