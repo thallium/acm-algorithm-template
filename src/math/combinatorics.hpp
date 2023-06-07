@@ -33,7 +33,7 @@ struct Combi {
     }
     mint catalan(int n) {
         assert(2 * n < (int)size(fac));
-        return C(2 * n, n) - C(2 * n, n - 1);
+        return C(2 * n, n) - C(2 * n, n + 1);
     }
 
     // evaluate expressions consisting of multiplication and division
