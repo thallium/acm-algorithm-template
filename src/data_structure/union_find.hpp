@@ -2,10 +2,10 @@
 #include <vector>
 
 struct UF {
-    int n;
+    int n, comp_cnt;
     std::vector<int> p; // size if negative or parent if non-negative
 
-    UF(int n_) : n(n_), p(n, -1) {}
+    UF(int n_) : n(n_), comp_cnt(n), p(n, -1) {}
 
     int find(int x) { return p[x] < 0 ? x : p[x] = find(p[x]); }
 
@@ -16,6 +16,7 @@ struct UF {
     bool join(int x, int y, F&& f) {
         x = find(x), y = find(y);
         if (x == y) return false;
+        comp_cnt--;
         if (-p[x] > -p[y]) std::swap(x, y);
         p[y] += p[x];
         f(x, y);
@@ -47,5 +48,13 @@ struct UF {
                 std::remove_if(begin(groups), end(groups), [](const std::vector<int>& v) { return v.empty(); }),
                 end(groups));
         return groups;
+    }
+
+    int group_cnt() {
+        return comp_cnt;
+    }
+
+    int size_of(int x) {
+        return -p[find(x)];
     }
 };
