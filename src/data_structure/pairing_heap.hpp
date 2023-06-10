@@ -9,7 +9,9 @@ template <typename T, typename Compare = std::less<T>> class PairingHeap {
         Node *prev; // if it's the leftmost child, points to parent, otherwise points to
                     // its left sibling
         Node(const T &_v) : v(_v), child(), sibling(), prev() {}
-        Node(T &&_v) : v(std::move(_v)), child(), sibling(), prev() {}
+        Node(T &&_v) : v(std::forward(_v)), child(), sibling(), prev() {}
+        template <typename... Args>
+        Node(Args&&... args) : v(std::forward<Args>(args)...), child(), sibling(), prev() {}
     };
 
     using node_ptr = Node *;
@@ -99,12 +101,33 @@ template <typename T, typename Compare = std::less<T>> class PairingHeap {
         auto old_root = root;
         root = merge(root->child);
         delete old_root;
+
+        m_size--;
         return res;
     }
 
     point_iterator push(const T &val) {
         auto node = new Node{val};
         root = meld(root, node);
+
+        m_size++;
+        return node;
+    }
+
+    point_iterator push(T&& val) {
+        auto node = new Node{std::forward(val)};
+        root = meld(root, node);
+
+        m_size++;
+        return node;
+    }
+
+    template <typename... Args>
+    point_iterator emplace(Args&&... args) {
+        auto node = new Node{std::forward<Args>(args)...};
+        root = meld(root, node);
+
+        m_size++;
         return node;
     }
 
