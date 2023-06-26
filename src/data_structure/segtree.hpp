@@ -11,7 +11,7 @@ template <typename T> struct segtree {
     segtree() : segtree(0) {}
     explicit segtree(int n) : segtree(std::vector<typename T::S>(n, T::e())) {}
     explicit segtree(const std::vector<typename T::S>& v) : _n(int(v.size())) {
-        log = ceil_lg(_n);
+        log = (int)ceil_lg((std::size_t)_n);
         size = 1 << log;
         d = std::vector<typename T::S>(2 * size, T::e());
         for (int i = 0; i < _n; i++) d[size + i] = v[i];

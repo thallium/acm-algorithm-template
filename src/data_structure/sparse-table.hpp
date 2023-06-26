@@ -18,6 +18,7 @@ template <typename T> struct SparseTable {
                 v[i][j] = F(v[i - 1][j], v[i - 1][j + (1 << (i - 1))]);
     }
 
+    // [l, r)
     T query(size_t l, size_t r) {
         assert(l < r);
         assert(l < n);
