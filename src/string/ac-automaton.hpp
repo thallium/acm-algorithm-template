@@ -19,9 +19,9 @@ struct AhoCorasick {
         // nmatches: number of patterns that is a suffix of current node
         // output: output link, points to the longest pattern that is a suffix
         // of current node
-        int back, end = -1, nmatches = 0, output = -1;
+        int back = 0, end = -1, nmatches = 0, output = -1;
         std::array<int, alpha> next;
-        Node(int v = -1) { std::fill(next.begin(), next.end(), v); }
+        Node() { std::fill(next.begin(), next.end(), -1); }
     };
 
     std::vector<Node> N;
@@ -55,17 +55,13 @@ struct AhoCorasick {
     }
 
     void build() {
-        // adds a dummy node so the root node can be correctly handled
-        N[0].back = (int)N.size();
-        N.emplace_back(0);
-
         std::queue<int> q;
         q.push(0);
         while (!q.empty()) {
             int u = q.front();
             q.pop();
             for (int i = 0; i < alpha; i++) {
-                int fail = N[N[u].back].next[i];
+                int fail = u ? N[N[u].back].next[i] : 0;
                 auto v = N[u].next[i];
                 if (v == -1) N[u].next[i] = fail;
                 else {
