@@ -1,12 +1,13 @@
 #pragma once
 // Modint
+#include <limits>
 #include <type_traits>
 #include <iostream>
 #include "misc/bin_expo.hpp"
 
 template <typename T, T MOD>
 struct ModInt {
-    using prod_type = std::conditional_t<std::is_same_v<T, int>, long long, __int128>;
+    using prod_type = std::conditional_t<std::numeric_limits<T>::digits <= 32, uint64_t, __uint128_t>;
     T val;
     constexpr ModInt(const int64_t v = 0) : val(v % MOD) { if (val < 0) val += MOD; }
     constexpr ModInt operator+() const { return ModInt(val); }
