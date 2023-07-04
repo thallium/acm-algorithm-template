@@ -5,7 +5,6 @@
 class fenwick_rg {
     int n;
     std::vector<int64_t> sum1, sum2;
-    fenwick_rg(int n_) : n(n_), sum1(n + 1), sum2(n + 1) {}
 
     void add(int i, int x) {
         assert(i >= 0 && i < n);
@@ -16,6 +15,7 @@ class fenwick_rg {
     }
 
 public:
+    fenwick_rg(int n_) : n(n_), sum1(n + 1), sum2(n + 1) {}
     // [l, r)
     void add(int l, int r, int x) {
         assert(l >= 0 && l < r && r <= n);
