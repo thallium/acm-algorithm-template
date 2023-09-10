@@ -1,15 +1,14 @@
+#pragma once
+
 #include <vector>
-struct BCC {
-    int n, pos = 0;
-    std::vector<std::vector<int>> g;
-    std::vector<int> ord, low, cuts, stk;
+
+static std::vector<std::vector<int>> biconnected_comp(const std::vector<std::vector<int>>& g) {
+    const int n = (int)size(g);
+    int pos = 0;
+    std::vector<int> ord(n, -1), low(n), cuts, stk;
     std::vector<std::vector<int>> comps; // components
-    BCC(int n_) : n(n_), g(n), ord(n, -1), low(n) {}
-    void add_edge(int u, int v) {
-        g[u].push_back(v);
-        g[v].push_back(u);
-    }
-    void dfs(int u, int pa) {
+
+    auto dfs = [&](auto& slf, int u, int pa) -> void {
         low[u] = ord[u] = pos++;
         stk.push_back(u);
         int cnt = 0;
@@ -18,7 +17,7 @@ struct BCC {
             if (v == pa) continue;
             if (ord[v] == -1) {
                 cnt++;
-                dfs(v, u);
+                slf(slf, v, u);
                 low[u] = std::min(low[u], low[v]);
                 if (low[v] >= ord[u]) {
                     if (u != pa || cnt > 1) is_cut = true;
@@ -38,10 +37,11 @@ struct BCC {
             }
         }
         if (is_cut) cuts.push_back(u);
+    };
+
+    for (int i = 0; i < n; i++) {
+        if (ord[i] == -1) dfs(dfs, i, i);
     }
-    void solve() {
-        for (int i = 0; i < n; i++) {
-            if (ord[i] == -1) dfs(i, i);
-        }
-    }
-};
+
+    return comps;
+}
