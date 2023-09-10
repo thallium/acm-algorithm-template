@@ -1,8 +1,10 @@
+#pragma once
+
 #include <vector>
 #include <string>
 
 template<typename T>
-inline std::vector<int> prefix_function(const T& s) {
+static std::vector<int> prefix_function(const T& s) {
     int n = (int)s.length();
     std::vector<int> pi(n);
     for (int i = 1; i < n; i++) {

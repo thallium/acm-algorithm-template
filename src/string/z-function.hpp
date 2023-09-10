@@ -1,3 +1,5 @@
+#pragma once
+
 // In other words, z[i] is the length of the longest common prefix between s and the suffix of s starting at i.
 #include <vector>
 

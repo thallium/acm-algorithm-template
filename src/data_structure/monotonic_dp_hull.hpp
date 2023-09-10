@@ -1,3 +1,5 @@
+#pragma once
+
 #include <deque>
 // monotonic_dp_hull enables you to do the following two operations in
 // amortized O(1) time:

@@ -10,9 +10,10 @@ void centroid_decomposition(const std::vector<std::vector<T>> &g, F &&action) {
     auto get_node = [&](T e) {
         if constexpr (std::is_same_v<T, int>) {
             return e;
+        } else {
+            auto [u, _] = e;
+            return u;
         }
-        auto [u, _] = e;
-        return u;
     };
 
     const int n = (int)size(g);

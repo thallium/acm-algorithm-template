@@ -1,3 +1,5 @@
+#pragma once
+
 #include <vector>
 struct Eulerian {
     int n, edge_cnt = 0;

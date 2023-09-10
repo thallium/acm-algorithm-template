@@ -13,7 +13,7 @@ struct lazy_segtree {
     lazy_segtree() : lazy_segtree(0) {}
     explicit lazy_segtree(int n) : lazy_segtree(std::vector<typename T::S>(n, T::e())) {}
     explicit lazy_segtree(const std::vector<typename T::S>& v) : _n(int(v.size())) {
-        log = ceil_lg(_n);
+        log = (int)ceil_lg((std::size_t)_n);
         size = 1 << log;
         d = std::vector<typename T::S>(2 * size, T::e());
         lz = std::vector<typename T::F>(size, T::id());
