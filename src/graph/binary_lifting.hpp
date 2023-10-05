@@ -4,12 +4,12 @@
 #include <vector>
 
 struct BinaryLifting {
-    const size_t n, level;
+    const int n, level;
     std::vector<std::vector<int>> pa;
     std::vector<int> dep, tin, tout;
 
     BinaryLifting(const std::vector<std::vector<int>> &g, int root)
-        : n(g.size()), level(lg(n) + 1),
+        : n((int)g.size()), level((int)lg((size_t)n) + 1),
           pa(n, std::vector<int>(level)), dep(n), tin(n), tout(n) {
         int timer = 0;
         dfs(root, root, g, timer);
@@ -31,7 +31,7 @@ struct BinaryLifting {
 
     int go_up(int u, int dis) {
         dis = std::min(dis, (1 << level) - 1);
-        for (auto j = level - 1; j >= 0; j--) {
+        for (int j = level - 1; j >= 0; j--) {
             if (dis >> j & 1) {
                 u = pa[u][j];
             }
@@ -47,7 +47,7 @@ struct BinaryLifting {
     int lca(int u, int v) {
         if (is_ancestor(u, v)) return u;
         if (is_ancestor(v, u)) return v;
-        for (auto i = level - 1; i >= 0; i--) {
+        for (int i = level - 1; i >= 0; i--) {
             if (!is_ancestor(pa[u][i], v)) {
                 u = pa[u][i];
             }

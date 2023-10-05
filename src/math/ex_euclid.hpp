@@ -22,12 +22,9 @@ static std::optional<std::array<int64_t, 3>>
 liEu(int64_t a, int64_t b, int64_t c) {
     auto [x, y, g] = exgcd(a, b);
     if (c % g != 0) return {};
-    int64_t k = c / g;
-    x *= k;
-    y *= k;
     // smallest positive x:
     int64_t t = b / g;
-    x = (x % t + t) % t;
+    x = (x * ((c / g) % t) % t + t) % t;
     y = (c - a * x) / b;
     return std::array{x, y, g};
 }
