@@ -10,13 +10,13 @@ struct Flow {
     std::vector<std::vector<int>> g;
     std::vector<int> prev;
     std::vector<ll> h; // distance, also potential
-    Flow(int n) : n(n), g(n), h(n), prev(n) {}
-    void addEdge(int u, int v, int w, int c) {
+    Flow(int n) : n(n), g(n), prev(n), h(n) {}
+    void addEdge(int u, int v, int cap, int cost) {
         if (u == v) return;
         g[u].emplace_back(e.size());
-        e.emplace_back(v, w, c);
+        e.push_back({v, cap, cost});
         g[v].emplace_back(e.size());
-        e.emplace_back(u, 0, -c);
+        e.push_back({u, 0, -cost});
     }
     bool dijkstra(int s, int t) {
         std::priority_queue<std::pair<ll, int>> q;
