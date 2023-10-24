@@ -1,22 +1,24 @@
 #include <bits/stdc++.h>
 using namespace std;
-template <typename T> struct sparse {
-    int n, logn;
-    vector<vector<T>> v;
-    function<T(T, T)> F;
-    sparse(const vector<T> &a, function<T(T, T)> func)
-        : n((int)a.size()), logn(__lg(n)), v(logn + 1, vector<T>(n + 1)), F(func) {
-        v[0] = a;
-        for (int i = 1; i <= logn; i++)
-            for (int j = 0; j + (1 << i) - 1 < n; j++)
-                v[i][j] = F(v[i - 1][j], v[i - 1][j + (1 << (i - 1))]);
-    }
-    T query(int x, int y) {
-        assert(x<=y);
-        int s = __lg(y - x + 1);
-        return F(v[s][x], v[s][y - (1 << s) + 1]);
-    }
-};
+
+int main() {
+    int n;
+    vector<int> a(n);
+
+    int logn = __lg(n);
+    vector v(logn + 1, vector<int>(n));
+    v[0] = a;
+    for (size_t i = 1; i <= logn; i++)
+        for (size_t j = 0; j + (1 << i) - 1 < n; j++)
+            v[i][j] = max(v[i - 1][j], v[i - 1][j + (1 << (i - 1))]);
+
+    // [l, r]
+    auto query = [&](int l, int r) {
+        assert(l <= r);
+        int s = __lg(r - l + 1);
+        return max(v[s][l], v[s][r - (1 << s) + 1]);
+    };
+}
 
 namespace st { // 2d sparse table
     using T = int;

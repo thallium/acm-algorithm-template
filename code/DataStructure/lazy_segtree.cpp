@@ -2,29 +2,25 @@
 #include<bits/stdc++.h>
 using namespace std;
 
-struct LazySegTree {
-    struct S {
+struct lazyseg {
+    using s = int;
+    using f = int;
 
-    };
-    struct F {
-
-    };
-
-    S e() {}
-    S op(const S& x, const S& y) {}
-    F id() {}
-    F comp(const F& neo, const F& old) {}
-    S mp(F, S) {}
+    s e() {}
+    s op(const s& x, const s& y) {}
+    f id() {}
+    f comp(const f& neo, const f& old) {}
+    s mp(f, s) {}
 
     int n;
-    vector<S> d;
-    vector<F> lz;
-    explicit LazySegTree(int n) : LazySegTree(vector<S>(n, e())) {}
-    LazySegTree(const vector<S> &v) : n((int)size(v)), d(4 * n), lz(4 * n) {
+    vector<s> d;
+    vector<f> lz;
+    explicit lazyseg(int n) : lazyseg(vector<s>(n, e())) {}
+    lazyseg(const vector<s> &v) : n((int)size(v)), d(4 * n), lz(4 * n, id()) {
         build(1, 0, n - 1, v);
     }
     void pull(int k) { d[k] = op(d[k * 2], d[k * 2 + 1]); }
-    void build(int k, int l, int r, const vector<S>& v) {
+    void build(int k, int l, int r, const vector<s>& v) {
         if (l == r) {
             d[k] = v[l];
             return;
@@ -34,7 +30,7 @@ struct LazySegTree {
         build(k * 2 + 1, mid + 1, r, v);
         pull(k);
     }
-    void all_apply(int k, F f) {
+    void all_apply(int k, f f) {
         d[k] = mp(f, d[k]);
         lz[k] = comp(f, lz[k]);
     }
@@ -43,7 +39,7 @@ struct LazySegTree {
         all_apply(k * 2 + 1, lz[k]);
         lz[k] = id();
     }
-    void apply(int k, int ql, int qr, int l, int r, F x) {
+    void apply(int k, int ql, int qr, int l, int r, f x) {
         if (r < ql || l > qr) return;
         if (ql <= l && qr >= r) {
             return all_apply(k, x);
@@ -54,32 +50,32 @@ struct LazySegTree {
         apply(k * 2 + 1, ql, qr, mid + 1, r, x);
         pull(k);
     }
-    S get(int k, int ql, int qr, int l, int r) {
+    s get(int k, int ql, int qr, int l, int r) {
         if (qr < l || ql > r) return e();
         if (ql <= l && qr >= r) return d[k];
         push(k);
         int mid = (l + r) / 2;
         return op(get(k * 2, ql, qr, l, mid), get(k * 2 + 1, ql, qr, mid + 1, r));
     }
-    void apply(int l, int r, F x) {
+    void apply(int l, int r, f x) {
         if (r < l) return;
         assert(l >= 0 && l <= r && r < n);
         apply(1, l, r, 0, n - 1, x);
     }
-    S get(int p) {
-        assert(p >= 0 && p < n);
-        return get(1, p, p, 0, n - 1);
+    s get(int i) {
+        assert(i >= 0 && i < n);
+        return get(1, i, i, 0, n - 1);
     }
-    S get(int l, int r) {
+    s get(int l, int r) {
         assert(l >= 0 && l <= r && r < n);
         return get(1, l, r, 0, n - 1);
     }
     template<class G> int max_right(int ql, G f) {
         assert(0 <= ql && ql <= n);
         assert(f(e()));
-        S sum = e();
+        s sum = e();
         auto rec = [&](auto& slf, int k, int l, int r) {
-            if (S s = op(sum, d[k]); l >= ql && f(s)) {
+            if (s s = op(sum, d[k]); l >= ql && f(s)) {
                 sum = s;
                 return r;
             }
@@ -97,9 +93,9 @@ struct LazySegTree {
     template<class G> int min_left(int qr, G f) {
         assert(-1 <= qr && qr < n);
         assert(f(e()));
-        S sum = e();
+        s sum = e();
         auto rec = [&](auto& slf, int k, int l, int r) {
-            if (S s = op(d[k], sum); r <= qr && f(s)) {
+            if (s s = op(d[k], sum); r <= qr && f(s)) {
                 sum = s;
                 return l;
             }

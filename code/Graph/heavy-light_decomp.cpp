@@ -1,55 +1,65 @@
 #include <vector>
 
-#include "../DataStructure/fenwick.cpp"
 using namespace std;
-struct HLD {
-    vector<vector<int>> g;
-    vector<int> pa, dep, heavy, head, pos, posr; // initialize heavy with -1
-    int cnt=0;
-    fenwick<long long> tr;
-    HLD(int n) : g(n), pa(n), dep(n), heavy(n, -1), head(n), pos(n), posr(n), tr(n) {}
-    void add_edge(int u, int v) {
-        g[u].push_back(v);
-        g[v].push_back(u);
-    }
-    int dfs(int u) {
-        int size = 1;
-        int mx = 0;
-        for (int v : g[u]) {
-            if (v != pa[u]) {
-                pa[v] = u, dep[v] = dep[u] + 1;
-                int csize = dfs(v);
-                size += csize;
-                if (csize > mx) mx = csize, heavy[u] = v;
+
+struct hld {
+    int n;
+    vector<int> pa, head, pos;
+    int cnt = 0;
+
+    hld(vector<vector<int>> &g, int root = 0)
+      : n((int)g.size()), pa(n), head(n, -1), pos(n) {
+        assert(root < (int)g.size());
+        pa[root] = root;
+        auto dfs = [&](auto &slf, int u) -> int {
+            // we use head array as heavy child here to save some space
+            int size = 1, max_size = 0;
+            for (int v : g[u]) {
+                if (v != pa[u]) {
+                    pa[v] = u;
+                    int csize = slf(slf, v);
+                    size += csize;
+                    if (csize > max_size) {
+                        max_size = csize;
+                        head[u] = v;
+                    }
+                }
             }
-        }
-        return size;
+            return size;
+        };
+        dfs(dfs, root);
+
+        auto dfs2 = [&](auto &slf, int u, int h) -> void {
+            int hc = exchange(head[u], h);
+            pos[u] = cnt++;
+            if (hc == -1)
+                return;
+            slf(slf, hc, h);
+            for (int v : g[u]) {
+                if (v != pa[u] && v != hc) {
+                    slf(slf, v, v);
+                }
+            }
+        };
+        dfs2(dfs2, root, root);
     }
-    void dfs2(int u, int h) {
-        head[u] = h, pos[u] = cnt++; //0-based index
-        if (heavy[u] != -1) dfs2(heavy[u], h);
-        for (int v : g[u]) {
-            if (v != pa[u] && v != heavy[u])
-                dfs2(v, v);
+    // decompose path from u to v into segment of [l, r] and call process_range
+    // use (r > min(pos[u], pos[v])) to test if the segment is from right
+    template <typename F>
+    int decompose(int u, int v, F&& process_range, bool ignore_lca = false) {
+        while (true) {
+            if (pos[u] > pos[v]) {
+                swap(u, v);
+            }
+            if (head[u] == head[v]) break;
+            int h = head[v];
+            process_range(pos[h], pos[v]);
+            v = pa[h];
         }
-        posr[u] = cnt;
-    }
-    long long pathsum(int u, int v) {
-        long long res = 0;
-        while (head[u] != head[v]) {
-            if (dep[head[u]] < dep[head[v]]) swap(u, v);
-            res += tr.query(pos[head[u]], pos[u]);
-            u = pa[head[u]];
+        int l = pos[u] + ignore_lca, r = pos[v];
+        if (l <= r) {
+            process_range(l, r);
         }
-        if (pos[u] > pos[v]) swap(u, v);
-        res += tr.query(pos[u], pos[v]);
-        return res;
-    }
-    int lca(int u, int v) {
-        while (head[u] != head[v]) {
-            if (dep[head[u]] > dep[head[v]]) u = pa[head[u]];
-            else v = pa[head[v]];
-        }
-        return dep[u] > dep[v] ? v : u;
+        return v;
     }
 };
