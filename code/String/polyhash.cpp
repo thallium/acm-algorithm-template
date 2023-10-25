@@ -1,25 +1,33 @@
-#include<bits/stdc++.h>
+#include <bits/stdc++.h>
+using namespace std;
+
 using ll = long long;
-struct PolyHash {
-    static constexpr int mod = (int)1e9 + 123;
-    static vector<int> pow;
-    static constexpr int base = 233;
-    vector<int> pref;
-    PolyHash(const string &s) : pref(s.size() + 1) {
-        assert(base < mod);
-        int n = (int)s.size();
-        while ((int)pow.size() <= n) {
-            pow.push_back((ll)pow.back() * base % mod);
+using i128 = __int128;
+int main() {
+    const int N = 1e6;
+    vector<ll> pow(N + 1);
+    ll base = 233, mod = 1'000'000'000'000'000'003;
+    pow[0] = 1;
+    for (int i = 1; i <= N; i++) {
+        pow[i] = (i128)pow[i - 1] * base % mod;
+    }
+
+    auto hash = [&](const string& s) {
+        int sz = (int)size(s);
+        vector<ll> pref(sz + 1);
+        for (int i = 0; i < sz; i++) {
+            pref[i + 1] = ((i128)pref[i] * base % mod + s[i]) % mod;
         }
-        for (int i = 0; i < n; i++) {
-            pref[i + 1] = ((ll)pref[i] * base + s[i]) % mod;
-        }
-    }
-    int get_hash() {
-        return pref.back();
-    }
-    int substr(int pos, int len) {
-        return (pref[pos + len] - (ll)pref[pos] * pow[len] % mod + mod) % mod;
-    }
-};
-vector<int> PolyHash::pow{1};
+        return pref;
+    };
+
+    // [l, r)
+    auto substr = [&](const vector<ll>& h, int l, int r) {
+        return (h[r] - (i128)h[l] * pow[r - l] % mod + mod) % mod;
+    };
+
+    auto concat = [&](ll lhs, ll rhs, int len_rhs) {
+        return ((i128)lhs * pow[len_rhs] % mod + rhs) % mod;
+    };
+
+}
