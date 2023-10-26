@@ -28,7 +28,7 @@ template <typename flow_t = int, typename cost_t = int> struct mcSFlow {
             return;
         }
         cost *= n;
-        eps = max(eps, abs(cost));
+        eps = std::max(eps, abs(cost));
         g[a].emplace_back(b, cost, cap, g[b].size());
         g[b].emplace_back(a, -cost, 0, g[a].size() - 1);
     }
@@ -55,9 +55,9 @@ template <typename flow_t = int, typename cost_t = int> struct mcSFlow {
                 int u = hs[hi].back();
                 hs[hi].pop_back();
                 while (ex[u] > 0) { // discharge u
-                    if (cur[u] == g[u].size()) {
+                    if (cur[u] == (int)g[u].size()) {
                         h[u] = 1e9;
-                        for (int i = 0; i < g[u].size(); ++i) {
+                        for (int i = 0; i < (int)g[u].size(); ++i) {
                             auto &e = g[u][i];
                             if (e.f && h[u] > h[e.to] + 1) {
                                 h[u] = h[e.to] + 1, cur[u] = i;
@@ -73,7 +73,7 @@ template <typename flow_t = int, typename cost_t = int> struct mcSFlow {
                         }
                         hi = h[u];
                     } else if (g[u][cur[u]].f && h[u] == h[g[u][cur[u]].to] + 1) {
-                        add_flow(g[u][cur[u]], min(ex[u], g[u][cur[u]].f));
+                        add_flow(g[u][cur[u]], std::min(ex[u], g[u][cur[u]].f));
                     } else {
                         ++cur[u];
                     }
@@ -92,7 +92,7 @@ template <typename flow_t = int, typename cost_t = int> struct mcSFlow {
     }
     void relabel(int v) {
         cost_t nh = -INF; // new height
-        for (int i = 0; i < g[v].size(); ++i) {
+        for (int i = 0; i < (int)g[v].size(); ++i) {
             const auto &e = g[v][i];
             if (e.f && nh < h[e.to] - e.c) {
                 nh = h[e.to] - e.c;
@@ -133,8 +133,8 @@ template <typename flow_t = int, typename cost_t = int> struct mcSFlow {
                 q.pop();
                 isq[u] = 0;
                 while (ex[u] > 0) {
-                    if (cur[u] == g[u].size()) relabel(u);
-                    for (int &i = cur[u], max_i = g[u].size(); i < max_i; ++i) {
+                    if (cur[u] == (int)g[u].size()) relabel(u);
+                    for (int &i = cur[u], max_i = (int)g[u].size(); i < max_i; ++i) {
                         auto &e = g[u][i];
                         if (h[u] + e.c - h[e.to] < 0) {
                             push(e, ex[u]);
