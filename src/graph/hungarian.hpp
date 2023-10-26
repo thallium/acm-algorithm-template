@@ -1,76 +1,50 @@
-// credits:
-// https://github.com/the-tourist/algo/blob/master/flows/hungarian.cpp
-// hungarian algorithm for bipartite graph matching, matches every
-// node on the left with a node on the right and the sum of the
-// weights is minimal. a[i][j] is the cost for i in L to be matched
-// with j in R. (0-indexed) pa[i] is the node in R matched with i
-// pb[j] is the node in L matched with j
-// Negate the cost for max cost.
-// Time: O(n^2M)
+// Tested on: https://vjudge.net/problem/UniversalOJ-80
 #include <vector>
 #include <limits>
 
-template <typename T> struct Hungarian {
-    int n, m;
-    std::vector<std::vector<T>> a;
-    std::vector<T> u, v;
-    std::vector<int> pa, pb, way;
-    std::vector<T> minv;
-    std::vector<bool> used;
-    T inf;
-    Hungarian(int _n, int _m)
-        : n(_n), m(_m), a(n, std::vector<T>(m)), u(n + 1), v(m + 1),
-          pa(n + 1, -1), pb(m + 1, -1), way(m, -1), minv(m),
-          used(m + 1) {
-        assert(n <= m);
-        inf = std::numeric_limits<T>::max();
-    }
-    inline void add_row(int i) {
-        fill(minv.begin(), minv.end(), inf);
-        fill(used.begin(), used.end(), false);
-        pb[m] = i;
-        pa[i] = m;
-        int j0 = m;
-        do {
-            used[j0] = true;
-            int i0 = pb[j0];
-            T delta = inf;
-            int j1 = -1;
+// a is the adjacency matrix where a[i][j] is the cost of mathcing i-th vertex
+// in the left to the j-th vertex in the right
+// It finds the minimum matching, negate the weight to find maximum matching
+// returns {cost, matching} Use a[i][matching[i]] == 0 to test if i-th vertex
+// is matched
+// Time: O(n^2M)
+template<class T>
+std::pair<T, std::vector<int>> hungarian(const std::vector<std::vector<T>> &a) {
+    if (a.empty()) return {0, {}};
+    int n = (int)a.size() + 1, m = (int)a[0].size() + 1;
+    assert(m >= n);
+    std::vector<T> u(n), v(m); // 顶标
+    std::vector<int> p(m), ans(n - 1);
+    T INF = std::numeric_limits<T>::max();
+    for (int i = 1; i < n; i++) {
+        p[0] = i;
+        int j0 = 0;
+        std::vector<T> dist(m, INF);
+        std::vector<int> pre(m, -1);
+        std::vector<bool> done(m + 1);
+        do { // dijkstra
+            done[j0] = true;
+            int i0 = p[j0], j1;
+            T delta = INF;
+            for (int j = 1; j < m; j++)
+                if (!done[j]) {
+                    auto cur = a[i0 - 1][j - 1] - u[i0] - v[j];
+                    if (cur < dist[j]) dist[j] = cur, pre[j] = j0;
+                    if (dist[j] < delta) delta = dist[j], j1 = j;
+                }
             for (int j = 0; j < m; j++) {
-                if (!used[j]) {
-                    T cur = a[i0][j] - u[i0] - v[j];
-                    if (cur < minv[j]) {
-                        minv[j] = cur;
-                        way[j] = j0;
-                    }
-                    if (minv[j] < delta) {
-                        delta = minv[j];
-                        j1 = j;
-                    }
-                }
-            }
-            for (int j = 0; j <= m; j++) {
-                if (used[j]) {
-                    u[pb[j]] += delta;
-                    v[j] -= delta;
-                } else {
-                    minv[j] -= delta;
-                }
+                if (done[j]) u[p[j]] += delta, v[j] -= delta;
+                else dist[j] -= delta;
             }
             j0 = j1;
-        } while (pb[j0] != -1);
-        do {
-            int j1 = way[j0];
-            pb[j0] = pb[j1];
-            pa[pb[j0]] = j0;
-            j0 = j1;
-        } while (j0 != m);
-    }
-    inline T current_score() { return -v[m]; }
-    inline T solve() {
-        for (int i = 0; i < n; i++) {
-            add_row(i);
+        } while (p[j0]);
+        while (j0) { // update alternating path
+            int j1 = pre[j0];
+            p[j0] = p[j1], j0 = j1;
         }
-        return current_score();
     }
-};
+    for (int j = 1; j < m; j++) {
+        if (p[j]) ans[p[j] - 1] = j - 1;
+    }
+    return {-v[0], ans}; // min cost
+}
