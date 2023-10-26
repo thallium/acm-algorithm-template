@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 
+template <bool union_by_size = true>
 struct UF {
     int n, comp_cnt;
     std::vector<int> p; // size if negative or parent if non-negative
@@ -17,7 +18,9 @@ struct UF {
         x = find(x), y = find(y);
         if (x == y) return false;
         comp_cnt--;
-        if (-p[x] > -p[y]) std::swap(x, y);
+        if constexpr (union_by_size) {
+            if (-p[x] > -p[y]) std::swap(x, y);
+        }
         p[y] += p[x];
         f(x, y);
         p[x] = y;
