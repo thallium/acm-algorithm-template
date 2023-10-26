@@ -6,11 +6,11 @@
 #include "misc/util.hpp"
 
 // template <class typename T::S, typename T::S (*op)(typename T::S, typename T::S), typename T::S (*e)()> struct segtree {
-template <typename T> struct segtree {
+template <typename T> struct SegTree {
   public:
-    segtree() : segtree(0) {}
-    explicit segtree(int n) : segtree(std::vector<typename T::S>(n, T::e())) {}
-    explicit segtree(const std::vector<typename T::S>& v) : _n(int(v.size())) {
+    SegTree() : SegTree(0) {}
+    explicit SegTree(int n) : SegTree(std::vector<typename T::S>(n, T::e())) {}
+    explicit SegTree(const std::vector<typename T::S>& v) : _n(int(v.size())) {
         log = (int)ceil_lg((std::size_t)_n);
         size = 1 << log;
         d = std::vector<typename T::S>(2 * size, T::e());
