@@ -1,14 +1,33 @@
-vector<int> manacher(const string& ss){
-    string s;
-    for(auto ch:ss) s+="#",s+=ch;
-    s+="#";
-    int n=(int)s.size();
-    vector<int> d1(n);
-    for (int i = 0, l = 0, r = -1; i < n; i++) {
-        int k = (i > r) ? 1 : min(d1[l + r - i], r - i);
-        while (0 <= i - k && i + k < n && s[i - k] == s[i + k]) k++;
-        d1[i] = k--;
-        if (i + k > r) l = i - k, r = i + k;
+#include <array>
+#include <vector>
+
+// return [even, odd] where:
+//
+// even[i] is the half of the length of longest palindrome starting from the
+// i-th gap, the first gap is before the first character, there are n+1 gaps.
+//
+// odd[i] is half of the length of longest palindrome starting from the i-th
+// character.
+template <typename T> std::array<std::vector<int>, 2> manacher(const T &s) {
+    int n = (int)size(s);
+    std::array d{std::vector<int>(n + 1), std::vector<int>(n)};
+
+    for (int z : {0, 1}) {
+        auto &p = d[z];
+        for (int i = 0, l = 0, r = 0; i < n; i++) {
+            int t = r - i + !z;
+            if (i < r) {
+                p[i] = std::min(t, p[l + t]);
+            }
+            int l2 = i - p[i], r2 = i + p[i] - !z;
+            while (l2 && r2 + 1 < n && s[l2 - 1] == s[r2 + 1]) {
+                ++p[i];
+                --l2, ++r2;
+            }
+            if (r2 > r) {
+                l = l2, r = r2;
+            }
+        }
     }
-    return d1;
+    return d;
 }

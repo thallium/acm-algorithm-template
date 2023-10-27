@@ -1,0 +1,4 @@
+set ttymouse=sgr
+
+syntax on
+set mouse=a si noswf cin et sw=4 ts=4 sr sts=-1 nu
