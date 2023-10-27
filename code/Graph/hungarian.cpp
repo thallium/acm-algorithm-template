@@ -4,7 +4,10 @@ using ll = long long;
 
 // a is the adjacency matrix where a[i][j] is the cost of mathcing i-th vertex
 // in the left to the j-th vertex in the right
-// it finds the minimum matching, negate the weight to find maximum matching
+// It finds the minimum matching, negate the weight to find maximum matching
+// returns {cost, matching} Use a[i][matching[i]] == 0 to test if i-th vertex
+// is matched
+// Time: O(n^2M)
 template<class T>
 pair<T, vector<int>> hungarian(const vector<vector<T>> &a) {
     if (a.empty()) return {0, {}};
